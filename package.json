@@ -1,0 +1,145 @@
+{
+  "name": "cookieowl",
+  "version": "0.1.0",
+  "description": "Free open source cookie consent banner for LGPD and GDPR that really blocks trackers before consent: one script tag, Google Consent Mode v2, auto blocking of Google Analytics, Meta Pixel, Hotjar and YouTube, accessible UI in 5 languages, React and Vue helpers, under 15 kB gzip.",
+  "keywords": [
+    "cookie consent",
+    "cookie banner",
+    "cookie consent banner",
+    "cookie consent manager",
+    "consent management",
+    "consent management platform",
+    "cmp",
+    "gdpr",
+    "gdpr cookie banner",
+    "gdpr cookie consent",
+    "lgpd",
+    "lgpd cookies",
+    "banner de cookies",
+    "aviso de cookies",
+    "eprivacy",
+    "ccpa",
+    "google consent mode",
+    "google consent mode v2",
+    "consent mode",
+    "block google analytics until consent",
+    "script blocking",
+    "tracker blocking",
+    "meta pixel",
+    "global privacy control",
+    "do not track",
+    "privacy",
+    "cookies",
+    "react cookie consent",
+    "vue cookie consent",
+    "nextjs cookie consent",
+    "wordpress cookie banner",
+    "accessible",
+    "i18n"
+  ],
+  "homepage": "https://kwy404.github.io/cookieowl/",
+  "bugs": {
+    "url": "https://github.com/kwy404/cookieowl/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwy404/cookieowl.git"
+  },
+  "license": "MIT",
+  "author": "Alexandre Kohler (https://github.com/kwy404)",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/cookieowl.js",
+  "jsdelivr": "./dist/cookieowl.js",
+  "sideEffects": [
+    "./dist/cookieowl.js"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./react": {
+      "import": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.js"
+      },
+      "require": {
+        "types": "./dist/react.d.cts",
+        "default": "./dist/react.cjs"
+      }
+    },
+    "./vue": {
+      "import": {
+        "types": "./dist/vue.d.ts",
+        "default": "./dist/vue.js"
+      },
+      "require": {
+        "types": "./dist/vue.d.cts",
+        "default": "./dist/vue.cjs"
+      }
+    },
+    "./browser": "./dist/cookieowl.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "SECURITY.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup && node scripts/size.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . && node scripts/house-rules.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "size": "node scripts/size.mjs",
+    "docs": "node scripts/build-docs.mjs",
+    "docs:check": "node scripts/build-docs.mjs --check",
+    "images": "bash scripts/render-images.sh",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "peerDependencies": {
+    "react": ">=16.8",
+    "vue": ">=3.2"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/jsdom": "21.1.7",
+    "@types/node": "20.19.43",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitest/coverage-v8": "3.2.4",
+    "eslint": "9.39.5",
+    "jsdom": "25.0.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.2",
+    "vitest": "3.2.4",
+    "vue": "3.5.13"
+  }
+}
