@@ -17,6 +17,9 @@ export default defineConfig([
   {
     entry: { index: 'src/index.ts', react: 'src/react.ts', vue: 'src/vue.ts' },
     format: ['esm', 'cjs'],
+    // One shared chunk for every entry, also in CommonJS, so cookieowl/react
+    // and cookieowl/vue use the same instance as the main entry.
+    splitting: true,
     dts: true,
     clean: true,
     target: 'es2020',
