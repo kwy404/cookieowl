@@ -471,16 +471,12 @@ function tryInDemo() {
 
 const layers = $$('.town .px');
 if (layers.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const depth = { 'px-sky': 0.32, 'px-far': 0.2, 'px-mid': 0.1, 'px-near': 0, 'px-bugs': -0.06 };
   const hero = $('.town');
   let ticking = false;
   const move = () => {
     ticking = false;
     const y = Math.min(scrollY, hero.offsetHeight);
-    for (const g of layers) {
-      const k = depth[[...g.classList].find((c) => c in depth)] || 0;
-      g.style.transform = `translateY(${(y * k).toFixed(1)}px)`;
-    }
+    for (const el of layers) el.style.transform = `translateY(${(y * Number(el.dataset.depth || 0)).toFixed(1)}px)`;
   };
   addEventListener(
     'scroll',

@@ -366,59 +366,66 @@ function defs(P, id) {
 // ---------- Scenes ----------
 
 /**
- * The hero: Hoot on a lantern post guards a little town of websites. Tracker
- * bugs wait outside a glowing gate. Layers carry px-* classes for parallax.
+ * The hero, drawn as layers so the page can lay them out at any viewport
+ * size without panel edges: `far` and `ground` are 3200 wide and span the
+ * whole width (hills, a distant town, the near ground), `sky` and `art` are
+ * 1000 wide and sit at the bottom right (the moon, the website houses, Hoot
+ * on his lantern post, the consent gate and the tracker bugs). Every layer is
+ * 760 tall with the ground at y 664, so they line up whenever they share a
+ * height. The left 240 units of `art` stay empty, room for the hero text.
  */
-export function heroScene(P, { id = 'hero', sky = true, inline = false } = {}) {
-  const W = 1600;
-  const H = 760;
-  const G = 664;
+const HERO_G = 664;
+export function heroLayers(P, id = 'hero') {
+  const G = HERO_G;
   const r = rng(41);
-  let far = '';
-  // the distant town on the hills
-  for (let i = 0; i < 16; i++) {
-    const x = 40 + i * 52 + r() * 16;
+  let town = '';
+  for (let i = 0; i < 26; i++) {
+    const x = 1240 + i * 58 + r() * 18;
     const w = 26 + r() * 22;
-    const h = 30 + r() * 46;
-    const y = 572 + Math.sin(i * 0.7) * 10;
-    far += `<rect x="${f(x)}" y="${f(y - h)}" width="${f(w)}" height="${f(h + 30)}" fill="${P.hill2}"/><path d="M${f(x - 3)} ${f(y - h)}L${f(x + w / 2)} ${f(y - h - 14)}L${f(x + w + 3)} ${f(y - h)}Z" fill="${P.hill2}"/>`;
-    for (let k = 0; k < 2; k++) if (r() > 0.35) far += `<rect class="win-lit" x="${f(x + 5 + k * 11)}" y="${f(y - h + 10 + r() * 14)}" width="5" height="6" rx="1" fill="${P.win}" opacity=".85"/>`;
+    const h = 26 + r() * 44;
+    const y = 590 + Math.sin(i * 0.7) * 8;
+    town += `<rect x="${f(x)}" y="${f(y - h)}" width="${f(w)}" height="${f(h + 40)}" fill="${P.hill2}"/><path d="M${f(x - 3)} ${f(y - h)}L${f(x + w / 2)} ${f(y - h - 13)}L${f(x + w + 3)} ${f(y - h)}Z" fill="${P.hill2}"/>`;
+    for (let k = 0; k < 2; k++) if (r() > 0.4) town += `<rect class="win-lit" x="${f(x + 5 + k * 11)}" y="${f(y - h + 10 + r() * 12)}" width="5" height="6" rx="1" fill="${P.win}" opacity=".85"/>`;
   }
-  const near = [
-    house(P, { x: 380, y: G, w: 92, h: 120, seed: 4, jars: 1 }),
-    house(P, { x: 486, y: G, w: 118, h: 168, seed: 5, jars: 2, chimney: true }),
-    house(P, { x: 618, y: G, w: 84, h: 104, seed: 9, jars: 1, roof: 'flat' }),
-    house(P, { x: 716, y: G, w: 128, h: 196, seed: 12, jars: 2 }),
-  ].join('');
+  const far = `<path d="M0 570C260 548 520 566 800 572S1300 540 1600 556S2200 536 2500 552S2950 546 3200 556V760H0Z" fill="${P.hill1}"/>${town}<path d="M0 612C300 600 640 618 980 610S1600 592 1980 606S2700 598 3200 608V760H0Z" fill="${P.hill2}"/>`;
+  const ground = `<path d="M0 ${G + 4}C500 ${G - 4} 1100 ${G + 2} 1600 ${G - 4}S2700 ${G + 4} 3200 ${G - 2}V760H0Z" fill="${P.hill3}"/>${bush(P, 420, G + 8, 1)}${bush(P, 980, G + 6, 0.8)}`;
+  const sky = `<g class="tw-field">${stars(P, 11, 34, 1000, 420)}</g>${moonDisk(P, 760, 150, 58, id)}${cloud(P, 380, 210, 0.8, 'drift')}${cloud(P, 860, 300, 0.55, 'drift drift-2')}`;
   const bugs = [
-    bug(P, { x: 1440, y: 430, s: 1.3, label: 'analytics', cls: 'b1' }),
-    bug(P, { x: 1540, y: 530, s: 1.15, label: 'pixel', prop: 'camera', flip: true, cls: 'b2' }),
-    bug(P, { x: 1430, y: 616, s: 1.1, label: 'heatmap', prop: 'flame', cls: 'b3' }),
+    bug(P, { x: 912, y: 430, s: 1.05, label: 'analytics', cls: 'b1' }),
+    bug(P, { x: 948, y: 548, s: 0.92, label: 'pixel', prop: 'camera', flip: true, cls: 'b2' }),
+    bug(P, { x: 896, y: 628, s: 0.86, label: 'heatmap', prop: 'flame', cls: 'b3' }),
   ].join('');
-  const inner = `${defs(P, id)}
-${sky ? `<rect width="${W}" height="${H}" fill="url(#${id}-sky)"/>` : ''}
-<g class="px px-sky">${stars(P, 11, 120, W, 430)}${moonDisk(P, 1210, 150, 64, id)}${cloud(P, 150, 210, 1.1)}${cloud(P, 900, 120, 0.8, 'drift drift-2')}</g>
-<g class="px px-far"><path d="M0 560C180 520 320 540 460 556S760 520 920 548S1240 520 1400 540S1560 556 1600 548V${H}H0Z" fill="${P.hill1}"/>${far}<path d="M0 600C220 580 420 610 640 600S1040 576 1260 596S1500 610 1600 600V${H}H0Z" fill="${P.hill2}"/></g>
-<g class="px px-mid">${tree(P, 300, G, 1.3, 3)}${tree(P, 340, G, 0.9, 5)}${near}${tree(P, 880, G, 1.1, 8)}</g>
-<g class="px px-near">
-<path d="M0 ${G}C300 ${G - 8} 700 ${G - 4} 1000 ${G - 6}S1460 ${G + 4} 1600 ${G - 4}V${H}H0Z" fill="${P.hill3}"/>
-<path d="M860 ${H}C930 720 990 ${G + 10} 1110 ${G}H1330C1420 ${G + 10} 1520 716 1600 730V${H}Z" fill="${P.road}" opacity=".9"/>
-<path d="M960 ${H - 20}h40M1040 ${H - 44}h36M1140 ${G + 22}h30M1230 ${G + 40}h34M1320 ${G + 18}h28M1400 ${G + 50}h32M1490 ${G + 70}h26" stroke="${P.stone}" stroke-width="6" stroke-linecap="round"/>
-${bush(P, 930, G + 2, 1)}${bush(P, 1420, G + 4, 0.8)}${bush(P, 60, G + 6, 1.2)}${bush(P, 230, G + 8, 0.9)}
-${lanternPost(P, { x: 990, y: G + 6, h: 300, id, owlScale: 0.66 })}
-${gate(P, { x: 1100, y: G + 8, w: 240, h: 250, id })}
-</g>
-<g class="px px-bugs">${bugs}</g>
+  const art = `<path d="M300 760C380 724 470 ${G + 12} 640 ${G + 2}H860C900 ${G + 12} 960 708 1000 724V760Z" fill="${P.road}" opacity=".9"/>
+<path d="M420 744h34M520 714h30M612 ${G + 26}h28M700 ${G + 42}h30M790 ${G + 22}h26M880 ${G + 52}h28" stroke="${P.stone}" stroke-width="6" stroke-linecap="round"/>
+${house(P, { x: 250, y: G, w: 100, h: 130, seed: 4, jars: 1 })}${house(P, { x: 362, y: G, w: 120, h: 182, seed: 5, jars: 2, chimney: true })}${tree(P, 512, G, 0.9, 5)}
+${lanternPost(P, { x: 566, y: G + 6, h: 300, id, owlScale: 0.64 })}
+${gate(P, { x: 650, y: G + 8, w: 210, h: 240, id })}
+${bugs}
 <g class="fireflies">${[
-    [180, 620],
-    [560, 520],
-    [960, 600],
-    [1320, 520],
-    [1500, 660],
+    [300, 600],
+    [520, 560],
+    [620, 470],
+    [880, 700],
   ]
     .map(([x, y], i) => `<circle class="ff ff-${i}" cx="${x}" cy="${y}" r="3" fill="${P.lamp}"/>`)
     .join('')}</g>`;
-  return wrapSvg(inner, { w: W, h: H, id, inline, cls: 'hero-scene', ratio: inline ? 'xMaxYMax slice' : undefined, title: inline ? '' : 'Hoot the owl on a lantern post guards a little town of websites while tracker bugs wait outside the consent gate' });
+  return { far, ground, sky, art, defs: defs(P, id) };
+}
+
+/** One hero layer as an inline SVG for the page. */
+export function heroLayer(P, name, id = 'hero') {
+  const L = heroLayers(P, `${id}-${name}`);
+  const wide = name === 'far' || name === 'ground';
+  const defsPart = wide ? '' : L.defs;
+  return `<svg class="layer layer-${name}" viewBox="0 0 ${wide ? 3200 : 1000} 760" preserveAspectRatio="${wide ? 'xMidYMax slice' : 'xMaxYMax meet'}" aria-hidden="true" focusable="false">${defsPart}${L[name]}</svg>`;
+}
+
+/** The hero as one picture, 1600 by 760, for the exported files and the cards. */
+export function heroScene(P, { id = 'hero' } = {}) {
+  const L = heroLayers(P, id);
+  const inner = `${L.defs}<rect width="1600" height="760" fill="url(#${id}-sky)"/>${stars(P, 11, 70, 1600, 420)}
+<g transform="translate(-1000 0)">${L.far}${L.ground}</g><g transform="translate(600 0)">${L.sky}${L.art}</g>`;
+  return wrapSvg(inner, { w: 1600, h: 760, id, title: 'Hoot the owl on a lantern post guards a little town of websites while tracker bugs wait outside the consent gate' });
 }
 
 /** The street behind the live demo: rooftops, the moon and cobbles. */
@@ -597,7 +604,7 @@ ${[
 
   // How it works, panel one: dusk, Hoot lights the lantern first.
   dusk: (P, id) => `<rect width="320" height="240" fill="url(#${id}-sky)"/>${stars(P, 3, 14, 320, 110)}${moonDisk(P, 260, 56, 20, id)}
-<path d="M0 196c70-12 150-8 320-14v58H0Z" fill="${P.hill2}"/>${lanternPost(P, { x: 110, y: 216, h: 96, id, owlScale: 0.4 })}
+<path d="M0 196c70-12 150-8 320-14v58H0Z" fill="${P.hill2}"/>${lanternPost(P, { x: 110, y: 218, h: 86, id, owlScale: 0.36 })}
 <path d="M0 214c90-6 210-4 320-8v34H0Z" fill="${P.hill3}"/>`,
 
   // How it works, panel two: midnight, trackers wait outside the gate.

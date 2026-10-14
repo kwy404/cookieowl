@@ -2,7 +2,7 @@
 // street of the live demo with its logbook, how blocking works, the lantern
 // workshop (the configurator), the promises, frameworks, the record, the
 // shelf of guides and the FAQ.
-import { bug, demoGate, heroScene, streetScene, VARS, workshopLantern } from '../scripts/storybook.mjs';
+import { bug, demoGate, heroLayer, streetScene, VARS, workshopLantern } from '../scripts/storybook.mjs';
 import { CDN, GITHUB, GUIDES, SITE, VERSION, art, esc, icon, pic, roman, rule } from './layout.mjs';
 import { bookCard } from './pages.mjs';
 
@@ -170,23 +170,30 @@ export function homeBody(ctx) {
   const lamp = (cat, label) => `<li class="lamp" :class="{ 'is-lit': M.acc.${cat} }">${art(cat, 'ki')}<span>${label}</span><small v-text="M.acc.${cat} ? 'let in' : 'kept out'">kept out</small></li>`;
 
   return `<section class="town" aria-labelledby="hero-title">
-  <div class="hero-stars" aria-hidden="true"></div>
-  <div class="wrap hero-in">
-    <div class="hero-text">
-      <p class="tale"><span class="badge badge-soft">v${VERSION}</span><span>A bedtime story about privacy, free and MIT licensed</span></p>
-      <h1 id="hero-title">Cookie consent that keeps trackers outside the gate until visitors say <em>yes</em></h1>
-      <p class="lead">cookieowl is a free cookie consent banner for LGPD and GDPR. Analytics, pixels and heatmaps wait at the gate until their category is accepted, Google Consent Mode v2 is wired in, and the whole town runs on one script tag.</p>
-      <div class="hero-cta"><a class="btn btn-primary btn-lg" href="#demo">${art('gate', 'ki ki-btn')}Watch the gate hold trackers</a><a class="btn btn-outline btn-lg" href="#configurator">${art('lantern', 'ki ki-btn')}Build your snippet</a></div>
-      ${heroCode}
+  <div class="town-stage">
+    <div class="hero-stars" aria-hidden="true"></div>
+    <div class="town-scene" aria-hidden="true">
+      <div class="layer-box px" data-depth=".12">${heroLayer(VARS, 'far')}</div>
+      <div class="layer-box">${heroLayer(VARS, 'ground')}</div>
+      <div class="layer-box art-box px" data-depth=".22">${heroLayer(VARS, 'sky')}</div>
+      <div class="layer-box art-box">${heroLayer(VARS, 'art')}</div>
+    </div>
+    <div class="wrap hero-in">
+      <div class="hero-text">
+        <p class="tale"><span class="badge badge-soft">v${VERSION}</span><span>A bedtime story about privacy, free and MIT licensed</span></p>
+        <h1 id="hero-title">Cookie consent that keeps trackers outside the gate until visitors say <em>yes</em></h1>
+        <p class="lead">cookieowl is a free cookie consent banner for LGPD and GDPR. Analytics, pixels and heatmaps wait at the gate until their category is accepted, Google Consent Mode v2 is wired in, and the whole town runs on one script tag.</p>
+        <div class="hero-cta"><a class="btn btn-primary btn-lg" href="#demo">${art('gate', 'ki ki-btn')}Watch the gate hold trackers</a><a class="btn btn-outline btn-lg" href="#configurator">${art('lantern', 'ki ki-btn')}Build your snippet</a></div>
+        ${heroCode}
+      </div>
     </div>
   </div>
-  <div class="hero-art">${heroScene(VARS, { id: 'hero', sky: false, inline: true })}</div>
-  <ul class="hero-tags" aria-label="cookieowl in numbers">
+  <div class="hero-band"><ul class="wrap hero-tags" aria-label="cookieowl in numbers">
     <li><b>${ctx.size}</b><span>gzip, one file</span></li>
     <li><b>0</b><span>dependencies</span></li>
     <li><b>${ctx.langs}</b><span>languages</span></li>
     <li><b>${ctx.trackers}</b><span>trackers known by name</span></li>
-  </ul>
+  </ul></div>
 </section>
 
 <section id="demo" class="chapter street-sec" aria-labelledby="demo-title">
