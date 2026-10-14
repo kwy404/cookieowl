@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="hhd-t">
+<title id="hhd-t">Hoot, the cookieowl owl</title>
+<g fill="#e8edf9" stroke="#e8edf9" stroke-width="10" stroke-linejoin="round"><path d="M40 70L26 22L74 50Z"/><path d="M216 70L230 22L182 50Z"/><circle cx="128" cy="138" r="98"/><path d="M60 48C62 8 194 8 196 48L198 62L58 62Z"/></g>
+<path d="M40 70L26 22L74 50Z" fill="#1b2547"/>
+<path d="M216 70L230 22L182 50Z" fill="#1b2547"/>
+<circle cx="128" cy="138" r="98" fill="#1b2547"/>
+<circle cx="88" cy="140" r="50" fill="#f8eed8"/>
+<circle cx="168" cy="140" r="50" fill="#f8eed8"/>
+<circle cx="88" cy="142" r="34" fill="#f2b134"/>
+<circle cx="168" cy="142" r="34" fill="#f2b134"/>
+<circle cx="92" cy="146" r="19" fill="#111833"/>
+<circle cx="164" cy="146" r="19" fill="#111833"/>
+<circle cx="100" cy="135" r="7" fill="#ffffff"/>
+<circle cx="172" cy="135" r="7" fill="#ffffff"/>
+<path d="M114 186Q128 180 142 186L128 210Z" fill="#ea8f25"/>
+<g transform="rotate(-6 128 46)">
+<path d="M60 48C62 8 194 8 196 48L198 62L58 62Z" fill="#111833"/>
+<rect x="60" y="44" width="136" height="13" rx="3" fill="#f2b134"/>
+<path d="M54 58Q128 92 202 58L198 54Q128 80 58 54Z" fill="#0a0f22"/>
+<path d="M114 12h28v14c0 11-14 18-14 18s-14-7-14-18Z" fill="#f2b134"/>
+</g>
+</svg>

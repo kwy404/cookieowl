@@ -110,6 +110,7 @@
     "size": "node scripts/size.mjs",
     "docs": "node scripts/build-docs.mjs",
     "docs:check": "node scripts/build-docs.mjs --check",
+    "art": "node scripts/build-art.mjs",
     "images": "bash scripts/render-images.sh",
     "prepublishOnly": "npm run build && npm test"
   },
