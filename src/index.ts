@@ -7,6 +7,12 @@ export { LANGS, matchLang, detectLang } from './i18n';
 export { DEFAULT_MAPPING as CONSENT_MODE_MAPPING } from './consent-mode';
 export type * from './types';
 
-/** The shared instance. Call `cookieowl.init(config)` once, as early as possible. */
-export const cookieowl: CookieOwl = new CookieOwl();
+const existing = typeof window !== 'undefined' ? (window as { cookieowl?: CookieOwl }).cookieowl : undefined;
+
+/**
+ * The shared instance. Call `cookieowl.init(config)` once, as early as possible.
+ * When the script tag build already created `window.cookieowl`, this is that
+ * same instance, so the React and Vue helpers see the choice it manages.
+ */
+export const cookieowl: CookieOwl = existing && typeof existing.accepted === 'function' && typeof existing.on === 'function' ? existing : new CookieOwl();
 export default cookieowl;

@@ -112,3 +112,18 @@ describe.skipIf(!existsSync(dist))('dist/cookieowl.js in a page', () => {
     dom.window.close();
   });
 });
+
+describe('shared instance', () => {
+  it('reuses window.cookieowl created by the script tag build', async () => {
+    vi.resetModules();
+    const w = window as unknown as { cookieowl?: unknown };
+    const fake = { accepted: () => true, on: () => () => {} };
+    w.cookieowl = fake;
+    const mod = await import('../src/index');
+    expect(mod.cookieowl).toBe(fake);
+    delete w.cookieowl;
+    vi.resetModules();
+    const fresh = await import('../src/index');
+    expect(fresh.cookieowl).not.toBe(fake);
+  });
+});
