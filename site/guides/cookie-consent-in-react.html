@@ -1,0 +1,111 @@
+<!--meta
+{
+  "slug": "cookie-consent-in-react",
+  "title": "Cookie consent in React: hook, gate component and blocking | cookieowl",
+  "description": "Add cookie consent to a React app: start cookieowl early, render embeds and analytics with ConsentGate, read choices with the useConsent hook, and block trackers.",
+  "h1": "Cookie consent in React, without a provider maze",
+  "crumb": "React cookie consent",
+  "lead": "A React app still needs its trackers held before React even mounts. Here is where to start cookieowl, and how to read consent from components.",
+  "readTime": "7 min read",
+  "faq": [
+    { "q": "Is there a React component for the banner?", "a": "The banner is plain DOM rendered by cookieowl outside your React tree, so it works before React loads and on pages without React. From components you use the useConsent hook and the ConsentGate component." },
+    { "q": "Does it work with React 18 and React 19?", "a": "Yes. The helpers use only useState and useEffect, so they work from React 16.8 up, with React DOM, Vite, Create React App, Remix or Next.js." },
+    { "q": "Can I load Google Analytics from a React effect after consent?", "a": "Yes. Read useConsent('analytics') and inject the script in an effect when it turns true. Marking the script in index.html with text/plain is simpler and keeps it out of your bundle." },
+    { "q": "Does cookieowl work with server side rendering?", "a": "Importing it on the server is safe: without a DOM, init stores the configuration, accepted() returns false for optional categories and nothing touches document." }
+  ],
+  "related": ["cookie-consent-in-nextjs", "block-google-analytics-until-consent", "free-cookie-consent-script"]
+}
+-->
+<section id="where"><h2>Where cookie consent belongs in a React app</h2>
+<p>React mounts after the JavaScript bundle has been downloaded, parsed and executed. Anything in <code>index.html</code> runs before that, including the analytics snippet your marketing team pasted in. That is why consent cannot live only in a React component: by the time the component renders, the tracker may have run.</p>
+<p>The reliable layout is two layers. cookieowl loads first in <code>index.html</code>, where it can hold trackers and set Consent Mode defaults before anything else runs. Your components then read the visitor's choice through a tiny hook and render embeds or widgets only when they are allowed.</p>
+</section>
+<section id="install"><h2>Install and start it early</h2>
+<p>With Vite or Create React App, put the script tag in <code>index.html</code>. It is the only setup that blocks trackers written in the HTML:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+    data-policy-url="/privacy" data-consent-mode data-auto-block></script>
+  <script type="text/plain" data-cookieowl="analytics" async
+    src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+</head>
+</pre>
+<p>If you prefer the npm package, install it and call <code>init</code> at the top of your entry file, before rendering. Either way there is one instance: when the script tag already created <code>window.cookieowl</code>, the package exports that same object, so the hooks see the choice it manages.</p>
+<pre data-kind="terminal" data-lang="bash">
+npm install cookieowl
+</pre>
+<pre data-kind="editor" data-lang="tsx" data-title="src/main.tsx">
+import { createRoot } from 'react-dom/client';
+import { cookieowl } from 'cookieowl';
+import App from './App';
+
+cookieowl.init({
+  policyUrl: '/privacy',
+  consentMode: true,
+  autoBlock: true,
+});
+
+createRoot(document.getElementById('root')!).render(<App />);
+</pre>
+</section>
+<section id="gate"><h2>Render embeds after consent with ConsentGate</h2>
+<p><code>ConsentGate</code> renders its children only when every listed category is accepted, and a fallback otherwise. It re-renders on its own when the visitor changes their mind, so a video disappears the moment marketing is withdrawn:</p>
+<pre data-kind="editor" data-lang="tsx" data-title="src/VideoSection.tsx">
+import { ConsentGate } from 'cookieowl/react';
+import { cookieowl } from 'cookieowl';
+
+export function VideoSection() {
+  return (
+    <ConsentGate
+      category="marketing"
+      fallback={
+        <div className="video-placeholder">
+          <p>This video is hosted on YouTube, which sets cookies.</p>
+          <button onClick={() => cookieowl.showPreferences()}>Cookie settings</button>
+        </div>
+      }
+    >
+      <iframe src="https://www.youtube-nocookie.com/embed/VIDEO_ID" title="Product tour" />
+    </ConsentGate>
+  );
+}
+</pre>
+</section>
+<section id="hook"><h2>Read choices with useConsent</h2>
+<p><code>useConsent('analytics')</code> returns a boolean that follows the visitor's choice. Called without a category it returns the map of every category. Use it to start a client side SDK only when allowed:</p>
+<pre data-kind="editor" data-lang="tsx" data-title="src/useAnalytics.ts">
+import { useEffect } from 'react';
+import { useConsent } from 'cookieowl/react';
+
+export function useAnalytics() {
+  const allowed = useConsent('analytics');
+
+  useEffect(() => {
+    if (!allowed) return;
+    const s = document.createElement('script');
+    s.src = 'https://plausible.io/js/script.js';
+    s.dataset.domain = 'example.com';
+    document.head.append(s);
+  }, [allowed]);
+}
+</pre>
+<p>For a footer link, any element with <code>data-cookieowl-open</code> works, including JSX: <code>&lt;a href="#" data-cookieowl-open&gt;Cookie settings&lt;/a&gt;</code>. In TypeScript, data attributes need no extra typing.</p>
+</section>
+<section id="mistakes"><h2>Four mistakes to avoid</h2>
+<p><b>Starting consent inside a component.</b> A <code>useEffect</code> in your root component runs after the first render, which is after every script in <code>index.html</code>. Initialize cookieowl before <code>createRoot</code>, or better, with the script tag in the head.</p>
+<p><b>Keeping consent in React state only.</b> State resets on every full page load and is invisible to scripts outside React. cookieowl stores the choice in a first party cookie and exposes it to everything on the page, React or not.</p>
+<p><b>Loading an analytics SDK from a bundle import.</b> <code>import</code> statements run when the module loads, before any consent check. Load third party SDKs dynamically, inside the effect that checks <code>useConsent</code>, or keep them as inert scripts in the HTML.</p>
+<p><b>Hiding embeds with CSS.</b> An iframe hidden with <code>display: none</code> still loads and still sets cookies. Do not render it at all until consent, which is exactly what <code>ConsentGate</code> does.</p>
+</section>
+<section id="routes"><h2>Single page navigation and testing</h2>
+<p>Consent survives client side navigation because it is stored in a first party cookie, not in React state. Elements with <code>data-cookieowl</code> that a route renders later are released automatically when their category is already accepted, because cookieowl watches the document.</p>
+<p>In tests, start a separate instance with <code>storage: 'memory'</code> so every test begins without a choice, and pass it to the helpers through their <code>owl</code> argument:</p>
+<pre data-kind="editor" data-lang="tsx" data-title="VideoSection.test.tsx">
+import { createCookieOwl } from 'cookieowl';
+import { ConsentGate } from 'cookieowl/react';
+
+const owl = createCookieOwl({ storage: 'memory', autoShow: false });
+render(<ConsentGate category="marketing" owl={owl} fallback="blocked">video</ConsentGate>);
+owl.save({ marketing: true });
+</pre>
+</section>

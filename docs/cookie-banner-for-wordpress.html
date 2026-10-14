@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('voodoo:theme');if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);r.style.colorScheme=t}else{r.removeAttribute('data-theme')}}catch(e){}})();</script>
+<title>Free cookie banner for WordPress (LGPD and GDPR) | cookieowl</title>
+<meta name="description" content="Add a free LGPD and GDPR cookie banner to WordPress without a plugin subscription: load cookieowl in wp_head, block analytics plugins and embeds until consent.">
+<link rel="canonical" href="https://kwy404.github.io/cookieowl/cookie-banner-for-wordpress.html">
+<meta name="author" content="Alexandre Kohler">
+<meta name="theme-color" content="#0b1027">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="cookieowl">
+<meta property="og:title" content="Free cookie banner for WordPress (LGPD and GDPR) | cookieowl">
+<meta property="og:description" content="Add a free LGPD and GDPR cookie banner to WordPress without a plugin subscription: load cookieowl in wp_head, block analytics plugins and embeds until consent.">
+<meta property="og:url" content="https://kwy404.github.io/cookieowl/cookie-banner-for-wordpress.html">
+<meta property="og:image" content="https://kwy404.github.io/cookieowl/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="cookieowl: free cookie consent for LGPD and GDPR that really blocks trackers">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free cookie banner for WordPress (LGPD and GDPR) | cookieowl">
+<meta name="twitter:description" content="Add a free LGPD and GDPR cookie banner to WordPress without a plugin subscription: load cookieowl in wp_head, block analytics plugins and embeds until consent.">
+<meta name="twitter:image" content="https://kwy404.github.io/cookieowl/og.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,700&amp;display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+<link rel="stylesheet" href="site.css">
+<script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
+<script type="module" src="site.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "headline": "A free cookie banner for WordPress that blocks before consent",
+      "description": "Add a free LGPD and GDPR cookie banner to WordPress without a plugin subscription: load cookieowl in wp_head, block analytics plugins and embeds until consent.",
+      "url": "https://kwy404.github.io/cookieowl/cookie-banner-for-wordpress.html",
+      "datePublished": "2026-10-13",
+      "dateModified": "2026-10-13",
+      "inLanguage": "en",
+      "image": "https://kwy404.github.io/cookieowl/og.png",
+      "author": {
+        "@type": "Person",
+        "name": "Alexandre Kohler",
+        "url": "https://github.com/kwy404"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Alexandre Kohler",
+        "url": "https://github.com/kwy404"
+      },
+      "about": {
+        "@type": "SoftwareApplication",
+        "name": "cookieowl",
+        "url": "https://kwy404.github.io/cookieowl/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need a plugin to add cookieowl to WordPress?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. A few lines in your child theme functions.php (or a small must use plugin) print the script tag at the top of the head. A header code plugin also works if it can print before other scripts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Will it block Google Analytics added by Site Kit or another plugin?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With data-auto-block, cookieowl recognizes gtag.js, Tag Manager and the other known trackers by URL, even when a plugin prints them, as long as cookieowl is printed before them."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work with page caching plugins?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The banner is rendered in the browser and the choice is a first party cookie, so cached pages are the same for everyone. Exclude the script from JavaScript minification and combining so it stays first."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What about embedded YouTube videos in posts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Auto mode replaces YouTube and Vimeo iframes, including the ones the block editor embeds, with a click to load placeholder until marketing cookies are accepted."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "cookieowl",
+          "item": "https://kwy404.github.io/cookieowl/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://kwy404.github.io/cookieowl/guides.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "WordPress cookie banner",
+          "item": "https://kwy404.github.io/cookieowl/cookie-banner-for-wordpress.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body class="antialiased bg-background text-foreground page-guide">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol><symbol id="i-github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></symbol><symbol id="i-npm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17V7h10v10h-3V10h-2v7Z"/></symbol><symbol id="i-linkedin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol><symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></symbol><symbol id="i-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol><symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h13"/></symbol><symbol id="i-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v6h6"/><path d="M5 15a8 8 0 1 0 2-8.5L4 10"/></symbol><symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 4 13 8-13 8Z"/></symbol><symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7Z"/></symbol><symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol><symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol><symbol id="ic-block" viewBox="0 0 48 48"><path d="M24 5l15 6v11c0 10-6.5 17-15 21C15.5 39 9 32 9 22V11Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><rect x="17" y="21" width="14" height="11" rx="2.5" fill="var(--ic-accent, #f2b134)"/><path d="M19.5 21v-3a4.5 4.5 0 0 1 9 0v3" fill="none" stroke="currentColor" stroke-width="3"/></symbol><symbol id="ic-auto-block" viewBox="0 0 48 48"><circle cx="21" cy="21" r="12" fill="none" stroke="currentColor" stroke-width="3"/><path d="M30 30l10 10" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><path d="M15 21h12" stroke="var(--ic-accent, #f2b134)" stroke-width="3.5" stroke-linecap="round"/></symbol><symbol id="ic-consent-mode" viewBox="0 0 48 48"><rect x="6" y="9" width="26" height="12" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="15" r="4" fill="var(--ic-accent, #f2b134)"/><rect x="16" y="27" width="26" height="12" rx="6" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="22" cy="33" r="4" fill="currentColor"/></symbol><symbol id="ic-categories" viewBox="0 0 48 48"><path d="M24 6l18 9-18 9-18-9Z" fill="var(--ic-accent, #f2b134)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M6 24l18 9 18-9M6 33l18 9 18-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></symbol><symbol id="ic-languages" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" stroke-width="3"/><path d="M7 24h34M24 7c-6 6-6 28 0 34M24 7c6 6 6 28 0 34" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="35" cy="13" r="6" fill="var(--ic-accent, #f2b134)"/></symbol><symbol id="ic-accessibility" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="14" r="3.5" fill="var(--ic-accent, #f2b134)"/><path d="M14 20l10 2 10-2M24 22v8l-5 9M24 30l5 9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol><symbol id="ic-lightweight" viewBox="0 0 48 48"><path d="M38 8C22 8 12 18 12 34l-4 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M38 8C38 26 28 36 12 34C14 22 22 12 38 8Z" fill="var(--ic-accent, #f2b134)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 30l10-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol><symbol id="ic-frameworks" viewBox="0 0 48 48"><path d="M10 14h10a4 4 0 1 1 8 0h10v10a4 4 0 1 0 0 8v8H10Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="19" cy="29" r="5" fill="var(--ic-accent, #f2b134)"/></symbol><symbol id="ic-audit-log" viewBox="0 0 48 48"><rect x="10" y="8" width="28" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><rect x="18" y="5" width="12" height="7" rx="2" fill="var(--ic-accent, #f2b134)" stroke="currentColor" stroke-width="2.5"/><path d="M16 22h16M16 29h16M16 36h9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol><symbol id="ic-privacy-signal" viewBox="0 0 48 48"><path d="M14 26V14a3 3 0 0 1 6 0v10M20 22V10a3 3 0 0 1 6 0v12M26 22V12a3 3 0 0 1 6 0v12M32 24v-6a3 3 0 0 1 6 0v10c0 9-6 15-14 15s-11-4-15-11l-3-6a3 3 0 0 1 5-3l3 4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="9" r="5" fill="var(--ic-accent, #f2b134)"/></symbol><symbol id="ic-embed" viewBox="0 0 48 48"><rect x="5" y="10" width="38" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 17l11 7-11 7Z" fill="var(--ic-accent, #f2b134)"/><path d="M5 31h38" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/></symbol><symbol id="ic-reopen" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="18" cy="23" r="5" fill="var(--ic-accent, #f2b134)"/><circle cx="30" cy="23" r="5" fill="var(--ic-accent, #f2b134)"/><circle cx="18" cy="23" r="2" fill="currentColor"/><circle cx="30" cy="23" r="2" fill="currentColor"/><path d="M22 31l2 3 2-3Z" fill="var(--ic-accent, #f2b134)"/></symbol><symbol id="ic-dark-mode" viewBox="0 0 48 48"><path d="M30 7a17 17 0 1 0 11 27A14 14 0 0 1 30 7Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="36" cy="13" r="2.5" fill="var(--ic-accent, #f2b134)"/><circle cx="41" cy="22" r="1.8" fill="var(--ic-accent, #f2b134)"/></symbol><symbol id="ic-cookie" viewBox="0 0 48 48"><path d="M40 22a6 6 0 0 1-8-7 6 6 0 0 1-6-8A17 17 0 1 0 40 22Z" fill="var(--ic-accent, #f2b134)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="18" cy="22" r="2.6" fill="currentColor"/><circle cx="25" cy="31" r="2.6" fill="currentColor"/><circle cx="16" cy="32" r="2" fill="currentColor"/></symbol></svg>
+<a href="#main" class="skip-link">Skip to content</a>
+<header class="topbar dark" v-data="{ open: false }" @keydown.escape="open = false">
+  <div class="wrap topbar-in">
+    <a href="./" class="brand" aria-label="cookieowl home"><img src="assets/mascot-head-dark.svg" width="36" height="36" alt=""><span class="brand-name">cookie<b>owl</b></span></a>
+    <nav id="topnav" class="topnav" :class="{ 'is-open': open }" aria-label="Main" @click="open = false"><a href="./#demo" class="top-link">Live demo</a><a href="./#configurator" class="top-link">Configurator</a><a href="lgpd-gdpr-cookie-checklist.html" class="top-link">Checklist</a><a href="guides.html" class="top-link" aria-current="page">Guides</a><a href="api.html" class="top-link">API</a></nav>
+    <div class="top-right">
+      <button type="button" class="search-btn" data-search-open v-hotkey="mod+k" aria-haspopup="dialog" aria-label="Search the site"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-search"/></svg><span class="search-label">Search</span><kbd class="kbd kbd-xs">Ctrl K</kbd></button>
+      <a href="https://github.com/kwy404/cookieowl" class="icon-btn" aria-label="cookieowl on GitHub"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-github"/></svg></a>
+      <button type="button" class="icon-btn theme-btn" v-theme-toggle.cycle aria-label="Switch theme" title="Theme: system, light or dark"><svg class="ic ti-system" aria-hidden="true" focusable="false"><use href="#i-system"/></svg><svg class="ic ti-light" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg><svg class="ic ti-dark" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg></button>
+      <button type="button" class="icon-btn nav-btn" aria-controls="topnav" :aria-expanded="open ? 'true' : 'false'" aria-expanded="false" @click="open = !open" aria-label="Menu"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+<div class="read-progress" aria-hidden="true"></div>
+<header class="g-head night dark">
+  <div class="starfield starfield-dim" aria-hidden="true"></div>
+  <div class="wrap g-head-in">
+    <nav class="crumbs" aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">cookieowl</a></li><li><a href="guides.html">Guides</a></li><li><span aria-current="page">WordPress cookie banner</span></li></ol></nav>
+    <p class="g-star"><svg class="art-ic art-sm" aria-hidden="true" focusable="false"><use href="#ic-embed"/></svg><span>Guide 8 of 9</span><span class="g-star-name">Arcturus</span></p>
+    <h1>A free cookie banner for WordPress that blocks before consent</h1>
+    <p class="lead">WordPress sites collect trackers from themes and plugins. One hook in functions.php puts cookieowl in front of all of them.</p>
+    <p class="g-meta"><span>By <a href="https://github.com/kwy404" rel="author">Alexandre Kohler</a></span><span>Updated <time datetime="2026-10-13">October 13, 2026</time></span><span>7 min read</span></p>
+  </div>
+</header>
+<div class="wrap g-layout">
+  <article class="g-article">
+<section id="why" class="chapter"><h2><a href="#why" class="anchor" aria-hidden="true" tabindex="-1">#</a>Why WordPress sites leak trackers</h2>
+<p>A typical WordPress site does not have one place where trackers live. The analytics plugin prints gtag.js, the theme adds a font service, a form plugin loads a captcha, and editors embed YouTube videos in posts. Each of them prints its scripts in <code>wp_head</code> or <code>wp_footer</code>, usually without asking anyone. A cookie banner plugin that only shows a notice leaves all of that running.</p>
+<p>cookieowl solves it from the front of the queue. Printed as the very first thing in <code>wp_head</code>, it sets the Consent Mode defaults and starts watching the page, so every tracker printed after it is held until the visitor accepts its category.</p>
+</section>
+<section id="install" class="chapter"><h2><a href="#install" class="anchor" aria-hidden="true" tabindex="-1">#</a>Install with one hook</h2>
+<p>Add this to the <code>functions.php</code> of a child theme, or save it as a file in <code>wp-content/mu-plugins/</code> so a theme update never removes it. Priority 1 makes it print before the scripts that WordPress and plugins enqueue:</p>
+<figure class="frame frame-editor" data-lang="php"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#777bb3"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="5.2" font-weight="700" fill="#fff">PHP</text></svg><span>wp-content/mu-plugins/cookieowl.php</span></span><button type="button" class="frame-copy" v-copy-from="#g8-1" aria-label="Copy wp-content/mu-plugins/cookieowl.php"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="shiki" tabindex="0"><code id="g8-1"><span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">&#x3C;?php</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">/**</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955"> * Plugin Name: cookieowl</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955"> * Description: Cookie consent for LGPD and GDPR that blocks trackers until consent.</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955"> */</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">add_action</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">'wp_head'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">function</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> () {</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">    $policy</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">esc_url</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">get_privacy_policy_url</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">() ?: </span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">home_url</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#811F3F;--shiki-dark:#D16969">'/privacy/'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">));</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">    echo</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> '&#x3C;script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"'</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">        .</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> ' data-lang="auto" data-policy-url="'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> .</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> $policy</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> .</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> '"'</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">        .</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> ' data-consent-mode data-auto-block>&#x3C;/script>'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> .</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "</span><span style="--shiki-light:#EE0000;--shiki-dark:#D7BA7D">\n</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">}, </span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">1</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span></code></pre></figure>
+<p><code>get_privacy_policy_url()</code> returns the page you chose under Settings, Privacy, so the banner links to it automatically. With <code>data-lang="auto"</code> the banner follows the site language: a site set to Português do Brasil gets the LGPD text.</p>
+</section>
+<section id="plugins" class="chapter"><h2><a href="#plugins" class="anchor" aria-hidden="true" tabindex="-1">#</a>Holding scripts printed by plugins</h2>
+<p>Auto mode covers the well known trackers by URL. For any other script a plugin enqueues, WordPress has a filter that lets you rewrite its tag. Find the script handle (it is in the <code>id</code> attribute, without the <code>-js</code> suffix) and mark it:</p>
+<figure class="frame frame-editor" data-lang="php"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#777bb3"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="5.2" font-weight="700" fill="#fff">PHP</text></svg><span>functions.php</span></span><button type="button" class="frame-copy" v-copy-from="#g8-2" aria-label="Copy functions.php"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="shiki" tabindex="0"><code id="g8-2"><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">add_filter</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">'script_loader_tag'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">function</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> (</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">$tag</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">$handle</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) {</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">    $categories</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = [</span></span>
+<span class="line"><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">        'my-chat-widget'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">   => </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">'preferences'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span></span>
+<span class="line"><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">        'my-ab-testing'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">    => </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">'analytics'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span></span>
+<span class="line"><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">        'partner-tracking'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> => </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">'marketing'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">    ];</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">    if</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> (</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">isset</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">$categories</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">[</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">$handle</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">])) {</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">        $tag</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">str_replace</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span></span>
+<span class="line"><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">            '&#x3C;script '</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span></span>
+<span class="line"><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">            '&#x3C;script type="text/plain" data-cookieowl="'</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> .</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> $categories</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">[</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">$handle</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">] </span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> '" '</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">            $tag</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">        );</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">    }</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">    return</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> $tag</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">}, </span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">10</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">2</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span></code></pre></figure>
+<p>The new <code>type</code> comes first in the tag, and when an element has the same attribute twice, browsers keep the first one, so this also works on themes that still print <code>type="text/javascript"</code>.</p>
+</section>
+<section id="embeds" class="chapter"><h2><a href="#embeds" class="anchor" aria-hidden="true" tabindex="-1">#</a>YouTube and Vimeo in posts</h2>
+<p>The block editor turns a YouTube link into an iframe. With auto mode, cookieowl swaps it for a placeholder that explains the video sets cookies, with a button to load it once and another to allow marketing cookies. For other embeds, such as maps, add the attributes in a Custom HTML block:</p>
+<figure class="frame frame-editor" data-lang="html"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><svg class="file-ic" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#e34c26"/><text x="8" y="11" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="6.4" font-weight="700" fill="#fff">&lt;&gt;</text></svg><span>Custom HTML block</span></span><button type="button" class="frame-copy" v-copy-from="#g8-3" aria-label="Copy Custom HTML block"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div><pre class="shiki" tabindex="0"><code id="g8-3"><span class="line"><span style="--shiki-light:#800000;--shiki-dark:#808080">&#x3C;</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">iframe</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-cookieowl</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"marketing"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> data-cookieowl-name</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"Google Maps"</span></span>
+<span class="line"><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE">  data-cookieowl-src</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"https://www.google.com/maps/embed?pb=YOUR_EMBED_CODE"</span></span>
+<span class="line"><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE">  width</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"600"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> height</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"400"</span><span style="--shiki-light:#E50000;--shiki-dark:#9CDCFE"> title</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">=</span><span style="--shiki-light:#0000FF;--shiki-dark:#CE9178">"Map to our shop"</span><span style="--shiki-light:#800000;--shiki-dark:#808080">>&#x3C;/</span><span style="--shiki-light:#800000;--shiki-dark:#569CD6">iframe</span><span style="--shiki-light:#800000;--shiki-dark:#808080">></span></span></code></pre></figure>
+</section>
+<section id="footer" class="chapter"><h2><a href="#footer" class="anchor" aria-hidden="true" tabindex="-1">#</a>A Cookie settings link and caching</h2>
+<p>Withdrawal must stay easy. cookieowl shows a small owl button on every page, and you can add a link to your footer menu: create a custom link with the URL <code>#</code>, then add <code>data-cookieowl-open</code> through a small filter, or place a Custom HTML block with <code>&lt;a href="#" data-cookieowl-open&gt;Cookie settings&lt;/a&gt;</code> in a footer widget.</p>
+<p>Caching and optimization plugins are compatible because nothing is rendered on the server. Two settings to check: exclude <code>cookieowl.js</code> from deferring, delaying and combining JavaScript, since it must run first and synchronously, and do not lazy load scripts marked <code>text/plain</code>, which some delay features rewrite.</p>
+<div class="callout callout-accent"><p class="callout-title"><svg class="art-ic art-sm" aria-hidden="true" focusable="false"><use href="#ic-reopen"/></svg>Hoot says</p><p>Test with a private window after every plugin update. A new plugin version can add a tracker, and the Network panel is the quickest way to see it.</p></div>
+</section>
+
+    <section id="faq" class="chapter"><h2><a href="#faq" class="anchor" aria-hidden="true" tabindex="-1">#</a>Questions</h2><div class="accordion collapse-plus"><details class="collapse" name="gfaq" open><summary class="collapse-title">Do I need a plugin to add cookieowl to WordPress?</summary><div class="collapse-content"><p>No. A few lines in your child theme functions.php (or a small must use plugin) print the script tag at the top of the head. A header code plugin also works if it can print before other scripts.</p></div></details><details class="collapse" name="gfaq"><summary class="collapse-title">Will it block Google Analytics added by Site Kit or another plugin?</summary><div class="collapse-content"><p>With data-auto-block, cookieowl recognizes gtag.js, Tag Manager and the other known trackers by URL, even when a plugin prints them, as long as cookieowl is printed before them.</p></div></details><details class="collapse" name="gfaq"><summary class="collapse-title">Does it work with page caching plugins?</summary><div class="collapse-content"><p>Yes. The banner is rendered in the browser and the choice is a first party cookie, so cached pages are the same for everyone. Exclude the script from JavaScript minification and combining so it stays first.</p></div></details><details class="collapse" name="gfaq"><summary class="collapse-title">What about embedded YouTube videos in posts?</summary><div class="collapse-content"><p>Auto mode replaces YouTube and Vimeo iframes, including the ones the block editor embeds, with a click to load placeholder until marketing cookies are accepted.</p></div></details></div></section>
+    <aside class="g-cta dark" aria-label="Get started">
+      <img src="assets/mascot-dark.svg" width="110" height="110" alt="" loading="lazy">
+      <div><h2>Put Hoot on guard</h2><p>One script tag in your head, free and open source. Trackers wait until visitors say yes.</p>
+      <div class="cta-cmd"><code id="cta-cmd">&lt;script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"&gt;&lt;/script&gt;</code><button type="button" class="btn btn-sm btn-primary" v-copy-from="#cta-cmd" aria-label="Copy the script tag"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-copy"/></svg>Copy</button></div></div>
+    </aside>
+    <section id="related" class="chapter"><h2><a href="#related" class="anchor" aria-hidden="true" tabindex="-1">#</a>Keep reading</h2><div class="related"><a href="block-google-analytics-until-consent.html" class="rel"><svg class="art-ic" aria-hidden="true" focusable="false"><use href="#ic-block"/></svg><span><small>Deneb</small><strong>How to block Google Analytics until consent</strong><span>How to block Google Analytics 4 until cookie consent: hold gtag.js and the config as text/plain, catch injected tags with auto mode, and verify it in DevTools.</span></span></a><a href="cookie-consent-banner-lgpd.html" class="rel"><svg class="art-ic" aria-hidden="true" focusable="false"><use href="#ic-languages"/></svg><span><small>Vega</small><strong>A cookie consent banner for the LGPD, in Portuguese, that really blocks</strong><span>Add an LGPD cookie banner in Portuguese that blocks trackers before consent, follows the ANPD cookie guide and lets visitors revoke consent at any time.</span></span></a><a href="free-cookie-consent-script.html" class="rel"><svg class="art-ic" aria-hidden="true" focusable="false"><use href="#ic-lightweight"/></svg><span><small>Antares</small><strong>A free cookie consent script, with nothing held back</strong><span>A free, open source cookie consent script with no page view limits or account: one script tag, real blocking, Consent Mode v2, five languages, under 15 kB.</span></span></a></div></section>
+  </article>
+  <aside class="g-aside" aria-label="On this page">
+    <nav class="g-toc" aria-labelledby="toc-title"><p id="toc-title" class="g-toc-title"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>On this page</p><ol><li><a href="#why">Why WordPress sites leak trackers</a></li><li><a href="#install">Install with one hook</a></li><li><a href="#plugins">Holding scripts printed by plugins</a></li><li><a href="#embeds">YouTube and Vimeo in posts</a></li><li><a href="#footer">A Cookie settings link and caching</a></li><li><a href="#faq">Questions</a></li><li><a href="#related">Keep reading</a></li></ol></nav>
+    <div class="g-side-card"><p><b>Try it live</b></p><p>Toggle categories in the demo and watch fake trackers get held or run.</p><a class="btn btn-sm btn-outline" href="./#demo"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-play"/></svg>Open the demo</a></div>
+  </aside>
+</div>
+</main>
+<footer class="site-foot dark">
+  <div class="foot-sky" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a href="./" class="brand"><img src="assets/mascot-dark.svg" width="56" height="56" alt="" loading="lazy"><span class="brand-name">cookie<b>owl</b></span></a>
+        <p>Cookie consent for LGPD and GDPR that keeps trackers asleep until visitors say yes. One script tag, under 15 kB, MIT licensed.</p>
+        <p class="foot-links"><a href="https://github.com/kwy404/cookieowl"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-github"/></svg>GitHub</a><a href="https://www.npmjs.com/package/cookieowl"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-npm"/></svg>npm</a><a href="https://github.com/kwy404/cookieowl/blob/main/CHANGELOG.md"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-book"/></svg>Changelog</a></p>
+      </div>
+      <nav aria-labelledby="f-site"><h2 id="f-site" class="foot-title">Observatory</h2><ul>
+        <li><a href="./#demo">Live demo</a></li><li><a href="./#configurator">Configurator</a></li><li><a href="./#how">How blocking works</a></li><li><a href="./#frameworks">React, Vue, Next.js</a></li><li><a href="api.html">API reference</a></li><li><a href="guides.html">All guides</a></li><li><a href="./#faq">FAQ</a></li>
+      </ul></nav>
+      <nav aria-labelledby="f-guides"><h2 id="f-guides" class="foot-title">Guides</h2><ul><li><a href="lgpd-gdpr-cookie-checklist.html">LGPD and GDPR checklist</a></li><li><a href="cookie-consent-banner-lgpd.html">Cookie banner for LGPD</a></li><li><a href="gdpr-compliant-cookie-banner.html">GDPR compliant banner</a></li><li><a href="google-consent-mode-v2-setup.html">Consent Mode v2 setup</a></li><li><a href="block-google-analytics-until-consent.html">Block GA until consent</a></li><li><a href="cookie-consent-in-react.html">Cookie consent in React</a></li><li><a href="cookie-consent-in-nextjs.html">Cookie consent in Next.js</a></li><li><a href="cookie-banner-for-wordpress.html">Cookie banner for WordPress</a></li><li><a href="free-cookie-consent-script.html">Free cookie consent script</a></li></ul></nav>
+      <nav aria-labelledby="f-more"><h2 id="f-more" class="foot-title">More from kwy404</h2><ul class="foot-more"><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a><small>Utility-first CSS with no build step</small></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a><small>Reactive attributes for plain HTML</small></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a><small>Find bugs in JavaScript libraries</small></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a><small>Vue 2 to Vue 3 migration</small></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a><small>Grapheme aware string utilities</small></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a><small>Parse localized numbers</small></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a><small>Edge case inputs for testing</small></li></ul></nav>
+    </div>
+    <div class="foot-bottom">
+      <p>Made by <a href="https://github.com/kwy404" rel="me noopener">Alexandre Kohler</a><a href="https://github.com/kwy404" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on GitHub"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-github"/></svg></a><a href="https://www.linkedin.com/in/alexandre-silva-173687256/" class="foot-ic" rel="me noopener" aria-label="Alexandre Kohler on LinkedIn"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg></a></p>
+      <p>Built with <a href="https://kwy404.github.io/monsoon/">Monsoon</a>. Interactive parts built with <a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a>. MIT licensed. Not legal advice.</p>
+    </div>
+  </div>
+</footer>
+<dialog id="search" class="modal modal-top search-dlg" aria-label="Search the site">
+  <div class="command-palette" v-data="{ q: '', sel: 0 }" @keydown.down.prevent="sel = Math.min(sel + 1, hits(q, S.ready).length - 1)" @keydown.up.prevent="sel = Math.max(sel - 1, 0)" @keydown.enter.prevent="go(q, sel)">
+    <label class="command-palette-search"><input id="search-input" class="command-palette-input" v-model="q" @input="sel = 0" placeholder="Search guides, options and questions" autocomplete="off" spellcheck="false" aria-label="Search" aria-controls="search-results"></label>
+    <div id="search-results" class="command-palette-list" role="listbox" aria-label="Results">
+      <p class="command-palette-heading" v-if="!q">Suggestions</p>
+      <a v-for="(r, i) in hits(q, S.ready)" :key="r.url" :href="r.url" class="command-palette-item" role="option" :aria-selected="i === sel ? 'true' : 'false'" @mouseenter="sel = i"><span class="hit-kind" v-text="r.kind"></span><span class="hit-text"><span class="hit-title" v-text="r.title"></span><span class="hit-sub" v-text="r.sub"></span></span></a>
+      <p class="command-palette-empty" v-if="q && !hits(q, S.ready).length">Nothing here. Hoot looked everywhere.</p>
+    </div>
+    <div class="command-palette-footer"><span><kbd class="kbd kbd-xs">Enter</kbd> open</span><span><kbd class="kbd kbd-xs">Esc</kbd> close</span></div>
+  </div>
+  <form method="dialog" class="modal-backdrop"><button aria-label="Close search">Close</button></form>
+</dialog>
+</body>
+</html>

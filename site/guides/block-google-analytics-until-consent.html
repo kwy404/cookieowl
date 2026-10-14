@@ -1,0 +1,65 @@
+<!--meta
+{
+  "slug": "block-google-analytics-until-consent",
+  "title": "Block Google Analytics until consent (GA4, gtag and GTM) | cookieowl",
+  "description": "How to block Google Analytics 4 until cookie consent: hold gtag.js and the config as text/plain, catch injected tags with auto mode, and verify it in DevTools.",
+  "h1": "How to block Google Analytics until consent",
+  "crumb": "Block Google Analytics",
+  "lead": "Hiding a banner is easy. Keeping gtag.js from loading until the visitor says yes takes three small changes, and you can prove it in the Network panel.",
+  "readTime": "7 min read",
+  "faq": [
+    { "q": "Why not just set analytics_storage to denied and load GA anyway?", "a": "That is Consent Mode advanced mode. GA then loads before consent and sends cookieless pings to Google. Some authorities consider any request to a third party before consent a problem, so many sites prefer basic mode, where gtag.js does not load at all until consent." },
+    { "q": "Does blocking GA lose data?", "a": "You only lose hits from visitors who did not accept analytics, which you are not allowed to collect with cookies anyway. With Consent Mode in advanced mode Google can model part of the gap, at the cost of loading before consent." },
+    { "q": "Will GA count the page view after the visitor accepts?", "a": "Yes. When analytics is accepted, the gtag scripts run on the same page, so the config call sends the page view right away without a reload." },
+    { "q": "What about Google Analytics added by a plugin or a tag manager?", "a": "Turn on auto mode with data-auto-block. cookieowl recognizes gtag.js, analytics.js and gtm.js by URL and holds them even when another script injects them." }
+  ],
+  "related": ["google-consent-mode-v2-setup", "lgpd-gdpr-cookie-checklist", "cookie-banner-for-wordpress"]
+}
+-->
+<section id="problem"><h2>The problem with the standard snippet</h2>
+<p>The Google Analytics 4 snippet that Google gives you has two parts: an external script, <code>gtag/js?id=G-XXXX</code>, and an inline block that calls <code>gtag('config')</code>. Both run as soon as the browser parses them. By the time your banner paints, gtag.js has been downloaded, the <code>_ga</code> cookie is set and the first page view has been sent. A banner placed on top cannot undo that.</p>
+<p>Blocking means the browser never executes those scripts until the visitor accepts analytics. There is a simple, standard way to do it: a script whose type is not a JavaScript type is not executed, and not even downloaded. <code>type="text/plain"</code> turns a script into inert text.</p>
+</section>
+<section id="steps"><h2>Three changes to your head</h2>
+<p>First, load cookieowl as the very first script, synchronously. Second, change the type of both parts of the GA snippet to <code>text/plain</code>. Third, add <code>data-cookieowl="analytics"</code> so cookieowl knows which category releases them:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html" data-ok="2,3,5,6,7,8">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+    data-policy-url="/privacy" data-consent-mode></script>
+
+  <script type="text/plain" data-cookieowl="analytics" async
+    src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script type="text/plain" data-cookieowl="analytics">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
+</head>
+</pre>
+<p>When the visitor accepts analytics, cookieowl replaces each inert script with a live copy, in document order. The inline block runs right away; external scripts without <code>async</code> are waited for, so a script that depends on another never runs too early. If the visitor never accepts, nothing is requested from Google.</p>
+</section>
+<section id="auto"><h2>When you cannot edit the snippet</h2>
+<p>Plugins, themes and tag managers often inject Google Analytics from their own code. For those, auto mode recognizes the URL of the script when it is added to the page, whether by the HTML parser or by <code>document.createElement</code>, and holds it the same way:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html">
+<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+  data-consent-mode data-auto-block></script>
+</pre>
+<p>Auto mode knows gtag.js, the older analytics.js, Google Tag Manager and Google Ads, along with the Meta Pixel, Microsoft Clarity, Hotjar, LinkedIn Insight, the TikTok Pixel and YouTube and Vimeo embeds. Two honest limits: it must load before the tracker (so keep cookieowl first, synchronous, in the head), and the browser preload scanner may download, but not run, a tracker written directly in the HTML. Explicit <code>text/plain</code> markup avoids even that download.</p>
+<div class="note"><p>Prefer the explicit markup for the scripts you control and keep auto mode as a safety net for the ones you do not.</p></div>
+</section>
+<section id="verify"><h2>Verify it in DevTools</h2>
+<p>Open a private window, open the developer tools on the Network tab and type <code>google</code> in the filter. Load your page. The list must stay empty. In the Application tab, the cookie list must not contain <code>_ga</code> or <code>_ga_</code> entries. Then click Accept all: <code>gtag/js</code> and a <code>collect</code> request appear, and the cookies are set.</p>
+<p>You can also check from the console. Before a choice, <code>cookieowl.accepted('analytics')</code> is false and the GA scripts still have <code>type="text/plain"</code>. After accepting, they are replaced and marked with <code>data-cookieowl-done</code>.</p>
+</section>
+<section id="withdraw"><h2>Withdrawal: deleting _ga and stopping the script</h2>
+<p>A script that already ran cannot be unloaded, which is why withdrawal needs two steps. cookieowl erases the cookies it knows for the category (for analytics that includes <code>_ga</code>, <code>_ga_*</code>, <code>_gid</code> and <code>_gat*</code> on your domain and parent domains), and then reloads the page because analytics scripts ran on it. After the reload, the scripts are inert again.</p>
+<pre data-kind="editor" data-lang="js" data-title="spa.js">
+cookieowl.init({
+  // In a single page app you may prefer to clean up yourself.
+  reloadOnWithdraw(categories) {
+    if (categories.includes('analytics')) window.location.reload();
+  },
+});
+</pre>
+</section>

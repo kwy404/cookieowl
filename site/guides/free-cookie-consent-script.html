@@ -1,0 +1,61 @@
+<!--meta
+{
+  "slug": "free-cookie-consent-script",
+  "title": "Free cookie consent script: open source, no limits | cookieowl",
+  "description": "A free, open source cookie consent script with no page view limits or account: one script tag, real blocking, Consent Mode v2, five languages, under 15 kB.",
+  "h1": "A free cookie consent script, with nothing held back",
+  "crumb": "Free cookie consent script",
+  "lead": "Free can mean a trial, a page view cap or a branded banner. Here is what a cookie consent script needs, what cookieowl gives for free, and what it does not do.",
+  "readTime": "7 min read",
+  "faq": [
+    { "q": "Is cookieowl really free?", "a": "Yes. It is open source under the MIT license: free for personal and commercial sites, with no account, no page view limit, no branding requirement and no paid tier." },
+    { "q": "Where is the data stored?", "a": "Only in the visitor's browser, in a first party cookie on your domain. cookieowl has no server and sends nothing anywhere. If you want a central log, the onConsent callback hands each record to your own endpoint." },
+    { "q": "Does it include a cookie scanner?", "a": "No. You declare your categories, services and cookies yourself, and auto mode recognizes the most common trackers. Scanning tools and your browser developer tools help you build the list." },
+    { "q": "Does it support the IAB TCF?", "a": "No. cookieowl does not implement the IAB Transparency and Consent Framework, so it is not a fit for publishers that need TCF strings for programmatic advertising. It does support Google Consent Mode v2." }
+  ],
+  "related": ["cookie-consent-banner-lgpd", "gdpr-compliant-cookie-banner", "cookie-consent-in-react"]
+}
+-->
+<section id="what-free-means"><h2>What free usually means for consent tools</h2>
+<p>Search for a free cookie consent tool and you will find a lot of hosted platforms with a free plan. The plan is real, but it tends to come with a cap on monthly visits, a link to the vendor in your banner, a scan limited to a few pages or a missing feature that turns out to be the one regulators care about. The script is also loaded from their servers, which means one more third party on every page and a dependency on their uptime.</p>
+<p>cookieowl takes a different trade. It is a library, not a service: one file you load from a public CDN or host yourself, with every feature in it, under the MIT license. There is no dashboard and no account, and nothing to pay as your traffic grows.</p>
+</section>
+<section id="checklist"><h2>What a consent script has to do</h2>
+<p>Whatever you pick, these are the parts that matter, roughly in the order regulators check them:</p>
+<ul>
+<li><b>Block before consent.</b> Analytics, advertising and embeds must not run until their category is accepted.</li>
+<li><b>Offer a real choice.</b> Accept and Reject with equal weight on the first screen, plus a choice per purpose.</li>
+<li><b>Make withdrawal easy.</b> A link or button on every page that reopens the choices, and cleanup when consent is withdrawn.</li>
+<li><b>Keep proof.</b> A record of when and to what the visitor agreed, tied to a policy version.</li>
+<li><b>Talk to Google tags.</b> Consent Mode v2 if you use Google Analytics or Ads.</li>
+<li><b>Be usable.</b> Keyboard and screen reader support, the visitor's language and no layout that hides content.</li>
+</ul>
+<p>cookieowl does all six, and you can check each one in the <a href="./#demo">live demo</a> with its network monitor.</p>
+</section>
+<section id="setup"><h2>The whole setup</h2>
+<p>Paste one tag at the top of the head of every page. It is pinned to a version, so the file never changes under you:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html">
+<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+  data-lang="auto"
+  data-policy-url="/privacy"
+  data-consent-mode
+  data-auto-block></script>
+</pre>
+<p>Then mark the trackers you control so they wait for their category:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html">
+<script type="text/plain" data-cookieowl="analytics" src="/js/analytics.js"></script>
+<script type="text/plain" data-cookieowl="marketing" src="https://ads.example.com/pixel.js"></script>
+<iframe data-cookieowl="marketing" data-cookieowl-src="https://player.vimeo.com/video/123" title="Video"></iframe>
+</pre>
+<p>Prefer npm? <code>npm install cookieowl</code> gives you ES modules, CommonJS, TypeScript types and the React and Vue helpers. You can also copy <code>dist/cookieowl.js</code> into your own static files to avoid any third party request at all.</p>
+</section>
+<section id="size"><h2>Small enough to load first</h2>
+<p>A consent script has to run before every tracker, synchronously, which makes its size part of your page speed. cookieowl is one file of about 15 kB with gzip, including the banner, the preferences dialog, the stylesheet, five languages, the blocker and Consent Mode. It has no dependencies, loads no fonts or images and makes no requests of its own. The size is checked on every build, and the build fails if it grows past the budget.</p>
+<pre data-kind="terminal" data-lang="bash">
+npm run build
+</pre>
+</section>
+<section id="limits"><h2>What it does not do</h2>
+<p>Being honest about limits is part of being free. cookieowl does not scan your site for cookies; you list your services, and auto mode knows the common trackers. It does not store consent on a server; the <code>onConsent</code> hook lets you log records yourself. It does not implement the IAB Transparency and Consent Framework, which programmatic ad publishers may need. And it does not give legal advice: it gives you the mechanics that LGPD and GDPR guidance describes, and your counsel decides the rest.</p>
+<div class="note"><p>Found a gap? The code is on GitHub, issues and pull requests are welcome, and the license lets you fork it for your own needs.</p></div>
+</section>

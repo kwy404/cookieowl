@@ -1,0 +1,93 @@
+<!--meta
+{
+  "slug": "google-consent-mode-v2-setup",
+  "title": "Google Consent Mode v2 setup with a free cookie banner | cookieowl",
+  "description": "Set up Google Consent Mode v2: denied defaults with wait_for_update, region defaults, updates on every choice, basic or advanced mode, with gtag.js or Tag Manager.",
+  "h1": "Google Consent Mode v2 setup, step by step",
+  "crumb": "Consent Mode v2",
+  "lead": "Consent Mode tells Google tags what the visitor allowed. Here is how the four v2 signals work, basic versus advanced mode, and a setup that sends them right.",
+  "readTime": "8 min read",
+  "faq": [
+    { "q": "Is Google Consent Mode v2 mandatory?", "a": "Since March 2024 Google requires the ad_user_data and ad_personalization signals for advertisers who use Google Ads measurement, remarketing or audiences with traffic from the European Economic Area. Without them those features stop working for EEA users." },
+    { "q": "What is the difference between basic and advanced mode?", "a": "In basic mode Google tags do not load at all until consent. In advanced mode they load with everything denied and send cookieless pings, which Google uses for modeling. cookieowl uses basic mode by default and switches with advanced: true." },
+    { "q": "Does Consent Mode replace a cookie banner?", "a": "No. Consent Mode only passes the visitor's choice to Google tags. You still need a banner that collects the choice and blocks the other trackers." },
+    { "q": "How do I check that Consent Mode works?", "a": "Open Tag Assistant or the browser console and inspect window.dataLayer. You should see a consent default command before any config or event, then a consent update right after each choice." }
+  ],
+  "related": ["block-google-analytics-until-consent", "gdpr-compliant-cookie-banner", "cookie-consent-in-nextjs"]
+}
+-->
+<section id="signals"><h2>The four signals of Consent Mode v2</h2>
+<p>Consent Mode is a small protocol between your page and Google tags. Before a tag reads or writes cookies, it checks a set of consent types, each either <code>granted</code> or <code>denied</code>. Version 2, introduced for the Digital Markets Act, added two signals to the original two, and all four are now expected for traffic from the European Economic Area:</p>
+<ul>
+<li><code>ad_storage</code>: cookies and identifiers for advertising.</li>
+<li><code>ad_user_data</code>: sending user data to Google for advertising.</li>
+<li><code>ad_personalization</code>: personalized advertising and remarketing.</li>
+<li><code>analytics_storage</code>: cookies for analytics, such as the Google Analytics client id.</li>
+</ul>
+<p>There are also <code>functionality_storage</code>, <code>personalization_storage</code> and <code>security_storage</code>. cookieowl maps them all to categories: the three ad signals follow marketing, analytics follows analytics, functionality and personalization follow preferences and security is always granted.</p>
+</section>
+<section id="order"><h2>Order matters: default, then update</h2>
+<p>The default command must run before any Google tag, and the update must follow every choice. Getting the order wrong is the most common Consent Mode bug: if gtag.js reads the dataLayer before the default exists, the first hit goes out as if consent were granted. That is why cookieowl must be the first script in the head. It writes this before anything else can run:</p>
+<pre data-kind="editor" data-lang="js" data-title="what cookieowl sends">
+gtag('consent', 'default', {
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  analytics_storage: 'denied',
+  functionality_storage: 'denied',
+  personalization_storage: 'denied',
+  security_storage: 'granted',
+  wait_for_update: 500,
+});
+gtag('set', 'ads_data_redaction', true);
+
+// later, when the visitor accepts analytics only
+gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'denied' });
+</pre>
+<p><code>wait_for_update</code> tells tags that load before the visitor's stored choice is applied to wait that many milliseconds for an update. Returning visitors get their update in the same tick as the default, so tags never see a wrong state.</p>
+</section>
+<section id="setup"><h2>Setup with gtag.js</h2>
+<p>Turn Consent Mode on with one attribute. Keep your gtag snippet as it is, but mark it so it waits for analytics (basic mode):</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+    data-policy-url="/privacy" data-consent-mode></script>
+
+  <script type="text/plain" data-cookieowl="analytics" async
+    src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script type="text/plain" data-cookieowl="analytics">
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
+</head>
+</pre>
+<p>For advanced mode, load the Google tags normally (no <code>text/plain</code>) and set <code>data-consent-mode="advanced"</code>. The auto blocker then leaves gtag.js and Tag Manager alone, while still holding the Meta Pixel, Hotjar and the rest.</p>
+</section>
+<section id="gtm"><h2>Setup with Google Tag Manager</h2>
+<p>With Tag Manager you have two choices. In basic mode, hold the whole container until analytics is accepted: mark the GTM snippet with <code>type="text/plain" data-cookieowl="analytics"</code>, or let <code>data-auto-block</code> catch <code>gtm.js</code>. Nothing inside the container runs before consent, which is the simplest setup to audit.</p>
+<p>If you prefer to let the container load and decide per tag, use <code>data-consent-mode="advanced"</code>. Tags with built in consent checks (Google Analytics, Google Ads, Floodlight) read the consent state themselves. For other tags, turn on Require additional consent in their settings, or fire them from the <code>cookieowl_consent</code> event that cookieowl pushes to the dataLayer on every choice, reading the categories from the <code>cookieowl</code> variable it carries.</p>
+<pre data-kind="editor" data-lang="js" data-title="dataLayer after a choice">
+{
+  event: 'cookieowl_consent',
+  cookieowl: { necessary: true, preferences: false, analytics: true, marketing: false }
+}
+</pre>
+</section>
+<section id="regions"><h2>Region specific defaults</h2>
+<p>If you serve visitors outside the EEA and want different defaults there, list regions with ISO 3166-2 codes. Region commands are sent before the global default, and the most specific region wins:</p>
+<pre data-kind="editor" data-lang="js" data-title="consent.js">
+cookieowl.init({
+  consentMode: {
+    waitForUpdate: 500,
+    regions: [
+      { region: ['US-CA', 'US-CO'], analytics_storage: 'denied', ad_storage: 'denied' },
+      { region: ['US'], analytics_storage: 'granted' },
+    ],
+    urlPassthrough: true,
+  },
+});
+</pre>
+<div class="note"><p>Granting anything by default is a legal decision for your counsel, not a technical one. For visitors in Brazil and the EEA, keep everything denied until a choice.</p></div>
+</section>

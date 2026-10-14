@@ -1,0 +1,122 @@
+<!--meta
+{
+  "slug": "cookie-consent-in-nextjs",
+  "title": "Cookie consent in Next.js (App Router and Pages Router) | cookieowl",
+  "description": "Add a cookie consent banner to Next.js: load cookieowl with next/script beforeInteractive, gate Google Analytics and embeds, and read consent in client components.",
+  "h1": "Cookie consent in Next.js, App Router and Pages Router",
+  "crumb": "Next.js cookie consent",
+  "lead": "Next.js renders on the server and hydrates later, so consent has to start before both. Here is the setup that holds trackers from the first byte.",
+  "readTime": "8 min read",
+  "faq": [
+    { "q": "Why beforeInteractive and not afterInteractive?", "a": "beforeInteractive scripts are placed in the document head and run before any Next.js code and before scripts with other strategies. cookieowl has to set Consent Mode defaults and hold trackers before they run, so it must load first." },
+    { "q": "Can I use @next/third-parties for Google Analytics?", "a": "You can, but its GoogleAnalytics component loads gtag.js right away. Turn on Consent Mode and auto mode so gtag.js is held until analytics is accepted, or render the component inside a ConsentGate." },
+    { "q": "Does cookieowl break static export or ISR?", "a": "No. The banner is rendered in the browser and the choice lives in a cookie, so every page can stay static. Read consent on the client with the hook, not in server components." },
+    { "q": "Can a server component read the consent?", "a": "The record is a regular first party cookie named cookieowl holding JSON, so a server component or a route handler can read it with cookies() if you need to, for example to skip rendering a tracking pixel." }
+  ],
+  "related": ["cookie-consent-in-react", "google-consent-mode-v2-setup", "block-google-analytics-until-consent"]
+}
+-->
+<section id="timing"><h2>Why timing matters in Next.js</h2>
+<p>A Next.js page arrives as server rendered HTML, then the framework loads its JavaScript chunks and hydrates. Third party scripts added with <code>next/script</code> run at different moments depending on their strategy. If Google Analytics is added with the default <code>afterInteractive</code> strategy and your consent banner is a client component, the tracker can win the race: it runs as soon as the page is interactive, while the banner is still waiting for React.</p>
+<p>The fix is to give the consent manager the earliest slot Next.js offers. The <code>beforeInteractive</code> strategy puts a script in the document head and runs it before any first party code. cookieowl sets the Consent Mode defaults and starts holding trackers there, and everything else follows.</p>
+</section>
+<section id="app-router"><h2>App Router setup</h2>
+<p>Scripts with <code>beforeInteractive</code> belong in the root layout. Pass options as data attributes, exactly as on a plain HTML page:</p>
+<pre data-kind="editor" data-lang="tsx" data-title="app/layout.tsx">
+import Script from 'next/script';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Script
+          id="cookieowl"
+          src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+          strategy="beforeInteractive"
+          data-policy-url="/privacy"
+          data-consent-mode=""
+          data-auto-block=""
+        />
+      </body>
+    </html>
+  );
+}
+</pre>
+<p>Next.js moves <code>beforeInteractive</code> scripts into the head for you, so the placement inside <code>body</code> is fine. If you would rather host the file yourself, copy <code>node_modules/cookieowl/dist/cookieowl.js</code> into <code>public/</code> and point <code>src</code> at it.</p>
+</section>
+<section id="analytics"><h2>Google Analytics that waits for consent</h2>
+<p>Keep Google Analytics in a <code>Script</code> of its own, but give it the inert type and a category. cookieowl releases it when analytics is accepted:</p>
+<pre data-kind="editor" data-lang="tsx" data-title="app/analytics.tsx">
+import Script from 'next/script';
+
+export function Analytics() {
+  return (
+    <>
+      <script
+        type="text/plain"
+        data-cookieowl="analytics"
+        src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
+      />
+      <script
+        type="text/plain"
+        data-cookieowl="analytics"
+        dangerouslySetInnerHTML={{
+          __html: "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-XXXXXXX');",
+        }}
+      />
+    </>
+  );
+}
+</pre>
+<p>Plain <code>script</code> elements are used on purpose: <code>next/script</code> would load them itself, and leaving out <code>async</code> keeps React from treating the first one as a resource to preload. Rendered from a server component, they reach the browser inert and cookieowl picks them up. For tags that a library injects at runtime, auto mode catches gtag.js, Tag Manager, the Meta Pixel and the others by URL.</p>
+</section>
+<section id="client"><h2>Reading consent in client components</h2>
+<p>The React helpers work in client components. With the script tag build, the package exports the same instance, so there is nothing to initialize twice:</p>
+<pre data-kind="editor" data-lang="tsx" data-title="app/components/MapEmbed.tsx">
+'use client';
+import { ConsentGate, useConsent } from 'cookieowl/react';
+import { cookieowl } from 'cookieowl';
+
+export function MapEmbed() {
+  const marketing = useConsent('marketing');
+  return (
+    <section>
+      <h2>Visit the shop</h2>
+      {!marketing && <p>The map is hosted by Google, which sets cookies.</p>}
+      <ConsentGate
+        category="marketing"
+        fallback={<button onClick={() => cookieowl.showPreferences()}>Show the map</button>}
+      >
+        <iframe src="https://www.google.com/maps/embed?pb=YOUR_EMBED_CODE" title="Our shop" />
+      </ConsentGate>
+    </section>
+  );
+}
+</pre>
+<p>Server components cannot use hooks, but they do not need to: consent is a browser decision. When a server side check is useful, read the <code>cookieowl</code> cookie with <code>cookies()</code> from <code>next/headers</code> and parse its JSON.</p>
+</section>
+<section id="checklist"><h2>Before you ship</h2>
+<p>Run <code>next build</code> and <code>next start</code>, open the site in a private window and keep the Network panel open. No request to Google, Meta or any other vendor should appear before you choose. Accept analytics and check that gtag.js loads once, then withdraw it and confirm that the page reloads and the <code>_ga</code> cookies are gone. Repeat on a page that uses client side navigation, because a tracker added by a route component is the one people forget. Finally, test with JavaScript disabled: the page still renders, nothing is tracked, and the banner simply does not appear.</p>
+</section>
+<section id="pages-router"><h2>Pages Router setup</h2>
+<p>In the Pages Router, <code>beforeInteractive</code> scripts go in the custom document:</p>
+<pre data-kind="editor" data-lang="tsx" data-title="pages/_document.tsx">
+import { Html, Head, Main, NextScript } from 'next/document';
+import Script from 'next/script';
+
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head />
+      <body>
+        <Main />
+        <NextScript />
+        <Script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js" strategy="beforeInteractive" data-consent-mode="" />
+      </body>
+    </Html>
+  );
+}
+</pre>
+<div class="note"><p>Client side navigation keeps the choice: it lives in a first party cookie, and blocked elements rendered by a new route are released as soon as they appear when their category is already accepted.</p></div>
+</section>

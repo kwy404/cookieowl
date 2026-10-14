@@ -1,0 +1,77 @@
+<!--meta
+{
+  "slug": "gdpr-compliant-cookie-banner",
+  "title": "GDPR compliant cookie banner: requirements and a free setup | cookieowl",
+  "description": "What makes a cookie banner GDPR compliant: prior blocking, Reject on the first layer, no pre-ticked boxes, easy withdrawal and proof. With a free, open source setup.",
+  "h1": "What makes a cookie banner GDPR compliant",
+  "crumb": "GDPR cookie banner",
+  "lead": "The GDPR and the ePrivacy rules in practice: the requirements regulators enforce, the dark patterns they fine, and a banner that meets them by default.",
+  "readTime": "9 min read",
+  "faq": [
+    { "q": "Is a Reject all button mandatory under the GDPR?", "a": "The GDPR asks for consent that is freely given and as easy to withdraw as to give. Most European authorities, in the 2023 report of the EDPB cookie banner taskforce, consider a missing Reject option on the first layer, next to Accept, a breach of that requirement." },
+    { "q": "Do I need consent for analytics cookies?", "a": "Under the ePrivacy rule (article 5(3) of Directive 2002/58/EC as transposed in each country) storing or reading information on a device needs consent unless it is strictly necessary for a service the user asked for. Most analytics is not, though some authorities exempt narrowly configured audience measurement." },
+    { "q": "Can I keep a cookie wall?", "a": "Making access depend on accepting tracking is generally not freely given consent according to the EDPB consent guidelines 05/2020. Some national authorities accept a paid alternative in specific cases, so check the rules of your country." },
+    { "q": "How long is cookie consent valid?", "a": "The GDPR sets no fixed period. Many authorities recommend asking again after six to thirteen months; cookieowl defaults to twelve months and asks again earlier when your policy version changes." }
+  ],
+  "related": ["lgpd-gdpr-cookie-checklist", "google-consent-mode-v2-setup", "block-google-analytics-until-consent"]
+}
+-->
+<section id="two-laws"><h2>Two rules behind every cookie banner</h2>
+<p>A cookie banner in the European Union sits on two texts. The ePrivacy Directive (2002/58/EC, article 5(3)) says that storing or reading information on a visitor's device needs consent, unless it is strictly necessary for a service the visitor requested. It applies to every cookie, local storage entry or pixel, personal data or not. The GDPR (Regulation 2016/679) then defines what valid consent is: freely given, specific, informed and unambiguous (article 4(11)), demonstrable by the controller and as easy to withdraw as to give (article 7).</p>
+<p>The Court of Justice made the practical consequences explicit in the Planet49 case (C-673/17, 2019): a pre-ticked checkbox is not consent, and the rule covers all information stored on the device. National laws transpose the directive with local twists, such as the TDDDG in Germany or the CNIL guidelines in France, but the core is shared.</p>
+</section>
+<section id="requirements"><h2>The requirements regulators enforce</h2>
+<p>The European Data Protection Board cookie banner taskforce published its report in January 2023 after hundreds of complaints. Its findings read like a checklist, and they are what cookieowl is built around:</p>
+<ul>
+<li><b>No tracking before consent.</b> Optional cookies and the scripts that set them must wait. A banner that is only a notice does not count.</li>
+<li><b>Reject on the first layer.</b> If the first layer has an Accept button, it must also have a way to refuse, with no extra clicks.</li>
+<li><b>No deceptive design.</b> Colors, contrast and size must not push one answer. A bright Accept next to a grey link that says More options is the classic example.</li>
+<li><b>No pre-ticked boxes and no implied consent.</b> Scrolling, closing the banner or continuing to browse is not consent.</li>
+<li><b>Legitimate interest is not a substitute.</b> Optional cookies cannot be switched on by default under a legitimate interest toggle.</li>
+<li><b>Withdrawal is always available.</b> A persistent link or icon reopens the choices.</li>
+</ul>
+</section>
+<section id="setup"><h2>A banner that meets them by default</h2>
+<p>cookieowl implements these as defaults rather than options you have to remember. Load it first in the head of every page:</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+    data-lang="auto"
+    data-policy-url="/privacy"
+    data-version="2026-10"
+    data-consent-mode
+    data-auto-block></script>
+</head>
+</pre>
+<p>The first layer shows Reject all and Accept all with the same class, plus Customize. The preferences dialog lists the categories with switches that start off, a short description of each purpose, and the services and cookies behind it when you declare them. English, French, German and Spanish visitors get the GDPR wording, which cites the GDPR and the ePrivacy rules (and the TDDDG in German).</p>
+<pre data-kind="editor" data-lang="js" data-title="consent.js">
+cookieowl.init({
+  policyUrl: '/privacy',
+  categories: [
+    'preferences',
+    {
+      id: 'analytics',
+      services: [{
+        name: 'Google Analytics 4',
+        provider: 'Google Ireland Ltd',
+        policyUrl: 'https://policies.google.com/privacy',
+        cookies: [
+          { name: '_ga', duration: '2 years', description: 'Distinguishes visitors' },
+          { name: '_ga_*', duration: '2 years', description: 'Keeps the session state' },
+        ],
+      }],
+    },
+    'marketing',
+  ],
+});
+</pre>
+</section>
+<section id="design"><h2>Accessible, and free of dark patterns</h2>
+<p>Consent is not informed if part of your audience cannot operate the banner. The banner is a labelled dialog region, the preferences dialog traps focus while open and gives it back when closed, Escape closes it, every switch has a name, and saving announces the result to screen readers through a polite live region. Focus rings use a color with enough contrast in light and dark mode.</p>
+<p>The same design rules prevent the dark patterns regulators fine: there is no countdown, no shaking, no default that turns optional categories on, and the floating reopen button is the same on every page. You can restyle it with CSS variables, but the structure keeps Reject and Accept equal.</p>
+<div class="note"><p>Respecting Global Privacy Control is on by default. When a browser sends it, cookieowl records a refusal, skips the banner and explains why in the preferences, where the visitor can still opt in.</p></div>
+</section>
+<section id="proof"><h2>Demonstrating consent</h2>
+<p>Article 7(1) puts the proof on the controller. Each choice is stored on the device as a record with a random id, the policy version, the timestamp and the categories, and handed to your <code>onConsent</code> callback so your server can keep a log. Change <code>version</code> whenever your vendors or purposes change and every older consent is ignored, which is how you show that each consent covered what was in place when it was given.</p>
+<p>What remains yours: an accurate privacy policy and cookie list, the contract terms with each vendor, transfer safeguards for providers outside the EEA and a periodic review. A library cannot do those, and no banner makes a site compliant on its own.</p>
+</section>

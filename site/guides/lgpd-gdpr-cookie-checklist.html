@@ -1,0 +1,63 @@
+<!--meta
+{
+  "slug": "lgpd-gdpr-cookie-checklist",
+  "title": "LGPD and GDPR cookie consent checklist (interactive) | cookieowl",
+  "description": "An interactive LGPD and GDPR cookie consent checklist: prior blocking, equal Reject and Accept, no pre-ticked boxes, withdrawal, records and Consent Mode.",
+  "h1": "The LGPD and GDPR cookie consent checklist",
+  "crumb": "Checklist",
+  "lead": "Eighteen checks that separate a banner that looks compliant from one that actually protects visitors. Tick them as you go; your progress stays in this browser.",
+  "readTime": "8 min read",
+  "faq": [
+    { "q": "Is this checklist legal advice?", "a": "No. It summarizes what the LGPD, the GDPR, the ePrivacy rules and regulator guidance consistently ask of cookie consent, so you can review your site. Your counsel should confirm it for your processing and your countries." },
+    { "q": "Do LGPD and GDPR ask for the same cookie banner?", "a": "Very nearly. Both require consent that is free, informed and unambiguous for non essential cookies, easy withdrawal and proof of consent. The GDPR side adds the ePrivacy rule on storing information on a device; the Brazilian ANPD published its own cookie guide in 2022 with the same core advice." },
+    { "q": "Which checks fail most often?", "a": "Trackers that run before the choice, a Reject option hidden in a second layer, pre-ticked categories and no way to withdraw later. Those four are covered first in the list above." },
+    { "q": "Does cookieowl tick every box for me?", "a": "It covers the technical checks: blocking, the banner, choices, withdrawal, expiry, versioning, signals and the record. The documents (privacy policy, vendor list, DPO contact) and the legal review are yours." }
+  ],
+  "related": ["cookie-consent-banner-lgpd", "gdpr-compliant-cookie-banner", "block-google-analytics-until-consent"]
+}
+-->
+<section id="why"><h2>Why a checklist and not a template</h2>
+<p>Most cookie banners fail the same way: they look right and do the wrong thing. The text says that nothing is tracked until you agree, while Google Analytics, a Meta Pixel and a heatmap have already loaded in the background. Regulators in Europe and the Brazilian ANPD now test banners by opening the browser network panel, not by reading the wording, so the questions below are about behavior first and words second.</p>
+<p>The list follows the life of a visit. First, what happens before anyone clicks. Then the banner itself, the choices it offers and the records you keep. Each check says what to verify and how cookieowl handles it, so you can see where the library ends and your own work begins.</p>
+</section>
+<section id="checklist"><h2>The interactive checklist</h2>
+<p>Tick a check once you have verified it on your own site, ideally in a private window with the developer tools open on the Network tab. The list is stored in this browser with localStorage, so you can come back to it later.</p>
+<div data-checklist></div>
+</section>
+<section id="before"><h2>How to verify prior blocking in five minutes</h2>
+<p>Open your site in a private window so there is no stored choice. Open the developer tools, select the Network tab and reload. Filter by the domains of your vendors: <code>google-analytics.com</code>, <code>googletagmanager.com</code>, <code>connect.facebook.net</code>, <code>clarity.ms</code>, <code>hotjar.com</code>. Before you touch the banner there should be no request to any of them, except the Consent Mode pings if you chose advanced mode on purpose.</p>
+<p>Then open the Application tab and look at the cookies of your domain. Only necessary cookies should exist: a session, a CSRF token, the load balancer and, after a choice, the consent cookie itself. If you see <code>_ga</code>, <code>_fbp</code> or <code>_hjSession</code> before clicking anything, a tracker escaped.</p>
+<pre data-kind="editor" data-lang="html" data-title="index.html">
+<head>
+  <!-- 1. cookieowl first, without async or defer -->
+  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+    data-policy-url="/privacy" data-consent-mode data-auto-block></script>
+
+  <!-- 2. every tracker waits for its category -->
+  <script type="text/plain" data-cookieowl="analytics"
+    src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+</head>
+</pre>
+<p>Now click Accept all and watch the same panel: the tracker requests appear right away, in the order of your markup. Reopen the preferences, switch analytics off and save. The analytics cookies disappear and the page reloads, so the script that already ran is gone too.</p>
+</section>
+<section id="banner"><h2>What regulators look at on the banner</h2>
+<p>The European data protection authorities wrote down their shared position in the 2023 report of the cookie banner taskforce, and the ANPD guide says much the same. The points that come back every time: a Reject option on the first layer whenever there is an Accept option, no pre-ticked boxes, no consent from scrolling or from closing the banner, colors and sizes that do not push one answer, and purposes described in plain words.</p>
+<p>cookieowl ships Reject all and Accept all with the exact same class, so neither button is bigger or brighter. The third button opens the preferences, where every optional category starts off. The banner text names the law (the LGPD template for Portuguese, the GDPR template otherwise) and links to your policy when you set <code>policyUrl</code>.</p>
+<div class="note"><p>The banner is not a wall. Visitors can keep reading while it is open, which is what most regulators expect. If you want a modal, use <code>layout: 'modal'</code>, which keeps Reject one click away and traps focus for keyboard users.</p></div>
+</section>
+<section id="after"><h2>After the choice: withdrawal, expiry and versions</h2>
+<p>Consent is not a one time event. Article 7(3) of the GDPR and article 8, paragraph 5 of the LGPD both say that withdrawing must be as easy as consenting. In practice that means a visible way back on every page. cookieowl adds a small floating owl button and turns any element with <code>data-cookieowl-open</code> into a Cookie settings link.</p>
+<p>Choices also age. A common practice is to ask again after twelve months, which is the default <code>expiresDays</code>. And when you add a vendor or a new purpose, the old consent no longer covers it: bump <code>version</code> and every visitor sees the banner again. Adding a new category to the configuration has the same effect automatically.</p>
+</section>
+<section id="records"><h2>Records you can show an auditor</h2>
+<p>Both laws put the burden of proof on you. The record cookieowl stores holds a random consent id, the policy version, a timestamp, the expiry, the method and every category, which is enough to answer when, how and to what a visitor agreed. Keep a copy on your side with the <code>onConsent</code> hook:</p>
+<pre data-kind="editor" data-lang="js" data-title="consent-log.js">
+cookieowl.init({
+  version: '2026-10',
+  onConsent(record) {
+    navigator.sendBeacon('/api/consent-log', JSON.stringify(record));
+  },
+});
+</pre>
+<p>Do not store more than you need in that log. The record has no IP address and no user agent on purpose; add them only if your legal basis and retention policy cover them.</p>
+</section>
