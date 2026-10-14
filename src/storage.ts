@@ -123,8 +123,16 @@ export function eraseCookies(patterns: (string | RegExp)[], doc: Document = docu
   return erased;
 }
 
-/** A random consent id: a UUID where available, otherwise 32 random hex digits. */
+/**
+ * A random consent id: a UUID where available, otherwise 32 random hex digits.
+ * Very old browsers and Node 18 without the global Web Crypto object fall back
+ * to Math.random, which is fine for an audit id (it is not a secret).
+ */
 export function uuid(): string {
-  const c = globalThis.crypto;
-  return c.randomUUID ? c.randomUUID() : [...c.getRandomValues(new Uint8Array(16))].map((x) => x.toString(16).padStart(2, '0')).join('');
+  const c = (globalThis as { crypto?: Crypto }).crypto;
+  if (c && typeof c.randomUUID === 'function') return c.randomUUID();
+  const bytes = new Uint8Array(16);
+  if (c && typeof c.getRandomValues === 'function') c.getRandomValues(bytes);
+  else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+  return [...bytes].map((x) => x.toString(16).padStart(2, '0')).join('');
 }
