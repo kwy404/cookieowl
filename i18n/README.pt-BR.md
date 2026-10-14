@@ -330,6 +330,10 @@ Sim, pelo botão de coruja ou por qualquer link com `data-cookieowl-open`.
 - [graphemely](https://kwy404.github.io/graphemely/): utilitários de texto que respeitam grafemas.
 - [numberparrot](https://kwy404.github.io/numberparrot/): interpreta números localizados.
 - [edgegoat](https://kwy404.github.io/edgegoat/): casos extremos para testes em JavaScript.
+- [installkite](https://kwy404.github.io/installkite/): torna qualquer site instalável e com funcionamento offline.
+- [a11ymedic](https://kwy404.github.io/a11ymedic/): verificador de acessibilidade que explica cada problema e entrega a correção exata.
+- [fontsketch](https://kwy404.github.io/fontsketch/): transforma a sua letra em uma fonte, grátis e no navegador.
+- [kastor](https://kwy404.github.io/kastor/): ORM para TypeScript para PostgreSQL, MySQL, SQLite, SQL Server, Oracle, MongoDB e mais.
 
 ## Autor
 

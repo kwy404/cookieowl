@@ -40,6 +40,10 @@ export const MORE = [
   ['graphemely', 'https://kwy404.github.io/graphemely/', 'Grapheme aware string utilities'],
   ['numberparrot', 'https://kwy404.github.io/numberparrot/', 'Parse localized numbers'],
   ['edgegoat', 'https://kwy404.github.io/edgegoat/', 'Edge case inputs for testing'],
+  ['installkite', 'https://kwy404.github.io/installkite/', 'Make any website installable and offline'],
+  ['a11ymedic', 'https://kwy404.github.io/a11ymedic/', 'Accessibility checker with exact fixes'],
+  ['fontsketch', 'https://kwy404.github.io/fontsketch/', 'Turn your handwriting into a font'],
+  ['kastor', 'https://kwy404.github.io/kastor/', 'TypeScript ORM for almost every database'],
 ];
 
 // UI icons (24 by 24, stroked with currentColor).

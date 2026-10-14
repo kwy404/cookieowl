@@ -538,6 +538,10 @@ A neutral comparison with the usual kinds of consent tools:
 - [graphemely](https://kwy404.github.io/graphemely/): grapheme aware string utilities.
 - [numberparrot](https://kwy404.github.io/numberparrot/): parse localized numbers.
 - [edgegoat](https://kwy404.github.io/edgegoat/): edge case inputs for JavaScript testing.
+- [installkite](https://kwy404.github.io/installkite/): make any website installable and offline capable.
+- [a11ymedic](https://kwy404.github.io/a11ymedic/): accessibility checker that explains every problem and gives the exact fix.
+- [fontsketch](https://kwy404.github.io/fontsketch/): turn your handwriting into a font, free in your browser.
+- [kastor](https://kwy404.github.io/kastor/): TypeScript ORM for PostgreSQL, MySQL, SQLite, SQL Server, Oracle, MongoDB and more.
 
 ## Author
 
