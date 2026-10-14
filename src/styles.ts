@@ -6,6 +6,7 @@ export const CSS = `.cko{--cko-mode:0;--cko-p:calc(var(--cko-mode)*100%);--cko-a
 @media (prefers-color-scheme:dark){.cko[data-cko-theme=auto]{--cko-mode:1}}
 :is(.light,[data-theme=light]) .cko[data-cko-theme=auto]{--cko-mode:0}
 :is(.dark,[data-theme=dark]) .cko[data-cko-theme=auto],.cko[data-cko-theme=dark]{--cko-mode:1}
+:is(.dark,[data-theme=dark]) :is(.light,[data-theme=light]) .cko[data-cko-theme=auto]{--cko-mode:0}
 .cko *,.cko ::before,.cko ::after{box-sizing:border-box;margin:0;padding:0;border:0;font:inherit;color:inherit;letter-spacing:normal;text-transform:none;text-align:start}
 .cko [hidden]{display:none!important}
 .cko-box,.cko-bar,.cko-modal,.cko-prefs,.cko-reopen{position:fixed;z-index:2147483000;background:var(--cko-bg);border:1px solid var(--cko-line);box-shadow:0 18px 48px -12px rgb(0 0 0/calc(.3 + .3*var(--cko-mode)))}
