@@ -7,8 +7,8 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/banner-dark.svg">
-    <img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/banner.svg" width="820" alt="Banner do cookieowl: consentimento de cookies para LGPD e GDPR que bloqueia rastreadores de verdade até o visitante aceitar">
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/scenes/readme-banner-dark.svg">
+    <img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/scenes/readme-banner-light.svg" width="820" alt="Banner do cookieowl: consentimento de cookies para LGPD e GDPR que bloqueia rastreadores de verdade até o visitante aceitar">
   </picture>
 </p>
 
@@ -334,6 +334,8 @@ Sim, pelo botão de coruja ou por qualquer link com `data-cookieowl-open`.
 ## Autor
 
 Criado por **Alexandre Kohler** ([GitHub](https://github.com/kwy404) e [LinkedIn](https://www.linkedin.com/in/alexandre-silva-173687256/)).
+
+O [site da documentação](https://kwy404.github.io/cookieowl/) é feito com [Monsoon](https://kwy404.github.io/monsoon/), e as partes interativas com [Voodoo.js](https://kwy404.github.io/Voodoo.js/). A arte de livro ilustrado (Hoot, a cidade, os insetos rastreadores, 18 ilustrações e uma família de 57 ícones, cada um em versão de amanhecer e de noite) fica em [docs/assets/art](https://github.com/kwy404/cookieowl/tree/main/docs/assets/art), sob a licença MIT como o código.
 
 ## Licença
 

@@ -7,8 +7,8 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/banner-dark.svg">
-    <img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/banner.svg" width="820" alt="cookieowl banner: cookie consent for LGPD and GDPR that really blocks trackers until visitors say yes, with one script tag, Consent Mode v2 and under 15 kB">
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/scenes/readme-banner-dark.svg">
+    <img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/scenes/readme-banner-light.svg" width="820" alt="cookieowl banner: cookie consent for LGPD and GDPR that really blocks trackers until visitors say yes, with one script tag, Consent Mode v2 and under 15 kB">
   </picture>
 </p>
 
@@ -42,19 +42,19 @@
 
 <table>
   <tr>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/block.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/block.svg" width="32" alt="Shield with a lock icon: block scripts before cookie consent"></picture><br><b>Real blocking before consent</b><br>Marked scripts and iframes stay inert, then run in order once their category is accepted.</td>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/auto-block.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/auto-block.svg" width="32" alt="Magnifier icon: automatic tracker blocking"></picture><br><b>Auto mode for known trackers</b><br>Google Analytics, Tag Manager, Meta Pixel, Clarity, Hotjar, LinkedIn and TikTok caught by URL.</td>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/consent-mode.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/consent-mode.svg" width="32" alt="Toggles icon: Google Consent Mode v2"></picture><br><b>Google Consent Mode v2</b><br>Denied defaults with wait_for_update, region defaults and an update on every choice.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/gate-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/gate-light.svg" width="32" alt="Shield with a lock icon: block scripts before cookie consent"></picture><br><b>Real blocking before consent</b><br>Marked scripts and iframes stay inert, then run in order once their category is accepted.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/auto-block-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/auto-block-light.svg" width="32" alt="Magnifier icon: automatic tracker blocking"></picture><br><b>Auto mode for known trackers</b><br>Google Analytics, Tag Manager, Meta Pixel, Clarity, Hotjar, LinkedIn and TikTok caught by URL.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/consent-mode-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/consent-mode-light.svg" width="32" alt="Toggles icon: Google Consent Mode v2"></picture><br><b>Google Consent Mode v2</b><br>Denied defaults with wait_for_update, region defaults and an update on every choice.</td>
   </tr>
   <tr>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/embed.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/embed.svg" width="32" alt="Video player icon: click to load YouTube embeds"></picture><br><b>Click to load embeds</b><br>YouTube and Vimeo iframes become a placeholder with Load once and Allow.</td>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/audit-log.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/audit-log.svg" width="32" alt="Clipboard icon: consent log for audits"></picture><br><b>Records for audits</b><br>Version, timestamp and a random consent id, plus an onConsent hook for your log.</td>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/reopen.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/reopen.svg" width="32" alt="Owl eyes icon: reopen cookie preferences"></picture><br><b>Withdraw as easily as giving</b><br>A floating owl reopens the preferences; withdrawal erases cookies and stops scripts.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/video-embed-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/video-embed-light.svg" width="32" alt="Video player icon: click to load YouTube embeds"></picture><br><b>Click to load embeds</b><br>YouTube and Vimeo iframes become a placeholder with Load once and Allow.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/record-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/record-light.svg" width="32" alt="Clipboard icon: consent log for audits"></picture><br><b>Records for audits</b><br>Version, timestamp and a random consent id, plus an onConsent hook for your log.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/withdraw-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/withdraw-light.svg" width="32" alt="Owl eyes icon: reopen cookie preferences"></picture><br><b>Withdraw as easily as giving</b><br>A floating owl reopens the preferences; withdrawal erases cookies and stops scripts.</td>
   </tr>
   <tr>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/accessibility.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/accessibility.svg" width="32" alt="Accessibility icon: accessible cookie banner"></picture><br><b>Accessible, no dark patterns</b><br>Focus trap, keyboard, screen reader labels, equal Reject and Accept, no pre-ticked boxes.</td>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/languages.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/languages.svg" width="32" alt="Globe icon: cookie banner in five languages"></picture><br><b>Five languages</b><br>Portuguese with LGPD wording, English, Spanish, French and German. RTL safe.</td>
-    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/dark/lightweight.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/assets/icons/light/lightweight.svg" width="32" alt="Feather icon: lightweight cookie consent script"></picture><br><b>14.9 kB, zero dependencies</b><br>Banner, dialog, styles, blocker, Consent Mode and five languages in one file.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/accessibility-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/accessibility-light.svg" width="32" alt="Accessibility icon: accessible cookie banner"></picture><br><b>Accessible, no dark patterns</b><br>Focus trap, keyboard, screen reader labels, equal Reject and Accept, no pre-ticked boxes.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/language-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/language-light.svg" width="32" alt="Globe icon: cookie banner in five languages"></picture><br><b>Five languages</b><br>Portuguese with LGPD wording, English, Spanish, French and German. RTL safe.</td>
+    <td width="33%" valign="top"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/balloon-dark.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons/balloon-light.svg" width="32" alt="Feather icon: lightweight cookie consent script"></picture><br><b>14.9 kB, zero dependencies</b><br>Banner, dialog, styles, blocker, Consent Mode and five languages in one file.</td>
   </tr>
 </table>
 
@@ -542,6 +542,15 @@ A neutral comparison with the usual kinds of consent tools:
 ## Author
 
 Created by **Alexandre Kohler** ([GitHub](https://github.com/kwy404) and [LinkedIn](https://www.linkedin.com/in/alexandre-silva-173687256/)).
+
+The [documentation site](https://kwy404.github.io/cookieowl/) is built with [Monsoon](https://kwy404.github.io/monsoon/), and its interactive parts with [Voodoo.js](https://kwy404.github.io/Voodoo.js/). Its storybook art (Hoot, the town, the tracker bugs, 18 spot illustrations and a family of 57 icons, each in a dawn and a night version) lives in [docs/assets/art](https://github.com/kwy404/cookieowl/tree/main/docs/assets/art) and is MIT licensed like the code.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons-sheet-dark.svg">
+    <img src="https://cdn.jsdelivr.net/gh/kwy404/cookieowl@main/docs/assets/art/icons-sheet-light.svg" width="820" alt="The cookieowl icon family: 57 icons with rounded navy lines and an amber tint, for consent categories, blocked services, legal terms and the storybook props">
+  </picture>
+</p>
 
 ## License
 

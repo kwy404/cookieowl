@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" width="320" height="240" role="img" aria-labelledby="lost-d-t"><title id="lost-d-t">Hoot with a lantern in the woods next to a 404 signpost</title><defs><radialGradient id="lost-d-lamp"><stop offset="0" stop-color="#ffd36e" stop-opacity="0.55"/><stop offset=".45" stop-color="#ffd36e" stop-opacity="0.2"/><stop offset="1" stop-color="#ffd36e" stop-opacity="0"/></radialGradient><radialGradient id="lost-d-gate"><stop offset="0" stop-color="#f2b134" stop-opacity="0.42"/><stop offset=".45" stop-color="#f2b134" stop-opacity="0.1"/><stop offset="1" stop-color="#f2b134" stop-opacity="0"/></radialGradient><radialGradient id="lost-d-moon"><stop offset="0" stop-color="#f7e3a8" stop-opacity="0.5"/><stop offset=".45" stop-color="#f7e3a8" stop-opacity="0.2"/><stop offset="1" stop-color="#f7e3a8" stop-opacity="0"/></radialGradient><linearGradient id="lost-d-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070b22"/><stop offset=".62" stop-color="#131b48"/><stop offset="1" stop-color="#2c3679"/></linearGradient></defs><path d="M291.4 126C290.7 148.2 287.6 175.9 269.6 191.5C251.5 207 212.6 216.4 183.1 219.3C153.6 222.3 118.4 219 92.6 209.1C66.9 199.3 39.6 179.8 28.5 160.1C17.3 140.5 16.3 112.1 26 91.3C35.6 70.4 59.7 46.6 86.3 35.1C113 23.6 154.4 18.6 185.6 22.4C216.8 26.3 255.9 40.9 273.5 58.1C291.2 75.4 292.1 103.8 291.4 126Z" fill="#1c2557"/><g><path class="tw tw-0" d="M0 52.4Q0 56.8 4.4 56.8Q0 56.8 0 61.2Q0 56.8 -4.4 56.8Q0 56.8 0 52.4Z" fill="#fff6dc" opacity="1"/><circle class="tw tw-1" cx="296.3" cy="67.7" r="1.7" fill="#fff6dc" opacity="0.9"/><circle class="tw tw-2" cx="265.9" cy="12.1" r="2.2" fill="#fff6dc" opacity="0.9"/><circle class="tw tw-0" cx="256.8" cy="36" r="1.8" fill="#fff6dc" opacity="0.9"/><circle class="tw tw-1" cx="232" cy="8" r="2.2" fill="#fff6dc" opacity="0.9"/><circle class="tw tw-2" cx="136.7" cy="74.2" r="1.7" fill="#fff6dc" opacity="0.5"/><circle class="tw tw-0" cx="0.1" cy="68" r="1.1" fill="#fff6dc" opacity="0.7"/><circle class="tw tw-1" cx="130.6" cy="9.2" r="2" fill="#fff6dc" opacity="0.9"/><circle class="tw tw-2" cx="131.8" cy="49.4" r="1.6" fill="#fff6dc" opacity="0.6"/><path class="tw tw-0" d="M71.8 62.3Q71.8 66.7 76.2 66.7Q71.8 66.7 71.8 71.1Q71.8 66.7 67.4 66.7Q71.8 66.7 71.8 62.3Z" fill="#fff6dc" opacity="0.9"/></g>
+<g><path d="M40 208V160.4" stroke="#0b1030" stroke-width="7" stroke-linecap="round"/><ellipse cx="40" cy="146.1" rx="33.6" ry="35.7" fill="#1b3b52" stroke="#0b1030" stroke-width="3"/><path d="M26 136.6q8 -8 14 -2" fill="none" stroke="#245069" stroke-width="3" stroke-linecap="round"/></g><g><path d="M284 206V151.6" stroke="#0b1030" stroke-width="8" stroke-linecap="round"/><ellipse cx="284" cy="135.3" rx="38.4" ry="40.8" fill="#1b3b52" stroke="#0b1030" stroke-width="3"/><path d="M268 124.4q8 -8 14 -2" fill="none" stroke="#245069" stroke-width="3" stroke-linecap="round"/></g><g><path d="M250 214V180" stroke="#0b1030" stroke-width="5" stroke-linecap="round"/><ellipse cx="250" cy="169.8" rx="24" ry="25.5" fill="#1b3b52" stroke="#0b1030" stroke-width="3"/><path d="M240 163q8 -8 14 -2" fill="none" stroke="#245069" stroke-width="3" stroke-linecap="round"/></g>
+<path d="M70 218c40-10 120-12 190-4" stroke="#2b3670" stroke-width="14" stroke-linecap="round"/>
+<g transform="translate(214 92)"><path d="M0 0V120" stroke="#e9dfc6" stroke-width="6" stroke-linecap="round"/><path d="M0 12h44l10 11-10 11H0Z" fill="#f8eed8" stroke="#0b1030" stroke-width="3" stroke-linejoin="round"/><path d="M0 48h-44l-10 11 10 11H0Z" fill="#f8eed8" stroke="#0b1030" stroke-width="3" stroke-linejoin="round"/><text x="22" y="28" text-anchor="middle" font-family="Fraunces, 'Iowan Old Style', Georgia, serif" font-size="13" font-weight="800" fill="#1b2240">404</text><text x="-24" y="64" text-anchor="middle" font-family="Fraunces, 'Iowan Old Style', Georgia, serif" font-size="15" font-weight="800" fill="#1b2240">?</text></g>
+<ellipse class="flicker" cx="104" cy="160" rx="64" ry="64" fill="url(#lost-d-lamp)"/>
+<g transform="translate(63.4 86.1) scale(0.52)">
+
+<defs>
+<mask id="lost-d-hoot-bite"><rect width="256" height="256" fill="#fff"/><circle cx="150" cy="174" r="10" fill="#000"/><circle cx="160" cy="182" r="8" fill="#000"/></mask>
+<linearGradient id="lost-d-hoot-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26336a"/><stop offset="1" stop-color="#1b2547"/></linearGradient>
+</defs>
+<g fill="#f8eed8" stroke="#f8eed8" stroke-width="12" stroke-linejoin="round"><path d="M128 64C182 64 208 106 208 158C208 208 174 240 128 240C82 240 48 208 48 158C48 106 74 64 128 64Z"/><path d="M74 96L58 50L104 76Z"/><path d="M182 96L198 50L152 76Z"/><path d="M54 140C34 182 58 226 100 222C112 220 114 206 102 200C82 192 70 172 68 146Z"/><path d="M202 140C222 182 198 226 156 222C144 220 142 206 154 200C174 192 186 172 188 146Z"/><path d="M84 66C86 34 170 34 172 66L174 80L82 80Z"/><circle cx="128" cy="204" r="34"/></g>
+<path d="M74 96L58 50L104 76Z" fill="#1b2547"/>
+<path d="M182 96L198 50L152 76Z" fill="#1b2547"/>
+<path d="M128 64C182 64 208 106 208 158C208 208 174 240 128 240C82 240 48 208 48 158C48 106 74 64 128 64Z" fill="url(#lost-d-hoot-body)"/>
+<ellipse cx="128" cy="186" rx="54" ry="50" fill="#f3e2bf"/>
+<g fill="none" stroke="#dcc392" stroke-width="3" stroke-linecap="round"><path d="M106 162l6 6 6-6M138 162l6 6 6-6M122 176l6 6 6-6"/></g>
+<circle cx="99" cy="126" r="35" fill="#f8eed8"/>
+<circle cx="157" cy="126" r="35" fill="#f8eed8"/>
+<path d="M76 102C88 94 104 94 114 102" fill="none" stroke="#1b2547" stroke-width="5" stroke-linecap="round"/>
+<path d="M142 102C152 94 168 94 180 102" fill="none" stroke="#1b2547" stroke-width="5" stroke-linecap="round"/>
+<circle cx="99" cy="128" r="23" fill="#f2b134"/>
+<circle cx="157" cy="128" r="23" fill="#f2b134"/>
+<circle cx="99" cy="128" r="23" fill="none" stroke="#d98a1c" stroke-width="3"/>
+<circle cx="157" cy="128" r="23" fill="none" stroke="#d98a1c" stroke-width="3"/>
+<circle cx="102" cy="131" r="13" fill="#111833"/>
+<circle cx="154" cy="131" r="13" fill="#111833"/>
+<circle cx="108" cy="124" r="5" fill="#ffffff"/>
+<circle cx="160" cy="124" r="5" fill="#ffffff"/>
+<circle cx="98" cy="137" r="2.2" fill="#ffffff" opacity=".8"/>
+<circle cx="150" cy="137" r="2.2" fill="#ffffff" opacity=".8"/>
+<path d="M119 150Q128 146 137 150L128 166Z" fill="#ea8f25"/>
+<g mask="url(#lost-d-hoot-bite)">
+<circle cx="128" cy="204" r="32" fill="#d99343"/>
+<circle cx="128" cy="204" r="32" fill="none" stroke="#b06a22" stroke-width="3"/>
+<circle cx="128" cy="204" r="25" fill="none" stroke="#e7a95a" stroke-width="2" stroke-dasharray="3 7" opacity=".9"/>
+<ellipse cx="114" cy="192" rx="5" ry="4" fill="#6b3912"/>
+<ellipse cx="134" cy="200" rx="4" ry="3.4" fill="#6b3912"/>
+<ellipse cx="118" cy="214" rx="4.6" ry="3.6" fill="#6b3912"/>
+<ellipse cx="140" cy="220" rx="4" ry="3.2" fill="#6b3912"/>
+<ellipse cx="104" cy="206" rx="3.2" ry="2.6" fill="#6b3912"/>
+</g>
+<path d="M54 140C34 182 58 226 100 222C112 220 114 206 102 200C82 192 70 172 68 146Z" fill="#2a3972"/>
+<path d="M202 140C222 182 198 226 156 222C144 220 142 206 154 200C174 192 186 172 188 146Z" fill="#2a3972"/>
+<g fill="none" stroke="#3d4f92" stroke-width="3" stroke-linecap="round"><path d="M64 168C70 186 80 198 94 204M60 186C68 200 78 210 92 214"/><path d="M192 168C186 186 176 198 162 204M196 186C188 200 178 210 164 214"/></g>
+<g fill="#f2b134"><path d="M104 236q-6 6-2 8q4 0 6-4q2 4 6 4q4-2-2-8Z"/><path d="M140 236q-6 6-2 8q4 0 6-4q2 4 6 4q4-2-2-8Z"/></g>
+<g transform="rotate(-7 128 62)">
+<path d="M84 66C86 34 170 34 172 66L174 80L82 80Z" fill="#111833"/>
+<rect x="84" y="62" width="88" height="10" rx="2" fill="#f2b134"/>
+<path d="M80 74Q128 98 178 74L176 70Q128 88 82 70Z" fill="#0a0f22"/>
+<path d="M118 40h20v10c0 8-10 13-10 13s-10-5-10-13Z" fill="#f2b134" stroke="#d98a1c" stroke-width="2"/>
+<path d="M128 44l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7Z" fill="#111833"/>
+</g>
+</g></svg>

@@ -1,6 +1,9 @@
 // Builds the docs site in docs/ from the sources in site/.
 //   site/guides/*.html   guide sources: a meta comment, then prose sections
 //   site/*.mjs           layout, home, guides, API reference and 404 templates
+//   scripts/storybook.mjs the palette, icons and illustrations; every drawing
+//                        is written to docs/assets/art/ in a light (dawn) and
+//                        a dark (night) version and inlined where it animates
 //   docs/site.css, docs/site.js and docs/demo/ are written by hand
 // Code samples are highlighted at build time with Shiki (light-plus and
 // dark-plus) so the pages ship no highlighter. dist/cookieowl.js (npm run
@@ -16,6 +19,7 @@ import { FAQ, homeBody, homeJsonLd } from '../site/home.mjs';
 import { CDN, GUIDES, SITE, esc, page } from '../site/layout.mjs';
 import { CHECKLIST, guideBody, guideJsonLd, indexBody, indexJsonLd, notFoundBody } from '../site/pages.mjs';
 import { UPDATED } from '../site/layout.mjs';
+import { DAWN, ICON_NAMES, NIGHT, SPOT_NAMES, bugSprite, demoGate, heroScene, iconFile, iconSheet, paletteCss, readmeBanner, spotSvg, streetScene } from './storybook.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const docs = join(root, 'docs');
@@ -142,6 +146,8 @@ const homeCtx = {
   trackers: TRACKERS.length,
   langs: Object.keys(LANGS).length,
   trackerNames: nameList,
+  suspects: [...new Map(TRACKERS.map((t) => [t.name, [t.id, t.name, t.category]])).values()],
+  guideMeta: Object.fromEntries(guides.map((g) => [g.meta.slug, g.meta])),
   frameworks: [
     ['html', 'HTML'],
     ['react', 'React'],
@@ -226,7 +232,8 @@ out['api.html'] = page(
 );
 
 // The 404 page is served at any missing path, so its links are rooted.
-const rootLinks = (html) => html.replace(/\b(href|src)="(?![a-z]+:|#|\/)([^"]*)"/g, (_, a, v) => `${a}="/cookieowl/${v.replace(/^\.\//, '')}"`);
+// Only plain attributes: Voodoo bindings like :href="r.url" stay expressions.
+const rootLinks = (html) => html.replace(/(\s)(href|src)="(?![a-z]+:|#|\/)([^"]*)"/g, (_, sp, a, v) => `${sp}${a}="/cookieowl/${v.replace(/^\.\//, '')}"`);
 out['404.html'] = rootLinks(
   page(
     {
@@ -243,10 +250,10 @@ out['404.html'] = rootLinks(
 // ---------- Search index ----------
 
 const search = [];
-search.push({ kind: 'Page', title: 'Live demo', sub: 'Toggle categories and watch trackers', url: './#demo' });
-search.push({ kind: 'Page', title: 'Configurator', sub: 'Generate your snippet', url: './#configurator' });
+search.push({ kind: 'Page', title: 'Live demo: the street at night', sub: 'Accept a category and watch trackers get in', url: './#demo' });
+search.push({ kind: 'Page', title: 'Configurator: the lantern workshop', sub: 'Build your snippet', url: './#configurator' });
 search.push({ kind: 'Page', title: 'API reference', sub: 'Options, methods and events', url: 'api.html' });
-search.push({ kind: 'Page', title: 'All guides', sub: 'The star chart', url: 'guides.html' });
+search.push({ kind: 'Page', title: 'All guides', sub: 'The storybook shelf', url: 'guides.html' });
 for (const g of GUIDES) {
   const src = guides.find((x) => x.meta.slug === g.slug);
   search.push({ kind: 'Guide', title: src.meta.h1, sub: src.meta.description, url: `${g.slug}.html` });
@@ -281,6 +288,32 @@ const files = {
   'favicon.svg': readFileSync(join(root, 'assets', 'favicon.svg'), 'utf8'),
 };
 for (const f of ['mascot.svg', 'mascot-dark.svg', 'mascot-head.svg', 'mascot-head-dark.svg', 'banner.svg', 'banner-dark.svg']) files[`assets/${f}`] = readFileSync(join(root, 'assets', f), 'utf8');
+
+// The storybook art: every icon and illustration in a light and a dark file.
+files['assets/art/palette.css'] = paletteCss();
+const THEMES = [
+  ['light', DAWN],
+  ['dark', NIGHT],
+];
+const DEMO_BUG_ART = [
+  ['analytics', 'binoculars'],
+  ['pixel', 'camera'],
+  ['heatmap', 'flame'],
+  ['chat', 'bubble'],
+  ['ads', 'megaphone'],
+  ['video', 'reel'],
+];
+for (const [theme, P] of THEMES) {
+  for (const name of ICON_NAMES) files[`assets/art/icons/${name}-${theme}.svg`] = iconFile(name, theme);
+  files[`assets/art/icons-sheet-${theme}.svg`] = iconSheet(theme);
+  for (const name of SPOT_NAMES) files[`assets/art/spots/${name}-${theme}.svg`] = spotSvg(name, P, { id: `${name}-${theme[0]}` });
+  for (const [label, prop] of DEMO_BUG_ART) files[`assets/art/bugs/${label}-${theme}.svg`] = bugSprite(P, { label, prop, id: `bug-${label}-${theme[0]}` });
+  files[`assets/art/scenes/hero-${theme}.svg`] = heroScene(P, { id: `hero-${theme[0]}` });
+  files[`assets/art/scenes/street-${theme}.svg`] = streetScene(P, { id: `street-${theme[0]}` });
+  files[`assets/art/scenes/gate-closed-${theme}.svg`] = demoGate(P, { id: `gc-${theme[0]}` });
+  files[`assets/art/scenes/gate-open-${theme}.svg`] = demoGate(P, { id: `go-${theme[0]}`, open: 1 });
+  files[`assets/art/scenes/readme-banner-${theme}.svg`] = readmeBanner(P, theme);
+}
 
 // House rules for every generated file.
 const problems = [];

@@ -1,6 +1,7 @@
 // The API reference page: options, data attributes, methods, events, markup
 // attributes, CSS variables and the React and Vue helpers.
-import { SITE, art, icon } from './layout.mjs';
+import { VARS, spotSvg } from '../scripts/storybook.mjs';
+import { SITE, art } from './layout.mjs';
 
 export const OPTIONS = [
   ['categories', '(string | Category)[]', "['necessary', 'preferences', 'analytics', 'marketing']", 'Category ids or objects with <code>label</code>, <code>description</code>, <code>required</code> and <code>services</code>. <code>necessary</code> is always added and always on.'],
@@ -83,7 +84,7 @@ export const CSS_VARS = [
 ];
 
 const table = (head, rows) =>
-  `<div class="table-wrap"><table class="table api-table"><thead><tr>${head.map((h) => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows
+  `<div class="ledger"><table class="table api-table"><thead><tr>${head.map((h) => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows
     .map((r) => `<tr>${r.map((c, i) => (i === 0 ? `<th scope="row"><code>${c}</code></th>` : `<td>${(i === 1 && head.length > 2) || (i === 2 && head.length === 4) ? `<code>${c}</code>` : c}</td>`)).join('')}</tr>`)
     .join('')}</tbody></table></div>`;
 
@@ -103,21 +104,23 @@ export function apiBody(ctx) {
     ['vue', 'Vue', `<p><code>cookieowl/vue</code> exports <code>CookieOwlPlugin</code>, <code>useConsent(category)</code> and <code>ConsentGate</code> with a <code>fallback</code> slot.</p>${ctx.code.vue}`],
   ];
   const toc = sections.map(([id, t]) => `<li><a href="#${id}">${t}</a></li>`).join('');
-  const body = sections.map(([id, t, html]) => `<section id="${id}" class="chapter"><h2><a href="#${id}" class="anchor" aria-hidden="true" tabindex="-1">#</a>${t}</h2>${html}</section>`).join('\n');
-  return `<header class="g-head night dark">
-  <div class="starfield starfield-dim" aria-hidden="true"></div>
+  const body = sections.map(([id, t, html]) => `<section id="${id}" class="g-sec"><h2><a href="#${id}" class="anchor" aria-hidden="true" tabindex="-1">#</a>${t}</h2>${html}</section>`).join('\n');
+  return `<header class="g-head">
   <div class="wrap g-head-in">
-    <nav class="crumbs" aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">cookieowl</a></li><li><span aria-current="page">API reference</span></li></ol></nav>
-    <p class="g-star">${art('frameworks', 'art-ic art-sm')}<span>Reference</span></p>
-    <h1>cookieowl API reference</h1>
-    <p class="lead">Every option, attribute, method and event of the cookie consent script, with the React and Vue helpers.</p>
+    <div class="g-title">
+      <nav class="crumbs" aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">cookieowl</a></li><li><span aria-current="page">API reference</span></li></ol></nav>
+      <p class="ch-no">${art('key', 'ki ki-lg')}<span>The key ring</span></p>
+      <h1>cookieowl API reference</h1>
+      <p class="lead">Every option, attribute, method and event of the cookie consent script, with Consent Mode, auto blocking, styling and the React and Vue helpers. One key for every door in town.</p>
+    </div>
+    <div class="g-spot">${spotSvg('api', VARS, { id: 'gs', inline: true, cls: 'spot' })}</div>
   </div>
 </header>
 <div class="wrap g-layout">
-  <article class="g-article">
+  <article class="g-article g-article-wide">
 ${body}
   </article>
-  <aside class="g-aside" aria-label="On this page"><nav class="g-toc" aria-labelledby="toc-title"><p id="toc-title" class="g-toc-title">${icon('moon')}On this page</p><ol>${toc}</ol></nav></aside>
+  <aside class="g-aside" aria-label="On this page"><nav class="g-toc" aria-labelledby="toc-title"><p id="toc-title" class="g-toc-title">${art('key', 'ki ki-sm')}On this page</p><ol>${toc}</ol></nav></aside>
 </div>`;
 }
 

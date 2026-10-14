@@ -3,53 +3,35 @@
 <head>
 <meta charset="utf-8">
 <title>cookieowl card</title>
+<!-- The social preview and Open Graph card: the night town of the docs site
+     (docs/assets/art/scenes/hero-dark.svg, written by npm run docs) with the
+     name and the promise. Rendered by scripts/render-images.sh. -->
 <style>
   * { box-sizing: border-box; margin: 0; }
   html, body { width: 100vw; height: 100vh; overflow: hidden; }
-  body {
-    font-family: "Segoe UI", system-ui, sans-serif;
-    color: #f3f5fc;
-    background: radial-gradient(120vh 90vh at 78% 30%, #253173 0%, rgba(37, 49, 115, 0) 60%), linear-gradient(160deg, #0a0f26 0%, #141c45 70%, #1b2452 100%);
-    position: relative;
-  }
-  .stars { position: absolute; inset: 0; }
-  .moon { position: absolute; right: 7vw; top: 9vh; width: 34vh; height: 34vh; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #fbeec4, #f2d58a 70%); box-shadow: 0 0 12vh 4vh rgba(247, 222, 150, .28); }
-  .hill { position: absolute; right: -10vw; bottom: -28vh; width: 70vw; height: 56vh; border-radius: 50%; background: #10173a; }
-  .owl { position: absolute; right: 9vw; bottom: 6vh; height: 66vh; }
-  .text { position: absolute; left: 6.5vw; top: 13vh; width: 56vw; }
-  .brand { font-size: 9vh; font-weight: 800; letter-spacing: -.2vh; }
-  .brand span { color: #f2b134; }
-  .brand img { height: 10vh; }
-  h1 { font-size: 5.6vh; line-height: 1.18; margin-top: 3.2vh; font-weight: 700; }
-  p { font-size: 3.3vh; line-height: 1.45; color: #b9c2de; margin-top: 2.4vh; max-width: 48vw; }
+  body { position: relative; background: #070b22; color: #f8eed8; font-family: "Segoe UI", system-ui, sans-serif; }
+  .scene { position: absolute; right: 0; bottom: 0; height: 100vh; width: auto; }
+  .fade { position: absolute; inset: 0; background: linear-gradient(90deg, #070b22 0%, rgba(7, 11, 34, .9) 42%, rgba(7, 11, 34, 0) 64%); }
+  .text { position: absolute; left: 6.5vw; top: 12vh; width: 50vw; }
+  .tale { font-family: "Segoe Print", "Bradley Hand", cursive; font-size: 3.2vh; color: #f2b134; }
+  .brand { margin-top: 1.6vh; font-family: Georgia, "Times New Roman", serif; font-size: 13vh; font-weight: 700; line-height: 1; letter-spacing: -.2vh; }
+  .brand span { color: #f2b134; font-style: italic; }
+  h1 { margin-top: 3vh; font-family: Georgia, "Times New Roman", serif; font-size: 5.4vh; line-height: 1.2; font-weight: 700; }
+  p { margin-top: 2.4vh; font-size: 3vh; line-height: 1.45; color: #c9cde6; max-width: 44vw; }
   .chips { display: flex; flex-wrap: wrap; gap: 1.4vh; margin-top: 4vh; }
-  .chip { display: flex; align-items: center; gap: 1.2vh; padding: 1.2vh 2.2vh; border-radius: 99px; background: #1f2a5a; border: 1px solid #34437e; font-size: 2.6vh; font-weight: 600; }
-  .chip i { width: 1.2vh; height: 1.2vh; border-radius: 50%; background: #f2b134; }
-  .banner { position: absolute; left: 6.5vw; bottom: 7vh; width: 50vw; padding: 2.4vh 2.8vh; border-radius: 2vh; background: #fcfdff; color: #1b2240; box-shadow: 0 3vh 7vh -2vh rgba(0, 0, 0, .6); display: flex; align-items: center; gap: 2.4vh; }
-  .banner b { display: block; font-size: 2.5vh; }
-  .banner small { display: block; font-size: 1.9vh; color: #535d7d; margin-top: .4vh; }
-  .btns { display: flex; gap: 1vh; margin-left: auto; }
-  .btn { padding: 1.3vh 2vh; border-radius: 1.2vh; background: #f2b134; color: #141a2e; font-weight: 700; font-size: 2vh; white-space: nowrap; }
-  .btn.ghost { background: transparent; border: 1px solid #d8ddea; }
+  .chip { padding: 1.1vh 2.2vh; border-radius: .8vh; border: .35vh solid #1b2547; background: #fffaf0; color: #1b2547; font-size: 2.5vh; font-weight: 700; transform: rotate(-1.5deg); box-shadow: .5vh .5vh 0 rgba(0, 0, 0, .35); }
+  .chip:nth-child(2n) { transform: rotate(1.2deg); }
 </style>
 </head>
 <body>
-<svg class="stars" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" id="stars"></svg>
-<div class="moon"></div>
-<div class="hill"></div>
-<img class="owl" src="../../assets/mascot-dark.svg" alt="">
+<img class="scene" src="../../docs/assets/art/scenes/hero-dark.svg" alt="">
+<div class="fade"></div>
 <div class="text">
+  <div class="tale">A bedtime story about privacy</div>
   <div class="brand">cookie<span>owl</span></div>
-  <h1>Cookie consent for LGPD and GDPR that really blocks trackers</h1>
-  <p>One script tag. Google Consent Mode v2, auto blocking, an accessible banner in 5 languages. Free and open source.</p>
-  <div class="chips"><span class="chip"><i></i>Under 15 kB gzip</span><span class="chip"><i></i>Consent Mode v2</span><span class="chip"><i></i>React, Vue, Next.js</span></div>
+  <h1>Cookie consent that keeps trackers outside the gate until visitors say yes</h1>
+  <p>LGPD and GDPR. One script tag, Google Consent Mode v2, auto blocking, five languages. Free and open source.</p>
+  <div class="chips"><span class="chip">Under 15 kB gzip</span><span class="chip">Consent Mode v2</span><span class="chip">React, Vue, Next.js</span></div>
 </div>
-<div class="banner"><div><b>We value your privacy</b><small>Analytics and marketing stay off until you choose.</small></div><div class="btns"><span class="btn">Reject all</span><span class="btn">Accept all</span><span class="btn ghost">Customize</span></div></div>
-<script>
-  let s = 11, out = '';
-  const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
-  for (let i = 0; i < 90; i++) out += `<circle cx="${(r() * 100).toFixed(2)}" cy="${(r() * 100).toFixed(2)}" r="${(0.08 + r() * 0.16).toFixed(3)}" fill="#fff" opacity="${(0.25 + r() * 0.45).toFixed(2)}"/>`;
-  document.getElementById('stars').innerHTML = out;
-</script>
 </body>
 </html>

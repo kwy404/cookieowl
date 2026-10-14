@@ -3,8 +3,10 @@
 // this module publishes reactive stores and helpers on V.config.globals, then
 // calls V.start(). Pages declare behavior in HTML (v-data, v-model, @click,
 // v-for, v-show, v-copy-from, v-theme-toggle, v-hotkey). Plain JavaScript runs
-// the live demo: a real cookieowl instance inside a pretend shop, a network
-// monitor fed by the fake trackers, and the snippet configurator.
+// the live demo: a real cookieowl instance inside a pretend shop on the demo
+// street, tracker bugs that wait at the gate or fly in, the night watch
+// logbook fed by the fake trackers, the lantern workshop (the snippet
+// configurator) and the parallax of the hero town.
 
 const V = window.V;
 const $ = (s, el = document) => el.querySelector(s);
@@ -12,6 +14,8 @@ const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const S = V.reactive({ ready: 0 });
+// The site root, so search also works from the 404 page at any depth.
+const BASE = new URL('./', import.meta.url);
 
 // ---------- Search (Ctrl K) ----------
 
@@ -19,10 +23,10 @@ let index = [];
 let loading = null;
 function loadSearch() {
   if (!loading) {
-    loading = fetch('search.json')
+    loading = fetch(new URL('search.json', BASE))
       .then((r) => r.json())
       .then((j) => {
-        index = j.map((e) => ({ ...e, hay: `${e.title} ${e.sub} ${e.kind}`.toLowerCase() }));
+        index = j.map((e) => ({ ...e, url: new URL(e.url, BASE).href, hay: `${e.title} ${e.sub} ${e.kind}`.toLowerCase() }));
         S.ready++;
       })
       .catch(() => {
@@ -88,7 +92,7 @@ V.effect(() => {
 
 // ---------- Live demo ----------
 
-const M = V.reactive({ rows: [], gcm: [], cookies: [], status: 'idle' });
+const M = V.reactive({ rows: [], gcm: [], cookies: [], status: 'idle', acc: { preferences: false, analytics: false, marketing: false, any: false } });
 let rowId = 0;
 const stops = [];
 const site = $('[data-demo-site]');
@@ -113,7 +117,26 @@ window.demoNet = {
 };
 
 function label(state) {
-  return { held: 'Held', ran: 'Ran', sent: 'Sent', note: 'Note' }[state] || state;
+  return { held: 'Held', ran: 'Let in', sent: 'Sent', note: 'Note' }[state] || state;
+}
+
+/** Where a tracker bug is: waiting outside the gate (held) or inside the shop (ran). */
+function bugCls(rows, key, where) {
+  const row = rows.find((r) => r.state !== 'sent' && r.state !== 'note' && r.url.includes(`trackers/${key}.js`));
+  if (!row) return '';
+  return (where === 'out' ? row.state === 'held' : row.state === 'ran') ? 'is-here' : '';
+}
+
+/** Lights the gate lamps from the current choice. */
+function readAccepted() {
+  if (!demo) return;
+  let any = false;
+  for (const c of ['preferences', 'analytics', 'marketing']) {
+    const on = demoCfg.cats.includes(c) && demo.accepted(c);
+    M.acc[c] = on;
+    any = any || on;
+  }
+  M.acc.any = any;
 }
 
 function readCookies() {
@@ -195,13 +218,16 @@ function startDemo() {
   demo.on('consent', (r) => {
     M.status = `Saved: ${r.method}`;
     readCookies();
+    readAccepted();
   });
+  demo.on('change', readAccepted);
   demo.on('show', (w) => (M.status = w === 'banner' ? 'Waiting for a choice' : 'Preferences open'));
   M.status = demo.getConsent() ? `Stored choice: ${demo.getConsent().method}` : 'Waiting for a choice';
   new MutationObserver((records) => {
     for (const r of records) for (const n of r.addedNodes) if (n.nodeType === 1 && n.matches('script[data-cookieowl]') && !n.hasAttribute('data-cookieowl-done')) addScriptRow(n);
   }).observe(site, { childList: true, subtree: true });
   readCookies();
+  readAccepted();
 }
 
 /** A page reload, without reloading the docs: stop the trackers and rebuild the shop. */
@@ -217,6 +243,7 @@ function rebuild(clear) {
   fillScripts();
   demo.init(demoConfig());
   readCookies();
+  readAccepted();
 }
 
 let dlHooked = false;
@@ -277,6 +304,7 @@ document.addEventListener('click', (e) => {
     s.dataset.demo = 'NightPixel (injected)';
     site.append(s);
     if (s.getAttribute('type') !== 'text/plain') addScriptRow(s);
+    M.status = 'A snippet tried to sneak in a pixel';
   }
 });
 document.addEventListener('change', (e) => {
@@ -406,6 +434,19 @@ async function copySnippet() {
   }
 }
 
+const LANG_NAMES = { auto: "the visitor's language", 'pt-BR': 'Portuguese', en: 'English', es: 'Spanish', fr: 'French', de: 'German' };
+const LAYOUT_NAMES = { box: 'A corner box', bar: 'A bottom bar', modal: 'A center modal' };
+
+/** The handwritten note next to the lantern. */
+function lanternNote(c) {
+  const law = c.template ? `, ${c.template.toUpperCase()} wording` : '';
+  const gcm = c.consentMode ? ', Consent Mode on' : '';
+  return `${LAYOUT_NAMES[c.layout] || 'A banner'} in ${LANG_NAMES[c.lang] || c.lang}${law}${gcm}`;
+}
+
+const bench = $('[data-lantern]');
+if (bench) V.effect(() => bench.style.setProperty('--lamp', CFG.seed));
+
 function tryInDemo() {
   if (!demo) return;
   demoCfg.lang = CFG.lang === 'auto' ? 'en' : CFG.lang;
@@ -424,6 +465,33 @@ function tryInDemo() {
   M.gcm.splice(0);
   rebuild(true);
   $('#demo').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+}
+
+// ---------- Parallax of the hero town ----------
+
+const layers = $$('.town .px');
+if (layers.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const depth = { 'px-sky': 0.32, 'px-far': 0.2, 'px-mid': 0.1, 'px-near': 0, 'px-bugs': -0.06 };
+  const hero = $('.town');
+  let ticking = false;
+  const move = () => {
+    ticking = false;
+    const y = Math.min(scrollY, hero.offsetHeight);
+    for (const g of layers) {
+      const k = depth[[...g.classList].find((c) => c in depth)] || 0;
+      g.style.transform = `translateY(${(y * k).toFixed(1)}px)`;
+    }
+  };
+  addEventListener(
+    'scroll',
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(move);
+      }
+    },
+    { passive: true },
+  );
 }
 
 // ---------- Reading progress on guides ----------
@@ -451,6 +519,8 @@ Object.assign(V.config.globals, {
     location.href = r.url;
   },
   label,
+  bugCls,
+  lanternNote,
   clCount: (cl) => Object.values(cl.done).filter(Boolean).length,
   clReset() {
     for (const k of Object.keys(CL.done)) CL.done[k] = false;
