@@ -1,9 +1,11 @@
-// Writes the mascot, banners, favicon and icon set to assets/ (and the
-// favicon to docs/). Usage: npm run art
+// Writes the mascot, banners, favicon, icon set and the art of the special
+// dates (assets/seasons/<id>/) to assets/. Usage: npm run art
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ICON_NAMES, banner, favicon, head, iconSvg, mascot } from './art.mjs';
+import { seasonFiles } from './seasons.mjs';
+import { DAWN, NIGHT } from './storybook.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const out = (rel, content) => {
@@ -23,4 +25,9 @@ for (const name of ICON_NAMES) {
   out(`assets/icons/light/${name}.svg`, iconSvg(name, 'light'));
   out(`assets/icons/dark/${name}.svg`, iconSvg(name, 'dark'));
 }
-console.log(`wrote mascot, head, favicon, 2 banners and ${ICON_NAMES.length * 2} icons`);
+const seasons = seasonFiles([
+  ['light', DAWN],
+  ['dark', NIGHT],
+]);
+for (const [name, content] of Object.entries(seasons)) out(`assets/seasons/${name}`, content);
+console.log(`wrote ${Object.keys(seasons).length} seasonal files, mascot, head, favicon, 2 banners and ${ICON_NAMES.length * 2} icons`);
