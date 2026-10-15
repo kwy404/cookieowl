@@ -1,9 +1,9 @@
 <!--meta
 {
   "slug": "google-consent-mode-v2-setup",
-  "title": "Google Consent Mode v2 setup with a free cookie banner | cookieowl",
-  "description": "Set up Google Consent Mode v2: denied defaults with wait_for_update, region defaults, updates on every choice, basic or advanced mode, with gtag.js or Tag Manager.",
-  "h1": "Google Consent Mode v2 setup, step by step",
+  "title": "Google Consent Mode v2 | cookieowl",
+  "description": "How cookieowl sends the Consent Mode v2 signals to Google tags, and when to use basic or advanced mode.",
+  "h1": "Setting up Google Consent Mode v2",
   "crumb": "Consent Mode v2",
   "lead": "Consent Mode tells Google tags what the visitor allowed. Here is how the four v2 signals work, basic versus advanced mode, and a setup that sends them right.",
   "readTime": "8 min read",
@@ -13,7 +13,7 @@
     { "q": "Does Consent Mode replace a cookie banner?", "a": "No. Consent Mode only passes the visitor's choice to Google tags. You still need a banner that collects the choice and blocks the other trackers." },
     { "q": "How do I check that Consent Mode works?", "a": "Open Tag Assistant or the browser console and inspect window.dataLayer. You should see a consent default command before any config or event, then a consent update right after each choice." }
   ],
-  "related": ["block-google-analytics-until-consent", "gdpr-compliant-cookie-banner", "cookie-consent-in-nextjs"]
+  "related": ["block-google-analytics-until-consent", "lgpd-gdpr-cookie-checklist", "cookie-consent-in-react"]
 }
 -->
 <section id="signals"><h2>The four signals of Consent Mode v2</h2>

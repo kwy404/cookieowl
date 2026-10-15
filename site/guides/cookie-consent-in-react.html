@@ -1,10 +1,10 @@
 <!--meta
 {
   "slug": "cookie-consent-in-react",
-  "title": "Cookie consent in React: hook, gate component and blocking | cookieowl",
-  "description": "Add cookie consent to a React app: start cookieowl early, render embeds and analytics with ConsentGate, read choices with the useConsent hook, and block trackers.",
-  "h1": "Cookie consent in React, without a provider maze",
-  "crumb": "React cookie consent",
+  "title": "Using cookieowl with React | cookieowl",
+  "description": "Start cookieowl before React mounts, read choices with useConsent and render embeds with ConsentGate.",
+  "h1": "Using cookieowl with React",
+  "crumb": "React",
   "lead": "A React app still needs its trackers held before React even mounts. Here is where to start cookieowl, and how to read consent from components.",
   "readTime": "7 min read",
   "faq": [
@@ -13,7 +13,7 @@
     { "q": "Can I load Google Analytics from a React effect after consent?", "a": "Yes. Read useConsent('analytics') and inject the script in an effect when it turns true. Marking the script in index.html with text/plain is simpler and keeps it out of your bundle." },
     { "q": "Does cookieowl work with server side rendering?", "a": "Importing it on the server is safe: without a DOM, init stores the configuration, accepted() returns false for optional categories and nothing touches document." }
   ],
-  "related": ["cookie-consent-in-nextjs", "block-google-analytics-until-consent", "free-cookie-consent-script"]
+  "related": ["block-google-analytics-until-consent", "google-consent-mode-v2-setup", "lgpd-gdpr-cookie-checklist"]
 }
 -->
 <section id="where"><h2>Where cookie consent belongs in a React app</h2>

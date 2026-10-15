@@ -173,7 +173,7 @@ export function indexBody(guides) {
       ${crumbs([['cookieowl', './'], ['Guides', '']])}
       <p class="ch-no">${art('book', 'ki ki-lg')}<span>The storybook shelf</span></p>
       <h1>Cookie consent guides</h1>
-      <p class="lead">Practical, honest guides for LGPD and GDPR cookie consent: blocking Google Analytics until consent, Google Consent Mode v2, React, Next.js and WordPress setups, and a checklist to review your own site. Each one is a short chapter with working code.</p>
+      <p class="lead">Four short guides with working code: review your site with the checklist, set up Google Consent Mode v2, hold Google Analytics until consent and use cookieowl in React.</p>
     </div>
     <div class="g-spot">${spotSvg('shelf', VARS, { id: 'gs', inline: true, cls: 'spot' })}</div>
   </div>

@@ -1,10 +1,10 @@
 <!--meta
 {
   "slug": "block-google-analytics-until-consent",
-  "title": "Block Google Analytics until consent (GA4, gtag and GTM) | cookieowl",
-  "description": "How to block Google Analytics 4 until cookie consent: hold gtag.js and the config as text/plain, catch injected tags with auto mode, and verify it in DevTools.",
-  "h1": "How to block Google Analytics until consent",
-  "crumb": "Block Google Analytics",
+  "title": "Holding Google Analytics until consent | cookieowl",
+  "description": "Keep gtag.js from loading until analytics is accepted, and check it in the Network panel.",
+  "h1": "Holding Google Analytics until consent",
+  "crumb": "Google Analytics",
   "lead": "Hiding a banner is easy. Keeping gtag.js from loading until the visitor says yes takes three small changes, and you can prove it in the Network panel.",
   "readTime": "7 min read",
   "faq": [
@@ -13,7 +13,7 @@
     { "q": "Will GA count the page view after the visitor accepts?", "a": "Yes. When analytics is accepted, the gtag scripts run on the same page, so the config call sends the page view right away without a reload." },
     { "q": "What about Google Analytics added by a plugin or a tag manager?", "a": "Turn on auto mode with data-auto-block. cookieowl recognizes gtag.js, analytics.js and gtm.js by URL and holds them even when another script injects them." }
   ],
-  "related": ["google-consent-mode-v2-setup", "lgpd-gdpr-cookie-checklist", "cookie-banner-for-wordpress"]
+  "related": ["google-consent-mode-v2-setup", "lgpd-gdpr-cookie-checklist", "cookie-consent-in-react"]
 }
 -->
 <section id="problem"><h2>The problem with the standard snippet</h2>

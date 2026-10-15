@@ -19,14 +19,9 @@ export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 /** The guides, in reading order. `short` labels navigation, `icon` comes from the icon set. */
 export const GUIDES = [
   { slug: 'lgpd-gdpr-cookie-checklist', short: 'LGPD and GDPR checklist', icon: 'scroll', spot: 'checklist' },
-  { slug: 'cookie-consent-banner-lgpd', short: 'Cookie banner for LGPD', icon: 'lgpd', spot: 'lgpd' },
-  { slug: 'gdpr-compliant-cookie-banner', short: 'GDPR compliant banner', icon: 'gdpr', spot: 'gdpr' },
-  { slug: 'google-consent-mode-v2-setup', short: 'Consent Mode v2 setup', icon: 'consent-mode', spot: 'consent-mode' },
-  { slug: 'block-google-analytics-until-consent', short: 'Block GA until consent', icon: 'gate', spot: 'block-ga' },
-  { slug: 'cookie-consent-in-react', short: 'Cookie consent in React', icon: 'code', spot: 'react' },
-  { slug: 'cookie-consent-in-nextjs', short: 'Cookie consent in Next.js', icon: 'signpost', spot: 'nextjs' },
-  { slug: 'cookie-banner-for-wordpress', short: 'Cookie banner for WordPress', icon: 'house', spot: 'wordpress' },
-  { slug: 'free-cookie-consent-script', short: 'Free cookie consent script', icon: 'balloon', spot: 'free-script' },
+  { slug: 'google-consent-mode-v2-setup', short: 'Google Consent Mode v2', icon: 'consent-mode', spot: 'consent-mode' },
+  { slug: 'block-google-analytics-until-consent', short: 'Holding Google Analytics', icon: 'gate', spot: 'block-ga' },
+  { slug: 'cookie-consent-in-react', short: 'Using it with React', icon: 'code', spot: 'react' },
 ];
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
@@ -139,8 +134,8 @@ ${extra}<script src="${VOODOO_JS}" data-manual defer></script>
 }
 
 const NAV = [
-  ['demo', 'The street', './#demo', 'gate'],
-  ['configurator', 'Workshop', './#configurator', 'lantern'],
+  ['configurator', 'Generator', './#configurator', 'sparkles'],
+  ['demo', 'Live demo', './#demo', 'gate'],
   ['checklist', 'Checklist', 'lgpd-gdpr-cookie-checklist.html', 'scroll'],
   ['guides', 'Guides', 'guides.html', 'book'],
   ['api', 'API', 'api.html', 'key'],
@@ -207,7 +202,7 @@ export function footer() {
         <p class="foot-links"><a href="${GITHUB}">${icon('github')}GitHub</a><a href="${NPM}">${icon('npm')}npm</a><a href="${GITHUB}/blob/main/CHANGELOG.md">${art('logbook')}Changelog</a></p>
       </div>
       <nav aria-labelledby="f-site"><h2 id="f-site" class="foot-title">The town</h2><ul>
-        <li><a href="./#demo">The street at night (live demo)</a></li><li><a href="./#configurator">Lantern workshop</a></li><li><a href="./#how">How blocking works</a></li><li><a href="./#frameworks">React, Vue, Next.js</a></li><li><a href="api.html">API reference</a></li><li><a href="guides.html">All guides</a></li><li><a href="./#faq">FAQ</a></li>
+        <li><a href="./#configurator">Banner generator</a></li><li><a href="./#demo">Live demo</a></li><li><a href="./#how">How blocking works</a></li><li><a href="./#frameworks">React, Vue, Next.js</a></li><li><a href="api.html">API reference</a></li><li><a href="guides.html">All guides</a></li><li><a href="./#faq">FAQ</a></li>
       </ul></nav>
       <nav aria-labelledby="f-guides"><h2 id="f-guides" class="foot-title">Guides</h2><ul>${guides}</ul></nav>
       <nav aria-labelledby="f-more"><h2 id="f-more" class="foot-title">More from kwy404</h2><ul class="foot-more">${more}</ul></nav>
