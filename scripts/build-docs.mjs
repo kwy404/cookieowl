@@ -7,7 +7,8 @@
 //   docs/site.css, docs/site.js and docs/demo/ are written by hand
 // Code samples are highlighted at build time with Shiki (light-plus and
 // dark-plus) so the pages ship no highlighter. dist/cookieowl.js (npm run
-// build) is copied to docs/assets/ for the live demo.
+// build) is copied to docs/assets/ for the live demo, and
+// dist/cookieowl-snippet.js for the banner generator.
 // Usage: npm run docs, or npm run docs:check to verify docs/ is current.
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -175,7 +176,9 @@ out['index.html'] = page(
     description: 'An open source cookie banner that keeps trackers from loading until visitors agree. Set it up with one script tag.',
     jsonld: homeJsonLd(),
     // The live demo runs the real script, without the automatic init.
+    // The generator uses the pure functions of cookieowl/snippet.
     extraHead: `<script src="assets/cookieowl.js" data-manual></script>
+<script src="assets/cookieowl-snippet.js"></script>
 `,
   },
   homeBody(homeCtx),
@@ -287,6 +290,7 @@ const files = {
   'robots.txt': `User-agent: *\nAllow: /\nDisallow: /404.html\n\nSitemap: ${SITE}sitemap.xml\n`,
   '.nojekyll': '',
   'assets/cookieowl.js': dist,
+  'assets/cookieowl-snippet.js': readFileSync(join(root, 'dist', 'cookieowl-snippet.js'), 'utf8'),
   'favicon.svg': readFileSync(join(root, 'assets', 'favicon.svg'), 'utf8'),
 };
 for (const f of ['mascot.svg', 'mascot-dark.svg', 'mascot-head.svg', 'mascot-head-dark.svg', 'banner.svg', 'banner-dark.svg']) files[`assets/${f}`] = readFileSync(join(root, 'assets', f), 'utf8');
@@ -321,7 +325,7 @@ for (const [theme, P] of THEMES) {
 const problems = [];
 const dash = new RegExp(`[${String.fromCharCode(0x2013, 0x2014)}]`);
 for (const [name, content] of Object.entries(files)) {
-  if (name === 'assets/cookieowl.js') continue;
+  if (name === 'assets/cookieowl.js' || name === 'assets/cookieowl-snippet.js') continue;
   if (dash.test(content)) problems.push(`${name}: contains an en or em dash`);
   if (/\p{Extended_Pictographic}/u.test(content)) problems.push(`${name}: contains an emoji`);
   if (new RegExp(['tail', 'wind'].join(''), 'i').test(content)) problems.push(`${name}: names another CSS framework`);

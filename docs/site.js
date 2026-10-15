@@ -351,14 +351,10 @@ const G = V.reactive({
 const genCode = $('#gen-code');
 // The CDN address comes from the build, through the default line in the page.
 const CDN = (/src="([^"]+)"/.exec(genCode?.textContent || '') || [])[1] || 'https://cdn.jsdelivr.net/npm/cookieowl/dist/cookieowl.js';
-// What the region presets set, as in src/presets.ts: the line only adds what differs.
-const PRESETS = { lgpd: { lang: 'pt-BR', consentMode: true, autoBlock: true }, gdpr: { consentMode: true, autoBlock: true } };
-const TEXT_ATTRS = [
-  ['title', 'data-text-title'],
-  ['description', 'data-text-description'],
-  ['rejectAll', 'data-text-reject-all'],
-  ['acceptAll', 'data-text-accept-all'],
-];
+// The generator functions of cookieowl/snippet (assets/cookieowl-snippet.js),
+// so the line is always the one the script reads.
+const SN = window.CookieOwlSnippet;
+const TEXT_KEYS = ['title', 'description', 'rejectAll', 'acceptAll'];
 let TEXTS = {};
 try {
   TEXTS = JSON.parse($('#gen-texts')?.textContent || '{}');
@@ -367,59 +363,31 @@ try {
 }
 
 const genCats = (g) => ['preferences', 'analytics', 'marketing'].filter((k) => g[k]);
-const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const genTexts = (g) => Object.fromEntries(TEXT_KEYS.filter((k) => g[k].trim()).map((k) => [k, g[k].trim()]));
+
+/** The form state as options of cookieowl/snippet. */
+function genOpts(g) {
+  return {
+    preset: g.preset || undefined,
+    lang: g.lang === 'auto' ? undefined : g.lang,
+    policyUrl: g.policy,
+    categories: genCats(g),
+    layout: g.layout,
+    theme: g.theme,
+    accent: g.accent.toLowerCase() === DEFAULT_ACCENT ? undefined : g.accent,
+    text: genTexts(g),
+    consentMode: g.consentMode ? (g.advanced ? 'advanced' : true) : false,
+    autoBlock: g.autoBlock,
+    respectGPC: g.gpc,
+  };
+}
 
 /** The data attributes of the line, as [name, value] pairs (true for a bare attribute). */
-function genAttrs(g) {
-  const p = PRESETS[g.preset] || {};
-  const a = [];
-  if (g.preset) a.push(['data-preset', g.preset]);
-  if (g.lang !== 'auto') a.push(['data-lang', g.lang]);
-  const policy = g.policy.trim();
-  if (policy) a.push(['data-policy-url', policy]);
-  const cats = genCats(g);
-  if (cats.length < 3) a.push(['data-categories', cats.length ? cats.join(',') : 'necessary']);
-  if (g.layout !== 'box') a.push(['data-layout', g.layout]);
-  if (g.theme !== 'auto') a.push(['data-theme', g.theme]);
-  if (g.accent.toLowerCase() !== DEFAULT_ACCENT) a.push(['data-accent', g.accent]);
-  if (g.consentMode && g.advanced) a.push(['data-consent-mode', 'advanced']);
-  else if (g.consentMode && !p.consentMode) a.push(['data-consent-mode', true]);
-  else if (!g.consentMode && p.consentMode) a.push(['data-consent-mode', 'false']);
-  if (g.autoBlock && !p.autoBlock) a.push(['data-auto-block', true]);
-  else if (!g.autoBlock && p.autoBlock) a.push(['data-auto-block', 'false']);
-  if (!g.gpc) a.push(['data-gpc', 'false']);
-  for (const [key, attr] of TEXT_ATTRS) {
-    const v = g[key].trim();
-    if (v) a.push([attr, v]);
-  }
-  return a;
-}
-
-const attrText = (attrs) => attrs.map(([n, v]) => (v === true ? ` ${n}` : ` ${n}="${escAttr(v)}"`)).join('');
-const genLine = (g, src = CDN, extra = []) => `<script src="${src}"${attrText([...genAttrs(g), ...extra])}></script>`;
-
-/** The same setup for npm. */
-function genNpm(g) {
-  const p = PRESETS[g.preset] || {};
-  const q = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
-  const lines = [];
-  if (g.preset) lines.push(`preset: ${q(g.preset)},`);
-  if (g.lang !== 'auto') lines.push(`lang: ${q(g.lang)},`);
-  if (g.policy.trim()) lines.push(`policyUrl: ${q(g.policy.trim())},`);
-  const cats = genCats(g);
-  if (cats.length < 3) lines.push(`categories: [${(cats.length ? cats : ['necessary']).map(q).join(', ')}],`);
-  if (g.layout !== 'box') lines.push(`layout: ${q(g.layout)},`);
-  if (g.theme !== 'auto') lines.push(`theme: ${q(g.theme)},`);
-  if (g.accent.toLowerCase() !== DEFAULT_ACCENT) lines.push(`accent: ${q(g.accent)},`);
-  if (g.consentMode && g.advanced) lines.push('consentMode: { advanced: true },');
-  else if (g.consentMode !== Boolean(p.consentMode)) lines.push(`consentMode: ${g.consentMode},`);
-  if (g.autoBlock !== Boolean(p.autoBlock)) lines.push(`autoBlock: ${g.autoBlock},`);
-  if (!g.gpc) lines.push('respectGPC: false,');
-  const texts = TEXT_ATTRS.filter(([key]) => g[key].trim()).map(([key]) => `  ${key}: ${q(g[key].trim())},`);
-  if (texts.length) lines.push('text: {', ...texts, '},');
-  const body = lines.length ? `{\n${lines.map((l) => `  ${l}`).join('\n')}\n}` : '';
-  return `import { cookieowl } from 'cookieowl';\n\ncookieowl.init(${body});\n`;
-}
+const genAttrs = (g) => SN.scriptAttributes(genOpts(g)).map(([n, v]) => [n, v === null ? true : v]);
+const genLine = (g) => SN.scriptTag(genOpts(g), { src: CDN });
+const genNpm = (g) => SN.initCode(genOpts(g));
+// The same escaping as scriptTag(), so the highlighted line reads like the copied one.
+const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '&#10;').replace(/\r/g, '&#13;');
 
 const genText = (g) => (g.mode === 'npm' ? genNpm(g) : genLine(g));
 
@@ -438,6 +406,7 @@ function genTagHtml(g) {
 }
 
 function genHtml(g) {
+  if (!SN) return esc(genCode.textContent);
   return g.mode === 'npm' ? highlight(genNpm(g), 'npm') : genTagHtml(g);
 }
 
@@ -450,7 +419,7 @@ function genPh(g, key) {
 let copyTimer = 0;
 async function genCopy() {
   try {
-    await navigator.clipboard.writeText(genText(G));
+    await navigator.clipboard.writeText(SN ? genText(G) : genCode.textContent);
   } catch {
     // Clipboard blocked: select the code so Ctrl C works.
     const range = document.createRange();
@@ -481,7 +450,7 @@ if (frames[0]) frames[0].classList.add('is-live');
 
 /** The preview document: the line itself, but never stored and always shown (even with Global Privacy Control). */
 function previewDoc(g) {
-  const line = genLine({ ...g, gpc: true }, SCRIPT_URL, [['data-storage', 'memory'], ['data-gpc', 'false']]);
+  const line = SN.scriptTag({ ...genOpts(g), storage: 'memory', respectGPC: false }, { src: SCRIPT_URL });
   return `<!doctype html><html lang="en" class="${g.page}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="${g.page}"><style>:root{--a:${escAttr(g.accent)}}${PV_CSS}</style>${line}</head><body><!--${++nonce}-->${PV_BODY}</body></html>`;
 }
 
@@ -504,7 +473,7 @@ function renderPreview() {
 
 let pvTimer = 0;
 let pvFirst = true;
-if (frames.length) {
+if (frames.length && SN) {
   V.effect(() => {
     // Reading the attributes and the page color subscribes this effect to them.
     void (JSON.stringify(genAttrs(G)) + G.page);
@@ -524,7 +493,7 @@ function tryInDemo() {
   demoCfg.consentMode = G.consentMode;
   demoCfg.respectGPC = G.gpc;
   demoCfg.cats = genCats(G);
-  demoCfg.text = Object.fromEntries(TEXT_ATTRS.filter(([key]) => G[key].trim()).map(([key]) => [key, G[key].trim()]));
+  demoCfg.text = genTexts(G);
   site.style.setProperty('--seed', G.accent);
   const layoutSel = $('[data-demo-layout]');
   const langSel = $('[data-demo-lang]');

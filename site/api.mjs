@@ -4,6 +4,7 @@ import { VARS, spotSvg } from '../scripts/storybook.mjs';
 import { SITE, art } from './layout.mjs';
 
 export const OPTIONS = [
+  ['preset', "'lgpd' | 'gdpr'", 'none', 'Region preset. <code>lgpd</code>: Portuguese texts, LGPD wording, Consent Mode v2 and auto blocking. <code>gdpr</code>: GDPR wording, Consent Mode v2 and auto blocking. Your own options win over the preset.'],
   ['categories', '(string | Category)[]', "['necessary', 'preferences', 'analytics', 'marketing']", 'Category ids or objects with <code>label</code>, <code>description</code>, <code>required</code> and <code>services</code>. <code>necessary</code> is always added and always on.'],
   ['lang', 'string', "'auto'", 'Banner language: <code>pt-BR</code>, <code>en</code>, <code>es</code>, <code>fr</code> or <code>de</code>. <code>auto</code> reads <code>&lt;html lang&gt;</code>, then the browser.'],
   ['template', "'lgpd' | 'gdpr'", 'lgpd for Portuguese, gdpr otherwise', 'Legal wording of the banner and the preferences dialog.'],
@@ -14,6 +15,7 @@ export const OPTIONS = [
   ['cookie', '{ name, domain, path, sameSite }', "{ name: 'cookieowl', path: '/', sameSite: 'Lax' }", 'Cookie options. Set <code>domain</code> to share consent across subdomains.'],
   ['layout', "'box' | 'bar' | 'modal'", "'box'", 'Corner box, full width bar or centered modal with a focus trap.'],
   ['position', "'bottom' | 'top' | 'bottom-left' | 'bottom-right'", "'bottom-right' (box), 'bottom' (bar)", 'Where the banner sits.'],
+  ['accent', 'string', 'the page --seed, or amber', 'Accent color of the buttons and switches, any CSS color.'],
   ['theme', "'auto' | 'light' | 'dark'", "'auto'", '<code>auto</code> follows <code>data-theme</code> or a <code>.dark</code> class on the page, then the system setting.'],
   ['dir', "'auto' | 'ltr' | 'rtl'", "'auto'", 'Text direction; <code>auto</code> follows <code>&lt;html dir&gt;</code>.'],
   ['reopenButton', "boolean | 'left' | 'right'", 'true (left)', 'The floating owl button that reopens the preferences.'],
@@ -30,6 +32,7 @@ export const OPTIONS = [
 ];
 
 export const ATTRIBUTES = [
+  ['data-preset', 'preset'],
   ['data-lang', 'lang'],
   ['data-template', 'template'],
   ['data-policy-url', 'policyUrl'],
@@ -38,6 +41,8 @@ export const ATTRIBUTES = [
   ['data-layout', 'layout'],
   ['data-position', 'position'],
   ['data-theme', 'theme'],
+  ['data-accent', 'accent'],
+  ['data-text-*', 'text, for example data-text-title or data-text-accept-all'],
   ['data-dir', 'dir'],
   ['data-storage', 'storage'],
   ['data-expires-days', 'expiresDays'],
