@@ -115,7 +115,7 @@ export function eraseCookies(patterns: (string | RegExp)[], doc: Document = docu
     if (!name || !patterns.some((p) => cookieMatches(name, p))) continue;
     for (const d of domains) {
       for (const path of ['/', doc.location?.pathname || '/']) {
-        doc.cookie = `${name}=; Path=${path}; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT${d ? `; Domain=${d}` : ''}`;
+        doc.cookie = `${name}=; Path=${path}; Max-Age=0${d ? `; Domain=${d}` : ''}`;
       }
     }
     erased.push(name);

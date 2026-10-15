@@ -10,7 +10,7 @@ const MANGLE = [
   'restoreCreate', 'onBeforeExecute', 'doc', 'opts', 'visit', 'mark', 'block', 'addPlaceholder', 'hookCreate', 'ran',
   'reveal', 'loadOnce', 'banner', 'prefs', 'reopenBtn', 'live', 'returnFocus', 'actions', 'serviceBlock', 'showBanner',
   'hideBanner', 'showPrefs', 'hidePrefs', 'syncReopen', 'announce', 'choices', 'mount', 'unmount', 'hasChoice', 'shown',
-  'trackers', 'allowed', 'days', 'raw', 'getGtag', 'el', 'host', 'policyNodes',
+  'trackers', 'allowed', 'days', 'raw', 'getGtag', 'el', 'host', 'policyNodes', 'placeholder', 'release', 'styles', 'pick',
 ];
 
 export default defineConfig([
