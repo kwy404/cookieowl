@@ -132,6 +132,12 @@ export type Position = 'bottom' | 'top' | 'bottom-left' | 'bottom-right';
 export type Theme = 'auto' | 'light' | 'dark';
 
 export interface CookieOwlConfig {
+  /**
+   * Region preset. `lgpd` sets Portuguese texts, the LGPD wording, Consent Mode
+   * and auto blocking; `gdpr` sets the GDPR wording, Consent Mode and auto
+   * blocking. Your own options always win over the preset.
+   */
+  preset?: 'lgpd' | 'gdpr';
   /** Category ids or objects. Default `['necessary', 'preferences', 'analytics', 'marketing']`. */
   categories?: (string | CategoryConfig)[];
   /** `auto` (default) reads `<html lang>` and then the browser language. */
@@ -150,6 +156,8 @@ export interface CookieOwlConfig {
   layout?: Layout;
   position?: Position;
   theme?: Theme;
+  /** Accent color of the buttons and switches, any CSS color. Default: the page `--seed`, or amber. */
+  accent?: string;
   /** Text direction. `auto` (default) follows `<html dir>`. */
   dir?: 'auto' | 'ltr' | 'rtl';
   /** Show the floating button that reopens the preferences. Default true. */

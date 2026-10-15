@@ -95,6 +95,7 @@ export interface UIOptions {
   layout: Layout;
   position: Position;
   theme: Theme;
+  accent?: string;
   dir: 'auto' | 'ltr' | 'rtl';
   reopen: false | 'left' | 'right';
   container: HTMLElement | null;
@@ -117,6 +118,13 @@ export class UI {
     private opts: UIOptions,
   ) {}
 
+  /** The .cko wrapper, painted with the accent color when one is set. */
+  private wrap(props: Props, ...kids: Child[]): HTMLElement {
+    const el = this.el('div', { ...props, 'data-cko-theme': this.opts.theme, lang: this.host.lang() }, ...kids);
+    el.style.setProperty('--seed', this.opts.accent || null);
+    return el;
+  }
+
   private el = (tag: string, props?: Props | null, ...kids: (Child | Child[])[]) => h(this.doc, tag, props, ...kids);
 
   /** Injects the stylesheet once per document. */
@@ -134,7 +142,7 @@ export class UI {
     const dir = this.opts.dir === 'auto' ? this.doc.documentElement.getAttribute('dir') || 'ltr' : this.opts.dir;
     const c = this.opts.container;
     this.live = this.el('div', { class: 'cko-sr', 'aria-live': 'polite', role: 'status' });
-    this.root = this.el('div', { class: `cko${c ? ' cko-in' : ''}`, id: this.id, 'data-cko-theme': this.opts.theme, dir, lang: this.host.lang() }, this.live);
+    this.root = this.wrap({ class: `cko${c ? ' cko-in' : ''}`, id: this.id, dir }, this.live);
     if (c && /^(static)?$/.test(this.doc.defaultView?.getComputedStyle(c).position || '')) c.style.position = 'relative';
     (c || this.doc.body).append(this.root);
     return this.root;
@@ -358,10 +366,11 @@ export class UI {
     const t = this.host.texts();
     const w = iframe.getAttribute('width');
     const hgt = iframe.getAttribute('height');
+    const title = t.embedTitle.replace('{name}', name);
     const box = this.el(
       'div',
-      { class: 'cko-embed', role: 'group', 'aria-label': t.embedTitle.replace('{name}', name) },
-      this.el('strong', null, t.embedTitle.replace('{name}', name)),
+      { class: 'cko-embed', role: 'group', 'aria-label': title },
+      this.el('strong', null, title),
       this.el('p', null, t.embedText),
       this.el(
         'div',
@@ -370,7 +379,7 @@ export class UI {
         this.el('button', { type: 'button', class: 'cko-btn cko-ghost', 'data-cko': 'allow', onclick: onAllow }, t.allowAlways),
       ),
     );
-    const wrap = this.el('div', { class: 'cko', 'data-cko-theme': this.opts.theme, lang: this.host.lang() }, box);
+    const wrap = this.wrap({ class: 'cko' }, box);
     // display: contents on .cko keeps the placeholder in the flow of the page.
     if (w && /^\d+$/.test(w)) box.style.width = `${w}px`;
     if (w && hgt && /^\d+$/.test(w) && /^\d+$/.test(hgt)) box.style.aspectRatio = `${w} / ${hgt}`;

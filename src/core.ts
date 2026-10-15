@@ -3,6 +3,7 @@
 import { Blocker } from './blocker';
 import { normalizeConsentMode, pushEvent, sendDefaults, sendUpdate } from './consent-mode';
 import { LANGS, detectLang, matchLang } from './i18n';
+import { applyPreset } from './presets';
 import { cookieStore, eraseCookies, localStore, memoryStore, uuid, type Store } from './storage';
 import { TRACKERS } from './trackers';
 import type {
@@ -89,6 +90,7 @@ export class CookieOwl {
    */
   init(config: CookieOwlConfig = {}): this {
     if (this.cfg) this.destroy();
+    config = applyPreset(config);
     const hasDom = typeof document !== 'undefined' && typeof window !== 'undefined';
     const lang = config.lang && config.lang !== 'auto' ? config.lang : hasDom ? detectLang(document, navigator) : 'en';
     const pack = LANGS[matchLang(lang) || 'en']!;
@@ -218,7 +220,7 @@ export class CookieOwl {
           shown: (what, open) => this.emit(open ? 'show' : 'hide', what),
           pick: (x) => pickText(x as Text, this.cfg!.lang),
         },
-        { layout: this.cfg!.layout, position: this.cfg!.position, theme: raw.theme || 'auto', dir: raw.dir || 'auto', reopen, container },
+        { layout: this.cfg!.layout, position: this.cfg!.position, theme: raw.theme || 'auto', accent: raw.accent, dir: raw.dir || 'auto', reopen, container },
       );
     }
     return this.ui;

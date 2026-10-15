@@ -3,6 +3,7 @@ import { CookieOwl } from './core';
 
 export { CookieOwl, createCookieOwl, pickText, trackerList, DEFAULT_CATEGORIES, VERSION } from './core';
 export { TRACKERS } from './trackers';
+export { PRESETS, applyPreset, type PresetName } from './presets';
 export { LANGS, matchLang, detectLang } from './i18n';
 export { DEFAULT_MAPPING as CONSENT_MODE_MAPPING } from './consent-mode';
 export type * from './types';

@@ -51,6 +51,20 @@ describe('configFromScript', () => {
   });
 });
 
+describe('configFromScript for the generator', () => {
+  it('reads the preset, the accent and text overrides', () => {
+    expect(configFromScript(tag('data-preset="gdpr" data-accent="#2f6fed" data-text-title="Cookies?" data-text-accept-all="OK" data-text-reject-all="No, thanks" data-text-prefs-title=""'))).toEqual({
+      preset: 'gdpr',
+      accent: '#2f6fed',
+      text: { title: 'Cookies?', acceptAll: 'OK', rejectAll: 'No, thanks' },
+    });
+  });
+
+  it('does not take data-text alone or other attributes as texts', () => {
+    expect(configFromScript(tag('data-text="x" data-textual data-title="x"'))).toEqual({});
+  });
+});
+
 describe('script tag auto init', () => {
   it('starts the shared instance from window.cookieowlConfig and exposes the globals', async () => {
     vi.resetModules();
