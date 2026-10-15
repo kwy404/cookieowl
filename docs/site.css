@@ -4,8 +4,8 @@
    storybook palette as --k-* variables: dawn in light mode, night in dark
    mode, mixed by Monsoon's --mode so .dark sections follow too. This file
    adds the concept: cream paper with grain, a storybook serif, chapters with
-   hand drawn rules, the hero town, the demo street and its logbook, the
-   lantern workshop, the scroll checklist and VS Code style code frames. */
+   hand drawn rules, the hero town, the banner generator and its live
+   preview, the demo street and its logbook, the scroll checklist and VS Code style code frames. */
 
 :root {
   --seed: #f2b134;
@@ -220,7 +220,7 @@ a { color: inherit; }
 .frame-compact pre { font-size: 12px; }
 @media (max-width: 640px) { .frame pre { font-size: 12px; } .frame-copy span { display: none; } }
 
-/* ---------- Chapter I: the demo street ---------- */
+/* ---------- Chapter II: the demo street ---------- */
 .demo-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 1.25rem; align-items: stretch; }
 @media (max-width: 1100px) { .demo-grid { grid-template-columns: minmax(0, 1fr); } }
 .street { position: relative; display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1rem; padding: 1rem 1rem 1.2rem; border: 2px solid var(--line); border-radius: var(--wob); overflow: hidden; background: linear-gradient(180deg, transparent 15rem, var(--k-road) 15rem); box-shadow: var(--lift); min-width: 0; }
@@ -329,7 +329,7 @@ a { color: inherit; }
 .demo-pick { display: inline-flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 700; }
 .demo-pick .select { width: auto; }
 
-/* ---------- Chapter II: three panels and the usual suspects ---------- */
+/* ---------- Chapter III: three panels and the usual suspects ---------- */
 .panels { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.3rem; }
 @media (max-width: 980px) { .panels { grid-template-columns: minmax(0, 1fr); } }
 .panel { min-width: 0; padding: 1rem 1rem 1.3rem; border: 2px solid var(--line); border-radius: var(--wob); background: var(--surface); box-shadow: var(--lift); }
@@ -354,45 +354,126 @@ a { color: inherit; }
 .poster-cat { padding: .05rem .5rem; border: 2px solid currentColor; border-radius: 4px; font: 800 .66rem/1.3 var(--font-sans); text-transform: uppercase; letter-spacing: .1em; transform: rotate(-4deg); color: color-mix(in oklab, #ff8a7a var(--mx), #b8322a); }
 .poster-cat.cat-analytics { color: color-mix(in oklab, #8fb4ff var(--mx), #2f5fc4); }
 
-/* ---------- Chapter III: the lantern workshop ---------- */
-.workshop-sec { background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--surface-2) 80%, transparent) 20%, color-mix(in oklab, var(--surface-2) 80%, transparent) 80%, transparent); }
-.cfg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 1.6rem; align-items: start; }
-@media (max-width: 980px) { .cfg { grid-template-columns: minmax(0, 1fr); } }
-.cfg-form { display: grid; gap: 1.1rem; }
-.tray { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem 1rem; margin: 0; padding: 1.4rem 1.1rem 1.1rem; border: 2px solid var(--line); border-radius: var(--wob-sm); background: var(--surface); min-width: 0; box-shadow: var(--lift); }
-.tray legend { display: inline-flex; align-items: center; gap: .45rem; padding: .2rem .7rem; border: 2px solid var(--line); border-radius: 999px; background: var(--amber); color: #1b2547; font-family: var(--font-display); font-weight: 800; font-size: .98rem; }
-.tray legend .ki { width: 1.2rem; height: 1.2rem; color: #1b2547; --k-tint: #fffaf0; }
-.tray .field { display: grid; gap: .35rem; min-width: 0; }
-.tray .label { font-weight: 700; }
-.cfg-wide { grid-column: 1 / -1; }
-.cfg-checks { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem 1rem; }
-@media (max-width: 520px) { .tray, .cfg-checks { grid-template-columns: minmax(0, 1fr); } }
-.cfg-checks .label { display: flex; align-items: center; gap: .5rem; font-size: .93rem; }
-.cfg-color { display: flex; align-items: center; gap: .6rem; }
-.cfg-color input[type="color"] { width: 2.6rem; height: 2.4rem; padding: .15rem; border: 2px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; }
-.cfg-out { position: sticky; top: calc(var(--top) + 1rem); min-width: 0; }
-.bench { --lamp: #f2b134; display: grid; grid-template-columns: 10.5rem minmax(0, 1fr); align-items: end; gap: 1rem; margin-bottom: 1rem; padding: .6rem 1.2rem 0; border: 2px solid var(--line); border-bottom-width: 10px; border-radius: var(--wob-sm); background: radial-gradient(14rem 10rem at 5.5rem 55%, color-mix(in oklab, var(--lamp) 26%, transparent), transparent), var(--surface); box-shadow: var(--lift); }
-.lantern { display: block; width: 100%; height: auto; overflow: visible; }
-.lantern .gem circle { fill: var(--k-winOff); transition: fill .3s, filter .3s; }
-.lantern .gem-necessary circle { fill: #f2b134; }
-.bench.on-preferences .gem-preferences circle { fill: #6fbf73; filter: drop-shadow(0 0 4px #6fbf73); }
-.bench.on-analytics .gem-analytics circle { fill: #6f8fe8; filter: drop-shadow(0 0 4px #6f8fe8); }
-.bench.on-marketing .gem-marketing circle { fill: #e8705a; filter: drop-shadow(0 0 4px #e8705a); }
-.bench-note { padding-bottom: 1rem; }
-.hand { margin: 0 0 .6rem; font-family: var(--font-hand); font-size: 1.5rem; line-height: 1.15; }
-.gem-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .3rem .9rem; font-size: .8rem; font-weight: 700; color: var(--muted-foreground); }
-.gem-key li { display: inline-flex; align-items: center; gap: .35rem; opacity: .5; transition: opacity .3s; }
-.gem-key li::before { content: ""; width: .7rem; height: .7rem; border-radius: 50%; border: 2px solid var(--line); background: var(--k-winOff); }
-.gem-key .gk-necessary, .bench.on-preferences .gk-preferences, .bench.on-analytics .gk-analytics, .bench.on-marketing .gk-marketing { opacity: 1; color: var(--foreground); }
-.gk-necessary::before { background: #f2b134 !important; }
-.bench.on-preferences .gk-preferences::before { background: #6fbf73; }
-.bench.on-analytics .gk-analytics::before { background: #6f8fe8; }
-.bench.on-marketing .gk-marketing::before { background: #e8705a; }
-@media (max-width: 460px) { .bench { grid-template-columns: 7.5rem minmax(0, 1fr); padding-inline: .8rem; } .hand { font-size: 1.25rem; } }
-.cfg-frame { margin: .9rem 0; }
-.cfg-frame pre { min-height: 11rem; }
-.cfg-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
-.cfg-note { color: var(--muted-foreground); font-size: .9rem; line-height: 1.6; }
+/* ---------- Chapter I: the banner generator, the centerpiece ----------
+   Steps on the left, the live preview and the line to copy on the right,
+   sticky while the steps scroll by. */
+.gen-sec { background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--surface-2) 80%, transparent) 12%, color-mix(in oklab, var(--surface-2) 80%, transparent) 88%, transparent); }
+.gen { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: 1.6rem; align-items: start; }
+@media (max-width: 1020px) { .gen { grid-template-columns: minmax(0, 1fr); } }
+.vh { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.gen-form { display: grid; gap: 1.1rem; min-width: 0; }
+.gstep { display: grid; gap: .9rem; min-width: 0; margin: 0; padding: 1.3rem 1.1rem 1.2rem; border: 2px solid var(--line); border-radius: var(--wob-sm); background: var(--surface); box-shadow: var(--lift); }
+.gstep legend { display: inline-flex; align-items: center; gap: .55rem; padding: 0 .5rem; font-family: var(--font-display); font-weight: 800; font-size: 1.12rem; }
+.gstep-no { display: inline-grid; place-items: center; width: 1.9rem; height: 1.9rem; border: 2px solid var(--line); border-radius: 50%; background: var(--amber); color: #1b2547; font-size: .95rem; }
+.gstep .field { display: grid; gap: .35rem; min-width: 0; }
+.gstep .label { font-weight: 700; }
+.gsub { display: grid; gap: .45rem; }
+.gpair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+@media (max-width: 480px) { .gpair { grid-template-columns: minmax(0, 1fr); } }
+.ghint { margin: 0; color: var(--muted-foreground); font-size: .86rem; line-height: 1.55; }
+.gempty { padding: .55rem .75rem; border-radius: 10px; background: color-mix(in oklab, var(--amber) 16%, transparent); color: var(--foreground); }
+
+/* Step 1: region cards */
+.pcards { display: grid; gap: .6rem; }
+.pcard { position: relative; display: grid; grid-template-columns: 10.5rem minmax(0, 1fr); align-items: center; gap: .3rem 1rem; padding: .75rem 2.6rem .75rem .85rem; border: 2px solid color-mix(in oklab, var(--line) 28%, transparent); border-radius: 14px; background: var(--background); cursor: pointer; transition: transform .2s, border-color .2s, box-shadow .2s, background .2s; }
+.pcard:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--line) 60%, transparent); }
+.pcard:has(:checked) { border-color: var(--line); background: color-mix(in oklab, var(--amber) 18%, var(--surface)); box-shadow: 3px 4px 0 color-mix(in oklab, var(--line) 30%, transparent); }
+.pcard:has(:focus-visible), .lcard:has(:focus-visible), .swatch:has(:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
+.pcard:has(:checked) .ki { animation: stamp .4s cubic-bezier(.3, 1.6, .5, 1); }
+.pcard::after { content: ""; position: absolute; top: 50%; right: .8rem; margin-top: -.6rem; width: 1.15rem; height: 1.15rem; border-radius: 50%; border: 2px solid color-mix(in oklab, var(--line) 35%, transparent); }
+.pcard:has(:checked)::after { border-color: var(--line); background: var(--amber) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b2547' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E") center / 80% no-repeat; }
+.pcard-top { display: flex; align-items: center; gap: .55rem; }
+.pcard-top > span { display: grid; line-height: 1.15; }
+.pcard-top b { font-family: var(--font-display); font-size: 1.02rem; }
+.pcard-top small { font-size: .74rem; font-weight: 800; letter-spacing: .08em; color: var(--ink-amber); }
+@media (max-width: 560px) { .pcard { grid-template-columns: minmax(0, 1fr); } }
+.pcard-text { font-size: .84rem; line-height: 1.45; color: var(--muted-foreground); }
+@keyframes stamp { from { transform: scale(.6) rotate(-12deg); } }
+
+/* Step 2: layout pictures, swatches, theme */
+.lcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.lcard { display: grid; justify-items: center; gap: .35rem; padding: .55rem .4rem .5rem; border: 2px solid color-mix(in oklab, var(--line) 25%, transparent); border-radius: 12px; font-size: .82rem; font-weight: 700; cursor: pointer; transition: border-color .2s, background .2s; }
+.lcard:has(:checked) { border-color: var(--line); background: color-mix(in oklab, var(--amber) 16%, transparent); }
+.lay { position: relative; width: 4.4rem; height: 2.9rem; border: 2px solid color-mix(in oklab, var(--line) 55%, transparent); border-radius: 7px; background: var(--background); overflow: hidden; }
+.lay i { position: absolute; border-radius: 3px; background: var(--g-accent, var(--amber)); transition: transform .3s cubic-bezier(.3, 1.4, .5, 1); }
+.lay-box i { right: 4px; bottom: 4px; width: 46%; height: 42%; }
+.lay-bar i { left: 3px; right: 3px; bottom: 3px; height: 26%; }
+.lay-modal i { left: 26%; top: 22%; width: 48%; height: 56%; }
+.lay-modal { background: linear-gradient(color-mix(in oklab, #000 18%, transparent), color-mix(in oklab, #000 18%, transparent)), var(--background); }
+.lcard:has(:checked) .lay i { transform: scale(1.08); }
+.swatches { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.swatch { position: relative; display: inline-grid; place-items: center; width: 2.3rem; height: 2.3rem; border-radius: 50%; cursor: pointer; }
+.swatch i { width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--sw); border: 2px solid color-mix(in oklab, var(--line) 40%, transparent); transition: transform .2s cubic-bezier(.3, 1.6, .5, 1), box-shadow .2s; }
+.swatch:hover i { transform: scale(1.1); }
+.swatch:has(:checked) i { transform: scale(1.12); box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--line); }
+.swatch-custom input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.swatch-custom i { background: conic-gradient(#f2b134, #e8705a, #d6336c, #7c4dff, #2f6fed, #1f9d63, #f2b134); }
+.sw-hex { margin-inline-start: .2rem; }
+
+/* Step 4: categories and more options */
+.gcats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
+@media (max-width: 520px) { .gcats { grid-template-columns: minmax(0, 1fr); } }
+.gcat { display: flex; align-items: center; gap: .55rem; margin: 0; padding: .55rem .65rem; border: 2px solid color-mix(in oklab, var(--line) 22%, transparent); border-radius: 12px; cursor: pointer; transition: border-color .2s, background .2s; }
+.gcat:has(:checked), .gcat-on { border-color: color-mix(in oklab, var(--line) 60%, transparent); background: color-mix(in oklab, var(--amber) 12%, transparent); }
+.gcat-on { cursor: default; padding-inline-start: .8rem; }
+.gcat > span { display: grid; line-height: 1.25; min-width: 0; }
+.gcat b { font-size: .92rem; }
+.gcat small { font-size: .76rem; color: var(--muted-foreground); }
+.gcat .ki { width: 1.35rem; height: 1.35rem; }
+.gmore { border-top: 2px dashed color-mix(in oklab, var(--line) 25%, transparent); padding-top: .7rem; }
+.gmore summary { cursor: pointer; font-weight: 800; color: var(--ink-amber); }
+.gmore[open] { display: grid; gap: .7rem; }
+.gtoggle { display: flex; align-items: center; gap: .55rem; font-size: .9rem; }
+
+/* The live preview and the line */
+.gen-out { position: sticky; top: calc(var(--top) + 1rem); display: grid; gap: .9rem; min-width: 0; }
+@media (max-width: 1020px) { .gen-out { position: static; order: -1; } }
+.pv { border: 2px solid var(--line); border-radius: 14px; overflow: hidden; background: #f7f5f0; box-shadow: var(--lift); }
+.pv-dark { background: #121729; }
+.pv-bar { display: flex; align-items: center; gap: .5rem; padding: .45rem .55rem .45rem .2rem; background: #f1e8d6; border-bottom: 2px solid #1b2547; }
+.pv-bar .dots { padding-inline: .6rem .2rem; }
+.pv-btn { display: inline-grid; place-items: center; width: 2rem; height: 2rem; flex: none; border: 0; border-radius: 8px; background: none; color: #1b2547; cursor: pointer; transition: background .2s, transform .3s; }
+.pv-btn:hover { background: rgb(27 37 71 / .1); }
+.pv-btn:active { transform: rotate(-30deg); }
+.pv-btn .ic { width: 1.1rem; height: 1.1rem; }
+.pv-light .pv-sun, .pv-dark .pv-moon { display: none; }
+.pv-stage { position: relative; height: clamp(22rem, 34vw, 27rem); }
+@media (max-width: 520px) { .pv-stage { height: 26rem; } }
+.pv-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; visibility: hidden; transition: opacity .28s ease, visibility 0s .28s; }
+.pv-stage iframe.is-live { opacity: 1; visibility: visible; transition: opacity .28s ease; }
+.gen-mode { justify-self: start; }
+.gen-frame { margin: 0; }
+.gen-frame pre { min-height: 5.5rem; }
+.gen-frame code { min-width: 0; white-space: pre-wrap; }
+.gen-frame .at { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
+.chg { border-radius: 4px; color: inherit; background: color-mix(in oklab, var(--amber) 45%, transparent); animation: chg 1.6s ease-out forwards; }
+@keyframes chg { to { background: transparent; } }
+.gen-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.gen-copy { min-width: 11rem; }
+.gen-copy .ic { width: 1.15rem; height: 1.15rem; }
+.gen-copy .gc-check, .gen-copy.is-done .gc-copy { display: none; }
+.gen-copy.is-done .gc-check { display: block; animation: pop .45s cubic-bezier(.3, 1.8, .5, 1); }
+.gen-copy.is-done { background: #2e9e5b; color: #fff; box-shadow: 0 3px 0 #1d6b3c; }
+@keyframes pop { from { transform: scale(.3) rotate(-25deg); } }
+.gen-note { margin: 0; color: var(--muted-foreground); font-size: .9rem; line-height: 1.6; }
+.gen-note a { color: var(--ink-amber); font-weight: 700; }
+
+/* Hero: three small steps under the buttons */
+.hero-steps { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; list-style: none; margin: 0; padding: 0; font-weight: 700; font-size: .95rem; }
+.hero-steps li { display: inline-flex; align-items: center; gap: .45rem; animation: rise .6s cubic-bezier(.2, .8, .2, 1) both; }
+.hero-steps li:nth-child(2) { animation-delay: .12s; }
+.hero-steps li:nth-child(3) { animation-delay: .24s; }
+.hero-steps b { display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--amber); color: #1b2547; font-size: .85rem; }
+.hero-text > * { animation: rise .7s cubic-bezier(.2, .8, .2, 1) both; }
+.hero-text > :nth-child(2) { animation-delay: .06s; }
+.hero-text > :nth-child(3) { animation-delay: .12s; }
+.hero-text > :nth-child(4) { animation-delay: .18s; }
+.hero-text > :nth-child(5) { animation-delay: .24s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+
+/* Reveal on scroll (only when JavaScript runs and motion is welcome) */
+.reveal-on .reveal { transition: opacity .6s ease var(--rd, 0s), transform .7s cubic-bezier(.2, .8, .2, 1) var(--rd, 0s); }
+.reveal-on .reveal:not(.is-in) { opacity: 0; transform: translateY(22px); }
 
 /* ---------- Chapter IV: the promises, as an open book ---------- */
 .spread { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 2px solid var(--line); border-radius: 8px 8px 20px 20px; background: var(--grain), var(--surface); box-shadow: var(--lift), 0 0 0 6px color-mix(in oklab, var(--k-roof) 85%, transparent), 4px 11px 0 6px color-mix(in oklab, #000 20%, transparent); }
@@ -406,19 +487,16 @@ a { color: inherit; }
 .promise p { margin: 0; color: var(--muted-foreground); line-height: 1.6; font-size: .94rem; }
 @media (max-width: 820px) { .spread { grid-template-columns: minmax(0, 1fr); } .spread::before { display: none; } .page, .page-r { padding: 1.4rem 1.2rem; } .page-l { padding-bottom: 0; } }
 
-/* ---------- Chapters V and VI: frameworks and the record ---------- */
+/* ---------- Chapter V: frameworks (and the ledger table of the API page) ---------- */
 .fw-tabs .tab { font-family: var(--font-display); font-weight: 700; }
 .fw-tabs .tab-content { min-width: 0; }
 .fw-tabs .frame { margin: 0; }
-.rec-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
-@media (max-width: 900px) { .rec-grid { grid-template-columns: minmax(0, 1fr); } }
-.rec-pic { max-width: 18rem; margin: -1rem auto -.5rem; }
 .ledger { overflow-x: auto; border: 2px solid var(--line); border-radius: var(--wob-sm); background: var(--surface); box-shadow: var(--lift); }
 .ledger .table { margin: 0; }
 .ledger thead th { font-family: var(--font-display); font-size: .95rem; font-weight: 800; background: color-mix(in oklab, var(--amber) 22%, transparent); border-bottom: 2px solid var(--line); }
 .ledger th[scope="row"] { white-space: nowrap; }
 
-/* ---------- Chapter VII: the shelf ---------- */
+/* ---------- Chapter VI: the shelf ---------- */
 .shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.3rem; }
 @media (max-width: 960px) { .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .shelf { grid-template-columns: minmax(0, 1fr); } }

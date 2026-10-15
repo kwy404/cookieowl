@@ -1,8 +1,8 @@
 // The landing page, told as a storybook in chapters: the hero town, the
-// street of the live demo with its logbook, how blocking works, the lantern
-// workshop (the configurator), the promises, frameworks, the record, the
-// shelf of guides and the FAQ.
-import { bug, demoGate, heroLayer, streetScene, VARS, workshopLantern } from '../scripts/storybook.mjs';
+// banner generator with its live preview (the centerpiece), the street of the
+// live demo with its logbook, how blocking works, the promises, frameworks,
+// the shelf of guides and the FAQ.
+import { bug, demoGate, heroLayer, streetScene, VARS } from '../scripts/storybook.mjs';
 import { CDN, GITHUB, GUIDES, SITE, VERSION, art, esc, icon, pic, roman, rule } from './layout.mjs';
 import { bookCard } from './pages.mjs';
 
@@ -10,10 +10,6 @@ export const FAQ = [
   [
     'Does cookieowl really block Google Analytics before consent?',
     'Yes. Scripts you mark with <code>type="text/plain"</code> and <code>data-cookieowl="analytics"</code> are not executed by the browser at all, so gtag.js is never requested until analytics is accepted. With <code>data-auto-block</code> the gtag.js and Tag Manager URLs are also caught when they are inserted by a snippet. If you use Consent Mode advanced instead, Google tags load and send cookieless pings, which you choose explicitly.',
-  ],
-  [
-    'Is cookieowl free for commercial sites?',
-    'Yes. It is MIT licensed, has no paid tier, no page view limits, no account and no server. You load one file from jsDelivr or install it from npm and host it yourself.',
   ],
   [
     'Does it support Google Consent Mode v2?',
@@ -32,20 +28,8 @@ export const FAQ = [
     'A small floating owl button reopens the preferences on every page, and any element with <code>data-cookieowl-open</code> does the same, for example a Cookie settings link in your footer. Withdrawing erases the cookies of that category and reloads the page when its scripts already ran.',
   ],
   [
-    'Does it work with React, Vue, Next.js, Angular and WordPress?',
-    'Yes. The core is framework agnostic. <code>cookieowl/react</code> adds a <code>useConsent</code> hook and a <code>ConsentGate</code> component, <code>cookieowl/vue</code> adds a plugin, a composable and the same gate, and for WordPress you add the script tag in the theme head. Each one has a guide.',
-  ],
-  [
-    'Will it slow my site down?',
-    'The script is about 15 kB gzip with five languages, the stylesheet and the blocker included, and it has no dependencies. It must load synchronously in the head to block trackers, which costs a few milliseconds, and it makes no network requests of its own.',
-  ],
-  [
     'What happens with Global Privacy Control?',
     'When a browser sends Global Privacy Control, cookieowl records a refusal of optional categories, does not show the banner and notes the signal in the preferences, where the visitor can still opt in. Do Not Track can be honored the same way with <code>respectDNT</code>.',
-  ],
-  [
-    'Can I keep a consent log for audits?',
-    'Yes. Pass <code>onConsent(record)</code> and send each record to your own endpoint. Every record has a random id, the policy version, the timestamp, the method (accept all, reject all, custom or signal), the categories, the language and the page.',
   ],
 ];
 
@@ -62,16 +46,6 @@ const FEATURES = [
   ['language', 'Five languages, LGPD and GDPR', 'Portuguese with LGPD wording, English, Spanish, French and German, RTL safe, every text overridable.'],
   ['moon', 'Themed by one color', 'Light and dark mode out of the box and a --seed color for the accent, in a scoped stylesheet.'],
   ['balloon', 'One small file', 'About 15 kB gzip, no dependencies, no requests of its own, no account and no server.'],
-];
-
-const COLLECTED = [
-  ['id', 'Random consent id, kept across updates on the same device'],
-  ['version', 'The policy version the visitor agreed to'],
-  ['timestamp', 'When the choice was made, ISO 8601'],
-  ['expires', 'When the banner asks again (12 months by default)'],
-  ['method', 'accept-all, reject-all, custom or signal'],
-  ['categories', 'Every category and whether it was accepted'],
-  ['lang and page', 'The banner language and the path where the choice was made'],
 ];
 
 /** The icon for each known tracker on the wanted posters. */
@@ -152,15 +126,135 @@ function logbook() {
 </aside>`;
 }
 
-/** The home page body. ctx: { frame, size, trackers, langs, suspects, guideMeta } */
+/** Region presets of the generator: value, title, law, icon, what it sets. */
+const PRESET_CARDS = [
+  ['lgpd', 'Brazil', 'LGPD', 'lgpd', 'Portuguese texts and LGPD wording, Consent Mode v2 and auto blocking on.'],
+  ['gdpr', 'Europe and UK', 'GDPR', 'gdpr', "The visitor's language and GDPR wording, Consent Mode v2 and auto blocking on."],
+  ['', 'No preset', 'Custom', 'compass', "The visitor's language and the default wording. Switch on only what you need."],
+];
+
+/** Accent swatches of the generator. The first one is the cookieowl default. */
+const SWATCHES = [
+  ['#f2b134', 'Amber'],
+  ['#2f6fed', 'Ocean'],
+  ['#1f9d63', 'Leaf'],
+  ['#d6336c', 'Berry'],
+  ['#7c4dff', 'Violet'],
+  ['#1b2547', 'Ink'],
+];
+
+const LANG_OPTIONS = [
+  ['pt-BR', 'Português (Brasil)'],
+  ['en', 'English'],
+  ['es', 'Español'],
+  ['fr', 'Français'],
+  ['de', 'Deutsch'],
+];
+
+/**
+ * Chapter I, the centerpiece: the banner generator. The form is bound to the
+ * G store of site.js, which renders the live preview (the real script in an
+ * iframe) and the one line to copy. ctx.texts holds the built in texts per
+ * language for the placeholders.
+ */
+function generator(ctx) {
+  const checked = (on) => (on ? ' checked' : '');
+  const presets = PRESET_CARDS.map(
+    ([v, title, law, ic, text]) =>
+      `<label class="pcard"><input type="radio" class="vh" name="gen-preset" value="${v}" v-model="G.preset"${checked(v === 'gdpr')}><span class="pcard-top">${art(ic, 'ki ki-lg')}<span><b>${title}</b><small>${law}</small></span></span><span class="pcard-text">${text}</span></label>`,
+  ).join('');
+  const layouts = [
+    ['box', 'Corner box'],
+    ['bar', 'Bottom bar'],
+    ['modal', 'Center modal'],
+  ]
+    .map(([v, label]) => `<label class="lcard"><input type="radio" class="vh" name="gen-layout" value="${v}" v-model="G.layout"${checked(v === 'box')}><span class="lay lay-${v}" aria-hidden="true"><i></i></span><span>${label}</span></label>`)
+    .join('');
+  const themes = [
+    ['auto', 'Follow the page'],
+    ['light', 'Light'],
+    ['dark', 'Dark'],
+  ]
+    .map(([v, label]) => `<label class="segmented-item"><input type="radio" name="gen-theme" value="${v}" v-model="G.theme"${checked(v === 'auto')}> ${label}</label>`)
+    .join('');
+  const swatches = SWATCHES.map(([hex, name], i) => `<label class="swatch" style="--sw:${hex}" title="${name}"><input type="radio" class="vh" name="gen-accent" value="${hex}" v-model="G.accent"${checked(i === 0)} aria-label="${name}"><i aria-hidden="true"></i></label>`).join('');
+  const langs = LANG_OPTIONS.map(([v, label]) => `<option value="${v}">${label}</option>`).join('');
+  const field = (key, label) => `<label class="field"><span class="label">${label}</span><input class="input" v-model="G.${key}" :placeholder="genPh(G, '${key}')" maxlength="80"></label>`;
+  const cat = (id, label, text) => `<label class="gcat"><input type="checkbox" class="toggle toggle-sm" role="switch" v-model="G.${id}" checked>${art(id, 'ki')}<span><b>${label}</b><small>${text}</small></span></label>`;
+  const toggle = (key, label, extra = '') => `<label class="label gtoggle"><input type="checkbox" class="toggle toggle-sm" role="switch" v-model="G.${key}"${extra}> ${label}</label>`;
+  const defaultLine = `<script src="${CDN}" data-preset="gdpr" data-policy-url="/privacy"></script>`;
+
+  return `<section id="configurator" class="chapter gen-sec" aria-labelledby="gen-title">
+  <div class="wrap">
+    ${chHead(1, 'sparkles', 'Generator', 'Design your banner, then copy one line', 'Every change shows up in the preview right away. The preview is the real cookieowl, running the same line you copy.', 'gen-title')}
+    <script type="application/json" id="gen-texts">${JSON.stringify(ctx.texts)}</script>
+    <div class="gen">
+      <form class="gen-form" aria-label="Banner options" @submit.prevent>
+        <fieldset class="gstep"><legend><span class="gstep-no" aria-hidden="true">1</span>Where are your visitors?</legend>
+          <div class="pcards">${presets}</div>
+        </fieldset>
+        <fieldset class="gstep"><legend><span class="gstep-no" aria-hidden="true">2</span>Make it yours</legend>
+          <div class="gsub"><span class="label">Layout</span><div class="lcards">${layouts}</div></div>
+          <div class="gsub"><span class="label" id="gen-accent-label">Accent color</span>
+            <div class="swatches" role="radiogroup" aria-labelledby="gen-accent-label">${swatches}<label class="swatch swatch-custom" title="Any color"><input type="color" v-model="G.accent" aria-label="Pick any accent color"><i aria-hidden="true"></i></label><code class="sw-hex" v-text="G.accent">#f2b134</code></div>
+          </div>
+          <div class="gsub"><span class="label" id="gen-theme-label">Theme</span><div class="segmented" role="radiogroup" aria-labelledby="gen-theme-label">${themes}</div></div>
+        </fieldset>
+        <fieldset class="gstep"><legend><span class="gstep-no" aria-hidden="true">3</span>Your words</legend>
+          <label class="field"><span class="label">Language</span><select class="select" v-model="G.lang"><option value="auto" v-text="G.preset === 'lgpd' ? 'Portuguese, from the LGPD preset' : 'Automatic: the page, then the browser'">Automatic: the page, then the browser</option>${langs}</select></label>
+          ${field('title', 'Title')}
+          <label class="field"><span class="label">Message</span><textarea class="textarea" rows="3" v-model="G.description" :placeholder="genPh(G, 'description')" maxlength="320"></textarea></label>
+          <div class="gpair">${field('rejectAll', 'Reject button')}${field('acceptAll', 'Accept button')}</div>
+          <p class="ghint">Leave a field empty to keep the built in text, translated into all five languages. Your own words are shown in every language.</p>
+        </fieldset>
+        <fieldset class="gstep"><legend><span class="gstep-no" aria-hidden="true">4</span>What do you ask for?</legend>
+          <div class="gcats">
+            <p class="gcat gcat-on">${art('necessary', 'ki')}<span><b>Necessary</b><small>Always on, no choice needed</small></span></p>
+            ${cat('preferences', 'Preferences', 'Language, chat, saved settings')}
+            ${cat('analytics', 'Analytics', 'Google Analytics, Clarity, Hotjar')}
+            ${cat('marketing', 'Marketing', 'Ads, pixels, video embeds')}
+          </div>
+          <p class="ghint gempty" v-if="!G.preferences && !G.analytics && !G.marketing">Only necessary cookies: there is nothing to ask, so you may not need a banner at all. Switch a category on if you use trackers.</p>
+          <details class="gmore"><summary>More options</summary>
+            <label class="field"><span class="label">Privacy policy link</span><input class="input" v-model="G.policy" placeholder="/privacy" spellcheck="false"></label>
+            ${toggle('consentMode', 'Google Consent Mode v2')}
+            ${toggle('advanced', 'Advanced mode: Google tags load and send cookieless pings', ' :disabled="!G.consentMode"')}
+            ${toggle('autoBlock', 'Auto block known trackers')}
+            ${toggle('gpc', 'Honor Global Privacy Control')}
+          </details>
+        </fieldset>
+      </form>
+      <div class="gen-out">
+        <div class="pv" :class="'pv-' + G.page">
+          <div class="pv-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="browser-url">${icon('lock')}your-site.example</span>
+            <button type="button" class="pv-btn" @click="G.page = G.page === 'dark' ? 'light' : 'dark'" :aria-label="G.page === 'dark' ? 'Preview on a light page' : 'Preview on a dark page'" aria-label="Preview on a dark page" title="Light or dark page">${icon('moon', 'ic pv-moon')}${icon('sun', 'ic pv-sun')}</button>
+            <button type="button" class="pv-btn" @click="genReplay()" aria-label="Show the banner again" title="Show the banner again">${icon('reset')}</button>
+          </div>
+          <div class="pv-stage" data-gen-preview><iframe title="Live preview of your cookie banner"></iframe><iframe title="Live preview of your cookie banner" tabindex="-1" aria-hidden="true"></iframe></div>
+        </div>
+        <div class="segmented gen-mode" role="radiogroup" aria-label="Install with">
+          <label class="segmented-item"><input type="radio" name="gen-mode" value="tag" v-model="G.mode" checked> Script tag</label>
+          <label class="segmented-item"><input type="radio" name="gen-mode" value="npm" v-model="G.mode"> npm</label>
+        </div>
+        <figure class="frame frame-editor gen-frame"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><span v-text="G.mode === 'npm' ? 'consent.js' : 'index.html'">index.html</span></span></div><pre class="shiki" tabindex="0" aria-label="Your snippet"><code id="gen-code" v-html="genHtml(G)">${esc(defaultLine)}</code></pre></figure>
+        <div class="gen-actions">
+          <button type="button" class="btn btn-primary gen-copy" :class="{ 'is-done': G.copied }" @click="genCopy()">${icon('copy', 'ic gc-copy')}${icon('check', 'ic gc-check')}<span v-text="G.copied ? 'Copied' : G.mode === 'npm' ? 'Copy the code' : 'Copy the line'">Copy the line</span></button>
+          <button type="button" class="btn btn-outline" @click="tryInDemo()">${art('gate', 'ki ki-btn')}Try it on the demo shop</button>
+        </div>
+        <p class="gen-note" v-show="G.mode !== 'npm'">Paste it as the first line inside <code>&lt;head&gt;</code>, without <code>async</code> or <code>defer</code>. Then <a href="#how">mark your trackers</a> so they wait for consent.</p>
+        <p class="gen-note" v-show="G.mode === 'npm'">Run <code>npm install cookieowl</code> and call this before any tracker loads. Then <a href="#how">mark your trackers</a> so they wait for consent.</p>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+/** The home page body. ctx: { frame, size, trackers, langs, suspects, guideMeta, texts } */
 export function homeBody(ctx) {
-  const { frame } = ctx;
-  const heroCode = frame(`<script src="${CDN}"\n  data-lang="auto" data-policy-url="/privacy"\n  data-consent-mode data-auto-block></script>`, { lang: 'html', title: 'index.html', compact: true });
   const half = FEATURES.length / 2;
   const promise = ([ic, t, d]) => `<li class="promise"><span class="promise-ic">${art(ic, 'ki ki-lg')}</span><div><h3>${t}</h3><p>${d}</p></div></li>`;
   const faq = FAQ.map(([q, a], i) => `<details class="collapse" name="faq"${i === 0 ? ' open' : ''}><summary class="collapse-title">${q}</summary><div class="collapse-content"><p>${a}</p></div></details>`).join('');
   const shelf = GUIDES.map((g, i) => bookCard(g, ctx.guideMeta[g.slug], i + 1, { h: 'h3' })).join('');
-  const collected = COLLECTED.map(([k, v]) => `<tr><th scope="row"><code>${k}</code></th><td>${v}</td></tr>`).join('');
   const suspects = ctx.suspects
     .map(([id, name, cat]) => `<li class="poster"><span class="poster-top">Wanted</span>${art(SUSPECT_ICONS[id] || 'bug', 'ki ki-xl')}<b>${name}</b><span class="poster-cat cat-${cat}">${cat}</span></li>`)
     .join('');
@@ -180,11 +274,15 @@ export function homeBody(ctx) {
     </div>
     <div class="wrap hero-in">
       <div class="hero-text">
-        <p class="tale"><span class="badge badge-soft">v${VERSION}</span><span>A bedtime story about privacy, free and MIT licensed</span></p>
-        <h1 id="hero-title">Cookie consent that keeps trackers outside the gate until visitors say <em>yes</em></h1>
-        <p class="lead">cookieowl is a free cookie consent banner for LGPD and GDPR. Analytics, pixels and heatmaps wait at the gate until their category is accepted, Google Consent Mode v2 is wired in, and the whole town runs on one script tag.</p>
-        <div class="hero-cta"><a class="btn btn-primary btn-lg" href="#demo">${art('gate', 'ki ki-btn')}Watch the gate hold trackers</a><a class="btn btn-outline btn-lg" href="#configurator">${art('lantern', 'ki ki-btn')}Build your snippet</a></div>
-        ${heroCode}
+        <p class="tale"><span class="badge badge-soft">v${VERSION}</span><span>Free and MIT licensed</span></p>
+        <h1 id="hero-title">A cookie banner that keeps trackers out until visitors say <em>yes</em></h1>
+        <p class="lead">Free cookie consent for LGPD and GDPR. Pick a region, a color and your words, then copy one line into your site. Analytics, pixels and heatmaps wait until their category is accepted.</p>
+        <div class="hero-cta"><a class="btn btn-primary btn-lg" href="#configurator">${art('sparkles', 'ki ki-btn')}Design your banner</a><a class="btn btn-outline btn-lg" href="#demo">${art('gate', 'ki ki-btn')}See it block trackers</a></div>
+        <ol class="hero-steps" aria-label="Three steps">
+          <li><b>1</b>Pick a region</li>
+          <li><b>2</b>Style it</li>
+          <li><b>3</b>Copy one line</li>
+        </ol>
       </div>
     </div>
   </div>
@@ -196,9 +294,11 @@ export function homeBody(ctx) {
   </ul></div>
 </section>
 
+${generator(ctx)}
+
 <section id="demo" class="chapter street-sec" aria-labelledby="demo-title">
   <div class="wrap">
-    ${chHead(1, 'gate', 'Live demo', 'The street at night, where trackers knock and wait', 'This is the real cookieowl, guarding a pretend coffee shop. Four tracker bugs and a video wait at the gate. Accept a category and the lamp for it lights up, the gate opens and only those bugs fly in. The logbook writes down everything that tried to get through.', 'demo-title')}
+    ${chHead(2, 'gate', 'Live demo', 'Watch the gate hold real trackers', 'The real cookieowl guards a pretend coffee shop. Accept a category and only its tracker bugs fly in. The logbook lists everything that tried to get through.', 'demo-title')}
     ${bugSymbols()}
     <div class="demo-grid">
       <div class="street">
@@ -234,7 +334,7 @@ export function homeBody(ctx) {
 
 <section id="how" class="chapter" aria-labelledby="how-title">
   <div class="wrap">
-    ${chHead(2, 'moon', 'How blocking works', 'One night in the life of a tracker', 'A banner that only hides itself does nothing for privacy. cookieowl stops the browser from running trackers at all, and lets them in only after a choice.', 'how-title')}
+    ${chHead(3, 'moon', 'How blocking works', 'One night in the life of a tracker', 'A banner that only hides itself does nothing for privacy. cookieowl stops the browser from running trackers at all, and lets them in only after a choice.', 'how-title')}
     <ol class="panels">
       <li class="panel">${pic('spots/dusk', 'At dusk Hoot sits on a lantern post that is already lit', { cls: 'panel-pic' })}<p class="panel-time">Dusk</p><h3>Hoot lights the lantern first</h3><p>Put the script tag at the top of <code>&lt;head&gt;</code>, without <code>async</code> or <code>defer</code>. Consent Mode defaults and the auto blocker are in place before anything else runs.</p>${ctx.how[0]}</li>
       <li class="panel">${pic('spots/midnight', 'At midnight tracker bugs wait outside the closed gate', { cls: 'panel-pic' })}<p class="panel-time">Midnight</p><h3>Trackers wait outside as plain text</h3><p>Give each tracker <code>type="text/plain"</code> and a category. Browsers do not run text, so nothing is requested. Embeds keep their address in <code>data-cookieowl-src</code>.</p>${ctx.how[1]}</li>
@@ -243,55 +343,6 @@ export function homeBody(ctx) {
     <div class="suspects">
       <div class="suspects-head"><h3>${art('auto-block', 'ki ki-lg')}The usual suspects</h3><p>Load cookieowl first with <code>data-auto-block</code> and these ${ctx.trackers} tracker patterns are held by URL, even when a vendor snippet sneaks them in. Video embeds become a click to load placeholder.</p></div>
       <ul class="posters">${suspects}</ul>
-    </div>
-  </div>
-</section>
-
-<section id="configurator" class="chapter workshop-sec" aria-labelledby="cfg-title">
-  <div class="wrap">
-    ${chHead(3, 'lantern', 'Configurator', 'The lantern workshop: build your snippet', 'Pick the language, the look and the categories. The lantern glows in your accent color, one gem per category, and the snippet below it is ready to copy. Try it on the demo street before you take it home.', 'cfg-title')}
-    <div class="cfg" v-data="{}">
-      <form class="cfg-form" aria-label="Snippet options" @submit.prevent>
-        <fieldset class="tray"><legend>${art('language', 'ki')}Language and wording</legend>
-          <label class="field"><span class="label">Language</span><select class="select" v-model="CFG.lang"><option value="auto">Automatic (page and browser)</option><option value="pt-BR">Português (Brasil)</option><option value="en">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option></select></label>
-          <label class="field"><span class="label">Legal template</span><select class="select" v-model="CFG.template"><option value="">Default for the language</option><option value="lgpd">LGPD (Brazil)</option><option value="gdpr">GDPR (EU and UK)</option></select></label>
-          <label class="field cfg-wide"><span class="label">Privacy policy URL</span><input class="input" v-model="CFG.policy" placeholder="/privacy" spellcheck="false"></label>
-        </fieldset>
-        <fieldset class="tray"><legend>${art('sparkles', 'ki')}Look</legend>
-          <label class="field"><span class="label">Layout</span><select class="select" v-model="CFG.layout"><option value="box">Box</option><option value="bar">Bottom bar</option><option value="modal">Center modal</option></select></label>
-          <label class="field"><span class="label">Theme</span><select class="select" v-model="CFG.theme"><option value="auto">Follow the page</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
-          <label class="field"><span class="label">Accent color</span><span class="cfg-color"><input type="color" v-model="CFG.seed" aria-label="Accent color"><code v-text="CFG.seed"></code></span></label>
-        </fieldset>
-        <fieldset class="tray"><legend>${art('cookie-jar', 'ki')}Categories</legend>
-          <div class="cfg-checks">
-            <label class="label"><input type="checkbox" class="checkbox" checked disabled>${art('necessary', 'ki ki-sm')}Necessary</label>
-            <label class="label"><input type="checkbox" class="checkbox" v-model="CFG.preferences">${art('preferences', 'ki ki-sm')}Preferences</label>
-            <label class="label"><input type="checkbox" class="checkbox" v-model="CFG.analytics">${art('analytics', 'ki ki-sm')}Analytics</label>
-            <label class="label"><input type="checkbox" class="checkbox" v-model="CFG.marketing">${art('marketing', 'ki ki-sm')}Marketing</label>
-          </div>
-        </fieldset>
-        <fieldset class="tray"><legend>${art('gate', 'ki')}Blocking and signals</legend>
-          <div class="cfg-checks">
-            <label class="label"><input type="checkbox" class="toggle toggle-sm" role="switch" v-model="CFG.consentMode"> Google Consent Mode v2</label>
-            <label class="label"><input type="checkbox" class="toggle toggle-sm" role="switch" v-model="CFG.advanced" :disabled="!CFG.consentMode"> Advanced mode (let Google tags load)</label>
-            <label class="label"><input type="checkbox" class="toggle toggle-sm" role="switch" v-model="CFG.autoBlock"> Auto block known trackers</label>
-            <label class="label"><input type="checkbox" class="toggle toggle-sm" role="switch" v-model="CFG.gpc"> Honor Global Privacy Control</label>
-          </div>
-        </fieldset>
-      </form>
-      <div class="cfg-out">
-        <div class="bench" data-lantern :class="{ 'on-preferences': CFG.preferences, 'on-analytics': CFG.analytics, 'on-marketing': CFG.marketing }">
-          ${workshopLantern(VARS, 'wl')}
-          <div class="bench-note"><p class="hand" v-text="lanternNote(CFG)">A box banner in the visitor's language</p><ul class="gem-key"><li class="gk-necessary">Necessary</li><li class="gk-preferences">Preferences</li><li class="gk-analytics">Analytics</li><li class="gk-marketing">Marketing</li></ul></div>
-        </div>
-        <div class="segmented" role="radiogroup" aria-label="Install with">
-          <label class="segmented-item"><input type="radio" name="cfg-mode" value="tag" v-model="CFG.mode"> Script tag</label>
-          <label class="segmented-item"><input type="radio" name="cfg-mode" value="npm" v-model="CFG.mode"> npm</label>
-        </div>
-        <figure class="frame frame-editor cfg-frame"><div class="frame-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="frame-tab"><span v-text="CFG.mode === 'npm' ? 'consent.js' : 'index.html'"></span></span><button type="button" class="frame-copy" @click="copySnippet()" aria-label="Copy the snippet">${icon('copy')}<span v-text="CFG.copied ? 'Copied' : 'Copy'"></span></button></div><pre class="shiki" tabindex="0"><code id="cfg-code" v-html="snippetHtml(CFG)"></code></pre></figure>
-        <div class="cfg-actions"><button type="button" class="btn btn-primary" @click="tryInDemo()">${art('gate', 'ki ki-btn')}Try it on the demo street</button><a class="btn btn-ghost" href="api.html">Every option ${icon('arrow')}</a></div>
-        <p class="cfg-note">Load it as the first script in <code>&lt;head&gt;</code>, then mark your trackers with <code>type="text/plain"</code> and <code>data-cookieowl</code>.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -313,19 +364,9 @@ export function homeBody(ctx) {
   </div>
 </section>
 
-<section id="record" class="chapter" aria-labelledby="rec-title">
-  <div class="wrap">
-    ${chHead(6, 'record', 'What gets stored', 'A small, honest library card', 'cookieowl keeps one first party cookie with the choice and nothing else. No server, no fingerprint, no third party. Send the same record to your own log with <code>onConsent</code> when you need proof of consent.', 'rec-title')}
-    <div class="rec-grid">
-      <div class="rec-card">${pic('spots/record', 'A consent card with a green approval stamp', { cls: 'rec-pic' })}${ctx.recordCode}</div>
-      <div class="ledger"><table class="table"><caption class="sr-only">Fields of a consent record</caption><thead><tr><th scope="col">Field</th><th scope="col">What it holds</th></tr></thead><tbody>${collected}</tbody></table></div>
-    </div>
-  </div>
-</section>
-
 <section id="guides" class="chapter shelf-sec" aria-labelledby="guides-title">
   <div class="wrap">
-    ${chHead(7, 'book', 'Guides', 'The storybook shelf', 'Nine practical guides, from the LGPD checklist to Next.js. Each one ends with questions people really ask.', 'guides-title')}
+    ${chHead(6, 'book', 'Guides', 'The storybook shelf', 'Four short guides with working code: a consent checklist, Google Consent Mode v2, holding Google Analytics and React.', 'guides-title')}
     <div class="shelf">${shelf}</div>
   </div>
 </section>
@@ -333,7 +374,7 @@ export function homeBody(ctx) {
 <section id="faq" class="chapter" aria-labelledby="faq-title">
   <div class="wrap faq-grid">
     <div class="faq-side">
-      ${chHead(8, 'lantern', 'FAQ', 'Questions asked by lantern light', `Not finding yours? <a href="${GITHUB}/issues">Open an issue on GitHub</a>.`, 'faq-title')}
+      ${chHead(7, 'lantern', 'FAQ', 'Questions asked by lantern light', `Not finding yours? <a href="${GITHUB}/issues">Open an issue on GitHub</a>.`, 'faq-title')}
       ${pic('spots/lost', '', { cls: 'faq-pic' })}
     </div>
     <div class="accordion collapse-plus">${faq}</div>
@@ -348,7 +389,7 @@ export function homeJsonLd() {
       {
         '@type': 'SoftwareApplication',
         name: 'cookieowl',
-        description: 'Free open source cookie consent manager for LGPD and GDPR that blocks trackers before consent, with Google Consent Mode v2.',
+        description: 'Open source cookie consent banner that keeps trackers from loading until visitors agree.',
         applicationCategory: 'DeveloperApplication',
         operatingSystem: 'Any (web browser)',
         softwareVersion: VERSION,

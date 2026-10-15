@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light dark">
 <script>(function(){try{var t=localStorage.getItem('voodoo:theme');if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==='light'||t==='dark'){r.setAttribute('data-theme',t);r.style.colorScheme=t}else{r.removeAttribute('data-theme')}}catch(e){}})();</script>
 <title>cookieowl API reference: options, methods and events</title>
-<meta name="description" content="Every option, script tag attribute, method and event of the cookieowl cookie consent script, plus Consent Mode, auto blocking, styling, React and Vue helpers.">
+<meta name="description" content="Options, script tag attributes, methods and events of cookieowl.">
 <link rel="canonical" href="https://kwy404.github.io/cookieowl/api.html">
 <meta name="author" content="Alexandre Kohler">
 <meta name="theme-color" content="#fbf6ec" media="(prefers-color-scheme: light)">
@@ -14,7 +14,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="cookieowl">
 <meta property="og:title" content="cookieowl API reference: options, methods and events">
-<meta property="og:description" content="Every option, script tag attribute, method and event of the cookieowl cookie consent script, plus Consent Mode, auto blocking, styling, React and Vue helpers.">
+<meta property="og:description" content="Options, script tag attributes, methods and events of cookieowl.">
 <meta property="og:url" content="https://kwy404.github.io/cookieowl/api.html">
 <meta property="og:image" content="https://kwy404.github.io/cookieowl/og.png">
 <meta property="og:image:width" content="1200">
@@ -22,7 +22,7 @@
 <meta property="og:image:alt" content="cookieowl: Hoot the owl guards a little town of websites while tracker bugs wait at the consent gate">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="cookieowl API reference: options, methods and events">
-<meta name="twitter:description" content="Every option, script tag attribute, method and event of the cookieowl cookie consent script, plus Consent Mode, auto blocking, styling, React and Vue helpers.">
+<meta name="twitter:description" content="Options, script tag attributes, methods and events of cookieowl.">
 <meta name="twitter:image" content="https://kwy404.github.io/cookieowl/og.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -75,7 +75,7 @@
 <header class="topbar" v-data="{ open: false }" @keydown.escape="open = false">
   <div class="wrap topbar-in">
     <a href="./" class="brand" aria-label="cookieowl home"><img src="assets/mascot-head.svg" class="only-light" width="38" height="38" alt=""><img src="assets/mascot-head-dark.svg" class="only-dark" width="38" height="38" alt=""><span class="brand-name">cookie<b>owl</b></span></a>
-    <nav id="topnav" class="topnav" :class="{ 'is-open': open }" aria-label="Main" @click="open = false"><a href="./#demo" class="top-link"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-gate"/></svg><span>The street</span></a><a href="./#configurator" class="top-link"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-lantern"/></svg><span>Workshop</span></a><a href="lgpd-gdpr-cookie-checklist.html" class="top-link"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-scroll"/></svg><span>Checklist</span></a><a href="guides.html" class="top-link"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-book"/></svg><span>Guides</span></a><a href="api.html" class="top-link" aria-current="page"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-key"/></svg><span>API</span></a></nav>
+    <nav id="topnav" class="topnav" :class="{ 'is-open': open }" aria-label="Main" @click="open = false"><a href="./#configurator" class="top-link"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-sparkles"/></svg><span>Generator</span></a><a href="./#demo" class="top-link"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-gate"/></svg><span>Live demo</span></a><a href="lgpd-gdpr-cookie-checklist.html" class="top-link"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-scroll"/></svg><span>Checklist</span></a><a href="guides.html" class="top-link"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-book"/></svg><span>Guides</span></a><a href="api.html" class="top-link" aria-current="page"><svg class="ki ki-nav" aria-hidden="true" focusable="false"><use href="#k-key"/></svg><span>API</span></a></nav>
     <div class="top-right">
       <button type="button" class="search-btn" data-search-open v-hotkey="mod+k" aria-haspopup="dialog" aria-label="Search the site"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-search"/></svg><span class="search-label">Search</span><kbd class="kbd kbd-xs">Ctrl K</kbd></button>
       <a href="https://github.com/kwy404/cookieowl" class="icon-btn" aria-label="cookieowl on GitHub"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-github"/></svg></a>
@@ -198,9 +198,9 @@
         <p class="foot-links"><a href="https://github.com/kwy404/cookieowl"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-github"/></svg>GitHub</a><a href="https://www.npmjs.com/package/cookieowl"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-npm"/></svg>npm</a><a href="https://github.com/kwy404/cookieowl/blob/main/CHANGELOG.md"><svg class="ki" aria-hidden="true" focusable="false"><use href="#k-logbook"/></svg>Changelog</a></p>
       </div>
       <nav aria-labelledby="f-site"><h2 id="f-site" class="foot-title">The town</h2><ul>
-        <li><a href="./#demo">The street at night (live demo)</a></li><li><a href="./#configurator">Lantern workshop</a></li><li><a href="./#how">How blocking works</a></li><li><a href="./#frameworks">React, Vue, Next.js</a></li><li><a href="api.html">API reference</a></li><li><a href="guides.html">All guides</a></li><li><a href="./#faq">FAQ</a></li>
+        <li><a href="./#configurator">Banner generator</a></li><li><a href="./#demo">Live demo</a></li><li><a href="./#how">How blocking works</a></li><li><a href="./#frameworks">React, Vue, Next.js</a></li><li><a href="api.html">API reference</a></li><li><a href="guides.html">All guides</a></li><li><a href="./#faq">FAQ</a></li>
       </ul></nav>
-      <nav aria-labelledby="f-guides"><h2 id="f-guides" class="foot-title">Guides</h2><ul><li><a href="lgpd-gdpr-cookie-checklist.html">LGPD and GDPR checklist</a></li><li><a href="cookie-consent-banner-lgpd.html">Cookie banner for LGPD</a></li><li><a href="gdpr-compliant-cookie-banner.html">GDPR compliant banner</a></li><li><a href="google-consent-mode-v2-setup.html">Consent Mode v2 setup</a></li><li><a href="block-google-analytics-until-consent.html">Block GA until consent</a></li><li><a href="cookie-consent-in-react.html">Cookie consent in React</a></li><li><a href="cookie-consent-in-nextjs.html">Cookie consent in Next.js</a></li><li><a href="cookie-banner-for-wordpress.html">Cookie banner for WordPress</a></li><li><a href="free-cookie-consent-script.html">Free cookie consent script</a></li></ul></nav>
+      <nav aria-labelledby="f-guides"><h2 id="f-guides" class="foot-title">Guides</h2><ul><li><a href="lgpd-gdpr-cookie-checklist.html">LGPD and GDPR checklist</a></li><li><a href="google-consent-mode-v2-setup.html">Google Consent Mode v2</a></li><li><a href="block-google-analytics-until-consent.html">Holding Google Analytics</a></li><li><a href="cookie-consent-in-react.html">Using it with React</a></li></ul></nav>
       <nav aria-labelledby="f-more"><h2 id="f-more" class="foot-title">More from kwy404</h2><ul class="foot-more"><li><a href="https://kwy404.github.io/monsoon/">Monsoon</a><small>Utility-first CSS with no build step</small></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a><small>Reactive attributes for plain HTML</small></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a><small>Find bugs in JavaScript libraries</small></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a><small>Vue 2 to Vue 3 migration</small></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a><small>Grapheme aware string utilities</small></li><li><a href="https://kwy404.github.io/numberparrot/">numberparrot</a><small>Parse localized numbers</small></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a><small>Edge case inputs for testing</small></li><li><a href="https://kwy404.github.io/installkite/">installkite</a><small>Make any website installable and offline</small></li><li><a href="https://kwy404.github.io/a11ymedic/">a11ymedic</a><small>Accessibility checker with exact fixes</small></li><li><a href="https://kwy404.github.io/fontsketch/">fontsketch</a><small>Turn your handwriting into a font</small></li><li><a href="https://kwy404.github.io/kastor/">kastor</a><small>TypeScript ORM for almost every database</small></li></ul></nav>
     </div>
     <div class="foot-bottom">

@@ -3,10 +3,10 @@
 // this module publishes reactive stores and helpers on V.config.globals, then
 // calls V.start(). Pages declare behavior in HTML (v-data, v-model, @click,
 // v-for, v-show, v-copy-from, v-theme-toggle, v-hotkey). Plain JavaScript runs
-// the live demo: a real cookieowl instance inside a pretend shop on the demo
-// street, tracker bugs that wait at the gate or fly in, the night watch
-// logbook fed by the fake trackers, the lantern workshop (the snippet
-// configurator) and the parallax of the hero town.
+// the banner generator and its live preview, the live demo (a real cookieowl
+// instance inside a pretend shop, tracker bugs that wait at the gate or fly
+// in, the logbook fed by the fake trackers), the reveal on scroll and the
+// parallax of the hero town.
 
 const V = window.V;
 const $ = (s, el = document) => el.querySelector(s);
@@ -14,6 +14,7 @@ const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const S = V.reactive({ ready: 0 });
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // The site root, so search also works from the 404 page at any depth.
 const BASE = new URL('./', import.meta.url);
 
@@ -191,6 +192,7 @@ function demoConfig() {
     cookie: { name: 'cookieowl-demo' },
     lang: demoCfg.lang,
     template: demoCfg.template || undefined,
+    text: demoCfg.text,
     layout: demoCfg.layout,
     theme: demoCfg.theme,
     consentMode: demoCfg.consentMode,
@@ -316,64 +318,225 @@ document.addEventListener('change', (e) => {
   demo.init(demoConfig());
 });
 
-// ---------- Configurator ----------
+// ---------- Banner generator ----------
+// The form in the Generator chapter is bound to G. Every change renders the
+// live preview: the real script in an iframe, with the same attributes as the
+// line to copy (plus memory storage, so nothing is kept between renders).
+// Two iframes take turns so the new banner fades in over the old one.
 
-const CFG = V.reactive({
+const DEFAULT_ACCENT = '#f2b134';
+const G = V.reactive({
+  preset: 'gdpr',
   lang: 'auto',
-  template: '',
-  policy: '/privacy',
   layout: 'box',
   theme: 'auto',
-  seed: '#f2b134',
+  accent: DEFAULT_ACCENT,
+  title: '',
+  description: '',
+  rejectAll: '',
+  acceptAll: '',
   preferences: true,
   analytics: true,
   marketing: true,
+  policy: '/privacy',
   consentMode: true,
   advanced: false,
   autoBlock: true,
   gpc: true,
   mode: 'tag',
+  page: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
   copied: false,
 });
 
-const CDN = 'https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js';
-
-function cats(c) {
-  return ['preferences', 'analytics', 'marketing'].filter((k) => c[k]);
+const genCode = $('#gen-code');
+// The CDN address comes from the build, through the default line in the page.
+const CDN = (/src="([^"]+)"/.exec(genCode?.textContent || '') || [])[1] || 'https://cdn.jsdelivr.net/npm/cookieowl/dist/cookieowl.js';
+// What the region presets set, as in src/presets.ts: the line only adds what differs.
+const PRESETS = { lgpd: { lang: 'pt-BR', consentMode: true, autoBlock: true }, gdpr: { consentMode: true, autoBlock: true } };
+const TEXT_ATTRS = [
+  ['title', 'data-text-title'],
+  ['description', 'data-text-description'],
+  ['rejectAll', 'data-text-reject-all'],
+  ['acceptAll', 'data-text-accept-all'],
+];
+let TEXTS = {};
+try {
+  TEXTS = JSON.parse($('#gen-texts')?.textContent || '{}');
+} catch {
+  // placeholders stay empty
 }
 
-/** The snippet as plain text, for the copy button. */
-function snippetText(c) {
-  const all = cats(c).length === 3;
-  if (c.mode === 'npm') {
-    const lines = [];
-    if (c.lang !== 'auto') lines.push(`  lang: '${c.lang}',`);
-    if (c.template) lines.push(`  template: '${c.template}',`);
-    if (c.policy) lines.push(`  policyUrl: '${c.policy.replace(/'/g, "\\'")}',`);
-    if (!all) lines.push(`  categories: [${cats(c).map((k) => `'${k}'`).join(', ')}],`);
-    if (c.layout !== 'box') lines.push(`  layout: '${c.layout}',`);
-    if (c.theme !== 'auto') lines.push(`  theme: '${c.theme}',`);
-    if (c.consentMode) lines.push(c.advanced ? '  consentMode: { advanced: true },' : '  consentMode: true,');
-    if (c.autoBlock) lines.push('  autoBlock: true,');
-    if (!c.gpc) lines.push('  respectGPC: false,');
-    const seed = c.seed !== '#f2b134' ? `\n// In your CSS: :root { --seed: ${c.seed}; }\n` : '';
-    return `import { cookieowl } from 'cookieowl';\n\ncookieowl.init({\n${lines.join('\n')}\n});\n${seed}`;
+const genCats = (g) => ['preferences', 'analytics', 'marketing'].filter((k) => g[k]);
+const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+/** The data attributes of the line, as [name, value] pairs (true for a bare attribute). */
+function genAttrs(g) {
+  const p = PRESETS[g.preset] || {};
+  const a = [];
+  if (g.preset) a.push(['data-preset', g.preset]);
+  if (g.lang !== 'auto') a.push(['data-lang', g.lang]);
+  const policy = g.policy.trim();
+  if (policy) a.push(['data-policy-url', policy]);
+  const cats = genCats(g);
+  if (cats.length < 3) a.push(['data-categories', cats.length ? cats.join(',') : 'necessary']);
+  if (g.layout !== 'box') a.push(['data-layout', g.layout]);
+  if (g.theme !== 'auto') a.push(['data-theme', g.theme]);
+  if (g.accent.toLowerCase() !== DEFAULT_ACCENT) a.push(['data-accent', g.accent]);
+  if (g.consentMode && g.advanced) a.push(['data-consent-mode', 'advanced']);
+  else if (g.consentMode && !p.consentMode) a.push(['data-consent-mode', true]);
+  else if (!g.consentMode && p.consentMode) a.push(['data-consent-mode', 'false']);
+  if (g.autoBlock && !p.autoBlock) a.push(['data-auto-block', true]);
+  else if (!g.autoBlock && p.autoBlock) a.push(['data-auto-block', 'false']);
+  if (!g.gpc) a.push(['data-gpc', 'false']);
+  for (const [key, attr] of TEXT_ATTRS) {
+    const v = g[key].trim();
+    if (v) a.push([attr, v]);
   }
-  const attrs = [];
-  if (c.lang) attrs.push(`data-lang="${c.lang}"`);
-  if (c.template) attrs.push(`data-template="${c.template}"`);
-  if (c.policy) attrs.push(`data-policy-url="${c.policy.replace(/"/g, '&quot;')}"`);
-  if (!all) attrs.push(`data-categories="${cats(c).join(',')}"`);
-  if (c.layout !== 'box') attrs.push(`data-layout="${c.layout}"`);
-  if (c.theme !== 'auto') attrs.push(`data-theme="${c.theme}"`);
-  if (c.consentMode) attrs.push(c.advanced ? 'data-consent-mode="advanced"' : 'data-consent-mode');
-  if (c.autoBlock) attrs.push('data-auto-block');
-  if (!c.gpc) attrs.push('data-gpc="false"');
-  const seed = c.seed !== '#f2b134' ? `\n<style>:root { --seed: ${c.seed}; }</style>` : '';
-  return `<!-- First thing in <head>, without async or defer -->\n<script src="${CDN}"\n  ${attrs.join('\n  ')}></script>${seed}`;
+  return a;
 }
 
-// A tiny highlighter for the generated snippet, with the light-plus and
+const attrText = (attrs) => attrs.map(([n, v]) => (v === true ? ` ${n}` : ` ${n}="${escAttr(v)}"`)).join('');
+const genLine = (g, src = CDN, extra = []) => `<script src="${src}"${attrText([...genAttrs(g), ...extra])}></script>`;
+
+/** The same setup for npm. */
+function genNpm(g) {
+  const p = PRESETS[g.preset] || {};
+  const q = (s) => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+  const lines = [];
+  if (g.preset) lines.push(`preset: ${q(g.preset)},`);
+  if (g.lang !== 'auto') lines.push(`lang: ${q(g.lang)},`);
+  if (g.policy.trim()) lines.push(`policyUrl: ${q(g.policy.trim())},`);
+  const cats = genCats(g);
+  if (cats.length < 3) lines.push(`categories: [${(cats.length ? cats : ['necessary']).map(q).join(', ')}],`);
+  if (g.layout !== 'box') lines.push(`layout: ${q(g.layout)},`);
+  if (g.theme !== 'auto') lines.push(`theme: ${q(g.theme)},`);
+  if (g.accent.toLowerCase() !== DEFAULT_ACCENT) lines.push(`accent: ${q(g.accent)},`);
+  if (g.consentMode && g.advanced) lines.push('consentMode: { advanced: true },');
+  else if (g.consentMode !== Boolean(p.consentMode)) lines.push(`consentMode: ${g.consentMode},`);
+  if (g.autoBlock !== Boolean(p.autoBlock)) lines.push(`autoBlock: ${g.autoBlock},`);
+  if (!g.gpc) lines.push('respectGPC: false,');
+  const texts = TEXT_ATTRS.filter(([key]) => g[key].trim()).map(([key]) => `  ${key}: ${q(g[key].trim())},`);
+  if (texts.length) lines.push('text: {', ...texts, '},');
+  const body = lines.length ? `{\n${lines.map((l) => `  ${l}`).join('\n')}\n}` : '';
+  return `import { cookieowl } from 'cookieowl';\n\ncookieowl.init(${body});\n`;
+}
+
+const genText = (g) => (g.mode === 'npm' ? genNpm(g) : genLine(g));
+
+// Attributes that changed since the last render get a short highlight.
+let prevAttrs = null;
+function genTagHtml(g) {
+  const attrs = genAttrs(g);
+  const next = new Map(attrs.map(([n, v]) => [n, String(v)]));
+  let html = `${tok('tag', '<script')} <span class="at">${tok('attr', 'src')}${tok('txt', '=')}${tok('str', `"${CDN}"`)}</span>`;
+  for (const [n, v] of attrs) {
+    const part = `<span class="at">${tok('attr', n)}${v === true ? '' : tok('txt', '=') + tok('str', `"${escAttr(v)}"`)}</span>`;
+    html += ` ${prevAttrs && prevAttrs.get(n) !== String(v) ? `<mark class="chg">${part}</mark>` : part}`;
+  }
+  prevAttrs = next;
+  return `<span class="line">${html}${tok('tag', '></script>')}</span>`;
+}
+
+function genHtml(g) {
+  return g.mode === 'npm' ? highlight(genNpm(g), 'npm') : genTagHtml(g);
+}
+
+/** The built in text of the chosen language, shown as a placeholder. */
+function genPh(g, key) {
+  const lang = g.lang !== 'auto' ? g.lang : g.preset === 'lgpd' ? 'pt-BR' : 'en';
+  return (TEXTS[lang] || TEXTS.en || {})[key] || '';
+}
+
+let copyTimer = 0;
+async function genCopy() {
+  try {
+    await navigator.clipboard.writeText(genText(G));
+  } catch {
+    // Clipboard blocked: select the code so Ctrl C works.
+    const range = document.createRange();
+    range.selectNodeContents(genCode);
+    getSelection().removeAllRanges();
+    getSelection().addRange(range);
+    return;
+  }
+  G.copied = true;
+  clearTimeout(copyTimer);
+  copyTimer = setTimeout(() => (G.copied = false), 1800);
+}
+
+// The pretend page around the banner in the preview.
+const PV_CSS = `*{box-sizing:border-box}html,body{margin:0;height:100%}body{font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#f7f5f0;color:#1d2433;overflow:hidden}.dark body{background:#121729;color:#e6e9f2}
+.top{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid rgb(128 128 128/.18)}.logo{width:22px;height:22px;border-radius:7px;background:var(--a)}.top nav{display:flex;gap:12px;margin-left:auto}
+.s{display:block;height:9px;border-radius:9px;background:rgb(128 128 128/.22)}.top .s{width:42px}
+.hero{padding:30px 20px 12px;max-width:560px}.h{height:20px;border-radius:8px;background:rgb(128 128 128/.38);margin:0 0 12px}.h+.h{width:70%}.hero .s{margin:0 0 9px}.btn{display:inline-block;width:120px;height:34px;margin-top:10px;border-radius:9px;background:var(--a)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:16px 20px}.card{height:96px;border-radius:12px;background:rgb(128 128 128/.12)}`;
+const PV_BODY = '<header class="top"><span class="logo"></span><b>Your site</b><nav><span class="s"></span><span class="s"></span><span class="s"></span></nav></header><main class="hero"><p class="h"></p><p class="h"></p><span class="s"></span><span class="s" style="width:85%"></span><span class="s" style="width:60%"></span><span class="btn"></span></main><section class="cards"><span class="card"></span><span class="card"></span><span class="card"></span></section>';
+const SCRIPT_URL = new URL('assets/cookieowl.js', BASE).href;
+
+const stage = $('[data-gen-preview]');
+const frames = stage ? $$('iframe', stage) : [];
+let live = 0;
+let nonce = 0;
+if (frames[0]) frames[0].classList.add('is-live');
+
+/** The preview document: the line itself, but never stored and always shown (even with Global Privacy Control). */
+function previewDoc(g) {
+  const line = genLine({ ...g, gpc: true }, SCRIPT_URL, [['data-storage', 'memory'], ['data-gpc', 'false']]);
+  return `<!doctype html><html lang="en" class="${g.page}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="${g.page}"><style>:root{--a:${escAttr(g.accent)}}${PV_CSS}</style>${line}</head><body><!--${++nonce}-->${PV_BODY}</body></html>`;
+}
+
+function renderPreview() {
+  if (!frames.length) return;
+  const next = frames[1 - live];
+  next.onload = () => {
+    next.onload = null;
+    const old = frames[live];
+    old.classList.remove('is-live');
+    old.setAttribute('aria-hidden', 'true');
+    old.tabIndex = -1;
+    next.classList.add('is-live');
+    next.removeAttribute('aria-hidden');
+    next.removeAttribute('tabindex');
+    live = 1 - live;
+  };
+  next.srcdoc = previewDoc(G);
+}
+
+let pvTimer = 0;
+let pvFirst = true;
+if (frames.length) {
+  V.effect(() => {
+    // Reading the attributes and the page color subscribes this effect to them.
+    void (JSON.stringify(genAttrs(G)) + G.page);
+    stage.closest('.gen')?.style.setProperty('--g-accent', G.accent);
+    clearTimeout(pvTimer);
+    pvTimer = setTimeout(renderPreview, pvFirst ? 0 : 180);
+    pvFirst = false;
+  });
+}
+
+function tryInDemo() {
+  if (!demo) return;
+  demoCfg.lang = G.lang === 'auto' ? (G.preset === 'lgpd' ? 'pt-BR' : 'en') : G.lang;
+  demoCfg.template = G.preset;
+  demoCfg.layout = G.layout;
+  demoCfg.theme = G.theme;
+  demoCfg.consentMode = G.consentMode;
+  demoCfg.respectGPC = G.gpc;
+  demoCfg.cats = genCats(G);
+  demoCfg.text = Object.fromEntries(TEXT_ATTRS.filter(([key]) => G[key].trim()).map(([key]) => [key, G[key].trim()]));
+  site.style.setProperty('--seed', G.accent);
+  const layoutSel = $('[data-demo-layout]');
+  const langSel = $('[data-demo-lang]');
+  if (layoutSel) layoutSel.value = demoCfg.layout;
+  if (langSel) langSel.value = demoCfg.lang;
+  demo.reset();
+  M.gcm.splice(0);
+  rebuild(true);
+  $('#demo').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+}
+
+// A tiny highlighter for the generated code, with the light-plus and
 // dark-plus colors used by the Shiki frames on the rest of the site.
 const TOK = {
   com: ['#008000', '#6A9955'],
@@ -420,57 +583,34 @@ function highlight(code, mode) {
     .join('\n');
 }
 
-function snippetHtml(c) {
-  return highlight(snippetText(c), c.mode);
-}
+// ---------- Reveal on scroll ----------
 
-async function copySnippet() {
-  try {
-    await navigator.clipboard.writeText(snippetText(CFG));
-    CFG.copied = true;
-    setTimeout(() => (CFG.copied = false), 1600);
-  } catch {
-    // clipboard blocked: the code stays selectable
+if (!reduceMotion && 'IntersectionObserver' in window) {
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      }
+    },
+    { rootMargin: '0px 0px -6% 0px' },
+  );
+  const seen = new Map();
+  for (const el of $$('.chapter .ch-head, .gen-form .gstep, .gen-out, .demo-grid, .panel, .suspects, .spread, .fw-tabs, .shelf, .accordion, .g-cta, .related')) {
+    // Siblings arrive one after the other.
+    const n = seen.get(el.parentElement) || 0;
+    seen.set(el.parentElement, n + 1);
+    el.style.setProperty('--rd', `${Math.min(n, 5) * 80}ms`);
+    el.classList.add('reveal');
+    io.observe(el);
   }
+  document.documentElement.classList.add('reveal-on');
 }
-
-const LANG_NAMES = { auto: "the visitor's language", 'pt-BR': 'Portuguese', en: 'English', es: 'Spanish', fr: 'French', de: 'German' };
-const LAYOUT_NAMES = { box: 'A corner box', bar: 'A bottom bar', modal: 'A center modal' };
-
-/** The handwritten note next to the lantern. */
-function lanternNote(c) {
-  const law = c.template ? `, ${c.template.toUpperCase()} wording` : '';
-  const gcm = c.consentMode ? ', Consent Mode on' : '';
-  return `${LAYOUT_NAMES[c.layout] || 'A banner'} in ${LANG_NAMES[c.lang] || c.lang}${law}${gcm}`;
-}
-
-const bench = $('[data-lantern]');
-if (bench) V.effect(() => bench.style.setProperty('--lamp', CFG.seed));
-
-function tryInDemo() {
-  if (!demo) return;
-  demoCfg.lang = CFG.lang === 'auto' ? 'en' : CFG.lang;
-  demoCfg.template = CFG.template;
-  demoCfg.layout = CFG.layout;
-  demoCfg.theme = CFG.theme;
-  demoCfg.consentMode = CFG.consentMode;
-  demoCfg.respectGPC = CFG.gpc;
-  demoCfg.cats = cats(CFG);
-  site.style.setProperty('--seed', CFG.seed);
-  const layoutSel = $('[data-demo-layout]');
-  const langSel = $('[data-demo-lang]');
-  if (layoutSel) layoutSel.value = demoCfg.layout;
-  if (langSel) langSel.value = demoCfg.lang;
-  demo.reset();
-  M.gcm.splice(0);
-  rebuild(true);
-  $('#demo').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-}
-
 // ---------- Parallax of the hero town ----------
 
 const layers = $$('.town .px');
-if (layers.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (layers.length && !reduceMotion) {
   const hero = $('.town');
   let ticking = false;
   const move = () => {
@@ -506,7 +646,7 @@ Object.assign(V.config.globals, {
   S,
   M,
   CL,
-  CFG,
+  G,
   hits: (q) => hits(q),
   go(q, sel) {
     const r = hits(q)[sel];
@@ -516,13 +656,14 @@ Object.assign(V.config.globals, {
   },
   label,
   bugCls,
-  lanternNote,
   clCount: (cl) => Object.values(cl.done).filter(Boolean).length,
   clReset() {
     for (const k of Object.keys(CL.done)) CL.done[k] = false;
   },
-  snippetHtml,
-  copySnippet,
+  genHtml,
+  genPh,
+  genCopy,
+  genReplay: () => renderPreview(),
   tryInDemo,
 });
 

@@ -140,8 +140,11 @@ const fwCode = {
   angular: frame(`import { bootstrapApplication } from '@angular/platform-browser';\nimport { cookieowl } from 'cookieowl';\nimport { AppComponent } from './app/app.component';\n\ncookieowl.init({ policyUrl: '/privacy', consentMode: true });\n\nbootstrapApplication(AppComponent);\n\n// Anywhere: cookieowl.on('change', ({ accepted }) => console.log(accepted));`, { lang: 'ts', title: 'src/main.ts' }),
   wordpress: frame(`<?php\n// wp-content/mu-plugins/cookieowl.php\nadd_action('wp_head', function () {\n    $policy = esc_url(get_privacy_policy_url());\n    echo '<script src="${CDN}"'\n        . ' data-policy-url="' . $policy . '" data-consent-mode data-auto-block></script>';\n}, 1);`, { lang: 'php', title: 'cookieowl.php' }),
 };
+// The built in texts per language, for the placeholders of the generator.
+const genTexts = Object.fromEntries(Object.entries(LANGS).map(([code, pack]) => [code, Object.fromEntries(['title', 'description', 'acceptAll', 'rejectAll'].map((k) => [k, pack.t[k].replace('{law}', '')]))]));
 const homeCtx = {
   frame,
+  texts: genTexts,
   size: sizeLabel,
   trackers: TRACKERS.length,
   langs: Object.keys(LANGS).length,
@@ -162,7 +165,6 @@ const homeCtx = {
     frame(`<script type="text/plain" data-cookieowl="analytics"\n  src="https://www.googletagmanager.com/gtag/js?id=G-X"></script>\n<iframe data-cookieowl="marketing"\n  data-cookieowl-src="https://youtube.com/embed/ID"></iframe>`, { lang: 'html', title: 'tracker markup', compact: true }),
     frame(`cookieowl.on('change', ({ accepted }) => {\n  console.log('now allowed:', accepted);\n});`, { lang: 'js', title: 'events.js', compact: true }),
   ],
-  recordCode: frame(`{\n  "id": "1f0c9a7e-6b2d-4c41-9a1e-3f6f0d2b8c55",\n  "version": "2026-10",\n  "timestamp": "2026-10-13T21:04:11.093Z",\n  "expires": "2027-10-13T21:04:11.093Z",\n  "categories": { "necessary": true, "preferences": false, "analytics": true, "marketing": false },\n  "method": "custom",\n  "lang": "pt-BR",\n  "page": "/checkout"\n}`, { lang: 'json', title: 'cookie: cookieowl', compact: true }),
 };
 out['index.html'] = page(
   {
@@ -170,7 +172,7 @@ out['index.html'] = page(
     path: '',
     nav: '',
     title: 'cookieowl: free cookie consent banner for LGPD and GDPR',
-    description: 'Free open source cookie consent for LGPD and GDPR that really blocks trackers before consent. One script tag, Google Consent Mode v2, 5 languages, under 15 kB.',
+    description: 'An open source cookie banner that keeps trackers from loading until visitors agree. Set it up with one script tag.',
     jsonld: homeJsonLd(),
     // The live demo runs the real script, without the automatic init.
     extraHead: `<script src="assets/cookieowl.js" data-manual></script>
@@ -194,8 +196,8 @@ out['guides.html'] = page(
     kind: 'index',
     path: 'guides.html',
     nav: 'guides',
-    title: 'Cookie consent guides for LGPD and GDPR | cookieowl',
-    description: 'Guides for LGPD and GDPR cookie consent: block Google Analytics until consent, Consent Mode v2, React, Next.js and WordPress setups, and a checklist.',
+    title: 'Guides | cookieowl',
+    description: 'Short guides for cookieowl: a consent checklist, Google Consent Mode v2, Google Analytics and React.',
     jsonld: indexJsonLd(guides),
   },
   indexBody(guides),
@@ -225,7 +227,7 @@ out['api.html'] = page(
     path: 'api.html',
     nav: 'api',
     title: 'cookieowl API reference: options, methods and events',
-    description: 'Every option, script tag attribute, method and event of the cookieowl cookie consent script, plus Consent Mode, auto blocking, styling, React and Vue helpers.',
+    description: 'Options, script tag attributes, methods and events of cookieowl.',
     jsonld: apiJsonLd(),
   },
   apiBody(apiCtx),
@@ -241,7 +243,7 @@ out['404.html'] = rootLinks(
       path: '404.html',
       noindex: true,
       title: 'Page not found | cookieowl',
-      description: 'This page could not be found. Head back to cookieowl, the free cookie consent banner for LGPD and GDPR that blocks trackers until consent.',
+      description: 'This page could not be found.',
     },
     notFoundBody(),
   ),
@@ -250,8 +252,8 @@ out['404.html'] = rootLinks(
 // ---------- Search index ----------
 
 const search = [];
-search.push({ kind: 'Page', title: 'Live demo: the street at night', sub: 'Accept a category and watch trackers get in', url: './#demo' });
-search.push({ kind: 'Page', title: 'Configurator: the lantern workshop', sub: 'Build your snippet', url: './#configurator' });
+search.push({ kind: 'Page', title: 'Banner generator with a live preview', sub: 'Pick a region, a color and your words, copy one line', url: './#configurator' });
+search.push({ kind: 'Page', title: 'Live demo: watch the gate hold trackers', sub: 'Accept a category and watch trackers get in', url: './#demo' });
 search.push({ kind: 'Page', title: 'API reference', sub: 'Options, methods and events', url: 'api.html' });
 search.push({ kind: 'Page', title: 'All guides', sub: 'The storybook shelf', url: 'guides.html' });
 for (const g of GUIDES) {
