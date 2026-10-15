@@ -15,7 +15,7 @@ const MANGLE = [
 
 export default defineConfig([
   {
-    entry: { index: 'src/index.ts', react: 'src/react.ts', vue: 'src/vue.ts' },
+    entry: { index: 'src/index.ts', react: 'src/react.ts', vue: 'src/vue.ts', snippet: 'src/snippet.ts' },
     format: ['esm', 'cjs'],
     // One shared chunk for every entry, also in CommonJS, so cookieowl/react
     // and cookieowl/vue use the same instance as the main entry.
@@ -40,5 +40,18 @@ export default defineConfig([
       o.mangleProps = new RegExp(`^(${MANGLE.join('|')})$`);
     },
     banner: { js: `/*! cookieowl ${version} MIT */` },
+  },
+  {
+    // The snippet generator for pages without a bundler, as window.CookieOwlSnippet.
+    // Separate from dist/cookieowl.js so the banner script stays small.
+    entry: { 'cookieowl-snippet': 'src/snippet.ts' },
+    format: ['iife'],
+    globalName: 'CookieOwlSnippet',
+    outExtension: () => ({ js: '.js' }),
+    minify: true,
+    target: 'es2020',
+    platform: 'browser',
+    define,
+    banner: { js: `/*! cookieowl snippet ${version} MIT */` },
   },
 ]);

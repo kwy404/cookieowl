@@ -62,6 +62,16 @@
         "default": "./dist/vue.cjs"
       }
     },
+    "./snippet": {
+      "import": {
+        "types": "./dist/snippet.d.ts",
+        "default": "./dist/snippet.js"
+      },
+      "require": {
+        "types": "./dist/snippet.d.cts",
+        "default": "./dist/snippet.cjs"
+      }
+    },
     "./browser": "./dist/cookieowl.js",
     "./package.json": "./package.json"
   },

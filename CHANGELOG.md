@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Region presets: `preset: 'lgpd'` sets Portuguese texts, the LGPD wording, Google Consent Mode v2 and auto blocking; `preset: 'gdpr'` sets the GDPR wording, Consent Mode and auto blocking in the visitor's language. Your own options always win. `PRESETS` and `applyPreset` are exported.
+- `accent` option for the color of the buttons and switches, so no extra CSS is needed.
+- Script tag attributes `data-preset`, `data-accent` and `data-text-*` (for example `data-text-accept-all="OK"`), so a whole setup fits in one line.
+- `cookieowl/snippet`, the generator behind the visual configurator: `scriptTag()` writes the one line script tag, `initCode()` the npm code and `snippetConfig()` the matching configuration for a live preview, with every default left out. `dist/cookieowl-snippet.js` offers the same functions as `window.CookieOwlSnippet` for pages without a bundler.
+
+### Changed
+
+- The script tag build stores its language packs more compactly, so the new features fit in the same 15 kB gzip budget.
+- Withdrawn cookies are erased with `Max-Age=0` only, the same attribute used to write them.
+
 ## [0.1.0] - 2026-10-13
 
 ### Added
