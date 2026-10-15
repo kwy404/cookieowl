@@ -3,6 +3,7 @@
 // live demo with its logbook, how blocking works, the promises, frameworks,
 // the shelf of guides and the FAQ.
 import { bug, demoGate, heroLayer, streetScene, VARS } from '../scripts/storybook.mjs';
+import { SEASONS, SEASON_ICONS } from '../scripts/seasons.mjs';
 import { CDN, GITHUB, GUIDES, SITE, VERSION, art, esc, icon, pic, roman, rule } from './layout.mjs';
 import { bookCard } from './pages.mjs';
 
@@ -124,6 +125,16 @@ function logbook() {
     <p class="log-empty" v-if="!M.cookies.length">The jar is empty. Accept a category to see trackers set their cookies, then withdraw it and watch them go.</p>
   </div>
 </aside>`;
+}
+
+/** The hero accents of every season (docs/seasons.js sets html[data-season]); only the active one is shown and loaded. */
+function seasonArt() {
+  return `<div class="layer-box art-box season-art" aria-hidden="true">${SEASONS.map((id) => `<span class="season-only season-${id}"><img class="only-light" src="assets/seasons/${id}/hero-light.svg" alt="" loading="lazy" decoding="async"><img class="only-dark" src="assets/seasons/${id}/hero-dark.svg" alt="" loading="lazy" decoding="async"></span>`).join('')}</div>`;
+}
+
+/** The seasonal icons under the hero, one row per season. */
+function seasonIcons() {
+  return SEASONS.map((id) => `<ul class="wrap season-icons season-only season-${id}" aria-hidden="true">${SEASON_ICONS[id].map((n) => `<li><img class="only-light" src="assets/seasons/${id}/icon-${n}-light.svg" alt="" width="28" height="28" loading="lazy"><img class="only-dark" src="assets/seasons/${id}/icon-${n}-dark.svg" alt="" width="28" height="28" loading="lazy"></li>`).join('')}</ul>`).join('');
 }
 
 /** Region presets of the generator: value, title, law, icon, what it sets. */
@@ -271,6 +282,7 @@ export function homeBody(ctx) {
       <div class="layer-box">${heroLayer(VARS, 'ground')}</div>
       <div class="layer-box art-box px" data-depth=".22">${heroLayer(VARS, 'sky')}</div>
       <div class="layer-box art-box">${heroLayer(VARS, 'art')}</div>
+      ${seasonArt()}
     </div>
     <div class="wrap hero-in">
       <div class="hero-text">
@@ -291,7 +303,7 @@ export function homeBody(ctx) {
     <li><b>0</b><span>dependencies</span></li>
     <li><b>${ctx.langs}</b><span>languages</span></li>
     <li><b>${ctx.trackers}</b><span>trackers known by name</span></li>
-  </ul></div>
+  </ul>${seasonIcons()}</div>
 </section>
 
 ${generator(ctx)}

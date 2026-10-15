@@ -101,6 +101,7 @@ export function head(p) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 ${THEME_SNIPPET}
+<script src="seasons.js"></script>
 <title>${esc(p.title)}</title>
 <meta name="description" content="${esc(p.description)}">
 ${p.noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" href="${url}">`}

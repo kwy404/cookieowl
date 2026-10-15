@@ -4,7 +4,8 @@
 //   scripts/storybook.mjs the palette, icons and illustrations; every drawing
 //                        is written to docs/assets/art/ in a light (dawn) and
 //                        a dark (night) version and inlined where it animates
-//   docs/site.css, docs/site.js and docs/demo/ are written by hand
+//   scripts/seasons.mjs  the art of the special dates (docs/assets/seasons/)
+//   docs/site.css, docs/site.js, docs/seasons.js and docs/demo/ are written by hand
 // Code samples are highlighted at build time with Shiki (light-plus and
 // dark-plus) so the pages ship no highlighter. dist/cookieowl.js (npm run
 // build) is copied to docs/assets/ for the live demo, and
@@ -20,6 +21,7 @@ import { FAQ, homeBody, homeJsonLd } from '../site/home.mjs';
 import { CDN, GUIDES, SITE, esc, page } from '../site/layout.mjs';
 import { CHECKLIST, guideBody, guideJsonLd, indexBody, indexJsonLd, notFoundBody } from '../site/pages.mjs';
 import { UPDATED } from '../site/layout.mjs';
+import { seasonFiles } from './seasons.mjs';
 import { DAWN, ICON_NAMES, NIGHT, SPOT_NAMES, bugSprite, demoGate, heroScene, iconFile, iconSheet, paletteCss, readmeBanner, spotSvg, streetScene } from './storybook.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -320,6 +322,9 @@ for (const [theme, P] of THEMES) {
   files[`assets/art/scenes/gate-open-${theme}.svg`] = demoGate(P, { id: `go-${theme[0]}`, open: 1 });
   files[`assets/art/scenes/readme-banner-${theme}.svg`] = readmeBanner(P, theme);
 }
+
+// The special dates: Hoot in costume, icons and a hero accent per season.
+for (const [name, content] of Object.entries(seasonFiles(THEMES))) files[`assets/seasons/${name}`] = content;
 
 // House rules for every generated file.
 const problems = [];
