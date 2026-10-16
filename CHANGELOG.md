@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-15
+
 ### Added
 
 - Region presets: `preset: 'lgpd'` sets Portuguese texts, the LGPD wording, Google Consent Mode v2 and auto blocking; `preset: 'gdpr'` sets the GDPR wording, Consent Mode and auto blocking in the visitor's language. Your own options always win. `PRESETS` and `applyPreset` are exported.
@@ -38,5 +40,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Script tag build configured by data attributes or `window.cookieowlConfig`, under 15 kB with gzip.
 - React helpers (`useConsent`, `ConsentGate`, `useCookieOwl`) and Vue helpers (`CookieOwlPlugin`, `useConsent`, `ConsentGate`).
 
-[Unreleased]: https://github.com/kwy404/cookieowl/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/kwy404/cookieowl/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/kwy404/cookieowl/releases/tag/v0.2.0
 [0.1.0]: https://github.com/kwy404/cookieowl/releases/tag/v0.1.0

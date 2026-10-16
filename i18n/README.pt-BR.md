@@ -32,7 +32,7 @@ O jeito mais fácil é o [gerador de banner](https://kwy404.github.io/cookieowl/
 ```html
 <head>
   <!-- Primeira coisa do head, sem async nem defer -->
-  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js"
     data-preset="lgpd" data-policy-url="/privacidade"></script>
 
   <!-- O Google Analytics agora espera a categoria analytics -->
@@ -64,7 +64,7 @@ O que você definir por conta própria vale mais que o preset: `data-preset="lgp
 ### Cores e textos
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js"
   data-preset="lgpd" data-accent="#2f6fed" data-layout="bar"
   data-text-title="Cookies neste site" data-text-accept-all="OK"></script>
 ```

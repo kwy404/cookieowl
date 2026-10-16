@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  define: { __VERSION__: JSON.stringify('0.1.0') },
+  define: { __VERSION__: JSON.stringify('0.2.0') },
   test: {
     environment: 'jsdom',
     include: ['test/**/*.test.ts'],

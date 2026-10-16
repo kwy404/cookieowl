@@ -24,7 +24,7 @@
 <p>First, load cookieowl as the very first script, synchronously. Second, change the type of both parts of the GA snippet to <code>text/plain</code>. Third, add <code>data-cookieowl="analytics"</code> so cookieowl knows which category releases them:</p>
 <pre data-kind="editor" data-lang="html" data-title="index.html" data-ok="2,3,5,6,7,8">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js"
     data-policy-url="/privacy" data-consent-mode></script>
 
   <script type="text/plain" data-cookieowl="analytics" async
@@ -42,7 +42,7 @@
 <section id="auto"><h2>When you cannot edit the snippet</h2>
 <p>Plugins, themes and tag managers often inject Google Analytics from their own code. For those, auto mode recognizes the URL of the script when it is added to the page, whether by the HTML parser or by <code>document.createElement</code>, and holds it the same way:</p>
 <pre data-kind="editor" data-lang="html" data-title="index.html">
-<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js"
   data-consent-mode data-auto-block></script>
 </pre>
 <p>Auto mode knows gtag.js, the older analytics.js, Google Tag Manager and Google Ads, along with the Meta Pixel, Microsoft Clarity, Hotjar, LinkedIn Insight, the TikTok Pixel and YouTube and Vimeo embeds. Two honest limits: it must load before the tracker (so keep cookieowl first, synchronous, in the head), and the browser preload scanner may download, but not run, a tracker written directly in the HTML. Explicit <code>text/plain</code> markup avoids even that download.</p>

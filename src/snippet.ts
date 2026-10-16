@@ -126,7 +126,7 @@ export function scriptAttributes(o: SnippetOptions): [string, string | null][] {
 
 /**
  * The one line to paste first in `<head>`, without async or defer, for example
- * `<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js" data-preset="lgpd"></script>`.
+ * `<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js" data-preset="lgpd"></script>`.
  */
 export function scriptTag(o: SnippetOptions, opts: ScriptTagOptions = {}): string {
   const attrs = scriptAttributes(o).map(([k, v]) => (v === null ? ` ${k}` : ` ${k}="${attr(v)}"`));

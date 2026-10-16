@@ -1,6 +1,6 @@
 // The script tag build (dist/cookieowl.js). Load it first, synchronously, in
 // <head>, before any tracker:
-//   <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+//   <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js"
 //     data-preset="lgpd" data-policy-url="/privacidade" data-accent="#2f6fed"></script>
 // Options come from window.cookieowlConfig (set before the tag) and the data
 // attributes, which win. Add data-manual to skip the automatic init.

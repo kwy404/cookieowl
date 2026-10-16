@@ -73,7 +73,7 @@ describe('script tag auto init', () => {
     await import('../src/browser');
     expect(w.cookieowl!.lang).toBe('es');
     expect($('[data-cko=accept]')!.textContent).toBe('Aceptar todas');
-    expect(w.CookieOwl!.VERSION).toBe('0.1.0');
+    expect(w.CookieOwl!.VERSION).toBe('0.2.0');
     w.cookieowl!.destroy();
     delete w.cookieowlConfig;
   });

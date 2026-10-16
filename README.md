@@ -32,7 +32,7 @@ The easiest way is the [banner generator](https://kwy404.github.io/cookieowl/#co
 ```html
 <head>
   <!-- First thing in the head, without async or defer -->
-  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+  <script src="https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js"
     data-preset="gdpr" data-policy-url="/privacy"></script>
 
   <!-- Google Analytics now waits for the analytics category -->
@@ -64,7 +64,7 @@ Anything you set yourself wins over the preset, so `data-preset="lgpd" data-lang
 ### Colors and texts
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js"
+<script src="https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js"
   data-preset="lgpd" data-accent="#2f6fed" data-layout="bar"
   data-text-title="Cookies on this site" data-text-accept-all="OK"></script>
 ```

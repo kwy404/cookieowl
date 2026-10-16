@@ -1,6 +1,6 @@
 {
   "name": "cookieowl",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A small cookie consent banner for LGPD and GDPR that blocks trackers until visitors agree.",
   "keywords": [
     "cookie consent",

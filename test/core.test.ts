@@ -53,7 +53,7 @@ describe('init and the first visit', () => {
 
   it('exposes the version and language', () => {
     const o = owl({ lang: 'de' });
-    expect(o.version).toBe('0.1.0');
+    expect(o.version).toBe('0.2.0');
     expect(o.lang).toBe('de');
     expect(new CookieOwl().lang).toBe('en');
   });

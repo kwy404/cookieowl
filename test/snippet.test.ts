@@ -100,7 +100,7 @@ describe('snippetConfig', () => {
 describe('scriptTag', () => {
   it('is a single line, pinned to the CDN by default', () => {
     expect(scriptTag({})).toBe(`<script src="${CDN_URL}"></script>`);
-    expect(CDN_URL).toBe('https://cdn.jsdelivr.net/npm/cookieowl@0.1.0/dist/cookieowl.js');
+    expect(CDN_URL).toBe('https://cdn.jsdelivr.net/npm/cookieowl@0.2.0/dist/cookieowl.js');
     expect(scriptTag({ preset: 'lgpd', policyUrl: '/privacidade', accent: '#2f6fed' }, { src: '/js/cookieowl.js' })).toBe(
       '<script src="/js/cookieowl.js" data-preset="lgpd" data-policy-url="/privacidade" data-accent="#2f6fed"></script>',
     );
